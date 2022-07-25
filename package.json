@@ -1,0 +1,45 @@
+{
+  "name": "pishdeh",
+  "version": "0.1.1",
+  "description": "FormBuilder For React.js",
+  "main": "dist/index.js",
+  "repository": "https://github.com/owlpro/pishdeh.git",
+  "author": "OwlPro",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -cw"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "devDependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/material": "^5.9.1",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-test-renderer": "^18.0.0",
+    "react-scripts-ts": "^3.1.0",
+    "react-test-renderer": "^18.1.0",
+    "rollup": "^2.73.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-dts": "^4.2.2",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.31.2",
+    "typescript": "^4.6.4"
+  },
+  "peerDependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/material": "^5.9.1",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
+  }
+}

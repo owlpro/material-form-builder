@@ -1,0 +1,1 @@
+export type InputRef<Input> = Input | null | undefined
