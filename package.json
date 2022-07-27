@@ -1,5 +1,5 @@
 {
-  "name": "pishdeh",
+  "name": "pishdeh-form-builder",
   "version": "0.1.1",
   "description": "FormBuilder For React.js",
   "main": "dist/index.js",
