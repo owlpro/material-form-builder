@@ -6,3 +6,4 @@ rollup.config
 .eslintrc.js
 node_modules
 .npmignore
+.prettierrc

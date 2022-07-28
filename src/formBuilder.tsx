@@ -3,18 +3,19 @@ import React, { Component, Fragment } from 'react';
 import { setToObject } from './helpers/object.helper';
 import { OutputValues } from './types/builder.outputValues';
 import { Input, InputGetValueTypes, InputProps, InputTypes } from './types/input';
-import { Value } from './types/value.interface';
 
 import { ItemsInput } from './inputs/items/items.input';
 import { NumberInput } from './inputs/number/number.input';
 import { TextInput } from './inputs/text/text.input';
-import { ObjectLiteral } from 'typeorm';
+import { CustomInput } from './inputs/custom/custom.input';
+import { ObjectLiteral } from './types/helper.types';
+import { CheckboxInput } from './inputs/checkbox/checkbox.input';
 
 
 
 interface FormBuilderImplements {
     getValues: () => OutputValues;
-    setValues: (values: Value) => Promise<void>;
+    setValues: (values: ObjectLiteral) => Promise<void>;
     clear: () => Promise<void>;
 }
 
@@ -29,6 +30,8 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
         text: TextInput,
         number: NumberInput,
         items: ItemsInput,
+        custom: CustomInput,
+        checkbox: CheckboxInput
     }
     private defaultValues: ObjectLiteral = {};
 
@@ -40,15 +43,12 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
         this.props.inputs.forEach(inputProps => {
             const input = this.inputRefs[inputProps.selector]
             const isValid = input.validation();
-
-            if ((inputProps.required || inputProps.type === "items") && !isValid) {
+            if ((inputProps.required || inputProps.type === "items" || inputProps.type === "custom") && !isValid) {
                 invalidInputs.push(inputProps)
             }
-
             const value = input.getValue();
             setToObject(inputProps.selector, value, data)
         })
-
         return {
             data,
             validation: {
@@ -61,15 +61,12 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
     private setObjectValues(object: ObjectLiteral, path: string[] = []) {
         for (const key in object) {
             const value = object[key]
-
-
             if (typeof value === "object" && !Array.isArray(value)) {
                 path.push(key)
                 this.setObjectValues(value, path)
             } else {
                 this.setNormalValue([...path, key].join('.'), value)
             }
-
         }
     }
 
@@ -82,21 +79,13 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
 
     public setValues = async (value: ObjectLiteral): Promise<any> => {
         this.defaultValues = value;
-
         const setValues = Object.keys(value).map(async selector => {
             const valueItem = value[selector];
-
             if (typeof valueItem === "object" && !Array.isArray(valueItem)) {
-
                 this.setObjectValues(valueItem, [selector])
-
             } else {
-
                 this.setNormalValue(selector, valueItem)
-
             }
-
-
         })
         return await Promise.all(setValues)
     }
@@ -111,8 +100,7 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
         return await Promise.all(clearValues)
     }
 
-    private renderInput = (input: InputProps, index: number) => {
-        console.log(input)
+    private renderInput = (input: InputProps, index: number): JSX.Element => {
         const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...input });
         return (
             <Fragment key={index}>
@@ -123,11 +111,11 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
 
     render(): JSX.Element {
         return (
-            <Box bgcolor={'silver'}>
-                <Box>
+            <Fragment>
+                <Box bgcolor={'silver'}>
                     {this.props.inputs.map(this.renderInput)}
                 </Box>
-            </Box>
+            </Fragment>
         )
     }
 }

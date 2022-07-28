@@ -1,8 +1,8 @@
 import { TextFieldProps } from "@mui/material";
 import { BaseInput } from "../../types/input.base";
-import { NumberInput } from "./number.input";
 
-
-export interface NumberInputProps extends BaseInput<NumberInput>, Omit<TextFieldProps, '*'> {
+export type NumberInputValueType = number | null;
+export interface NumberInputProps extends BaseInput<NumberInputValueType>, Omit<TextFieldProps, 'defaultValue'> {
     type: "number",
+    defaultValue?: NumberInputValueType
 }

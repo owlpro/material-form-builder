@@ -1,20 +1,17 @@
 import { Box, Button } from "@mui/material";
 import React, { Component } from "react";
-import { ObjectLiteral } from "typeorm";
 import { FormBuilder } from "../../formBuilder";
 import { randomString } from "../../helpers/general.helper";
 import { OutputValues } from "../../types/builder.outputValues";
 import { InputImplement } from '../../types/input.implement';
-import { ItemsInputProps } from './items.interface';
-
-type ValueType = ObjectLiteral[] | null;
+import { ItemsInputProps, ItemsInputValueType } from './items.interface';
 
 interface IState {
     error: boolean,
     items: string[],
 }
 
-export class ItemsInput extends Component<ItemsInputProps, IState> implements InputImplement<ValueType> {
+export class ItemsInput extends Component<ItemsInputProps, IState> implements InputImplement<ItemsInputValueType> {
     state: IState = {
         error: false,
         items: []
@@ -31,7 +28,7 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         }
     }
 
-    async setValue(values: ValueType): Promise<any> {
+    async setValue(values: ItemsInputValueType): Promise<any> {
         await this.setState({ ...this.state, items: [] })
         this.formBuilderRef = {}
 
@@ -43,8 +40,6 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
                 formBuilderRef.setValues(object)
             }
         }))
-        return Promise.resolve()
-
     }
 
     exportFormBuilderData = (): OutputValues[] => {

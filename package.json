@@ -9,7 +9,7 @@
   "private": true,
   "scripts": {
     "build": "rollup -c",
-    "watch": "rollup -cw"
+    "watch": "rm -rf ./dist && yarn cache clean && rollup -cw"
   },
   "eslintConfig": {
     "extends": [
@@ -21,8 +21,8 @@
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/material": "^5.9.1",
-    "@types/react": "^17.0.2",
-    "@types/react-dom": "^17.0.2",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
     "@types/react-test-renderer": "^18.0.0",
     "react-scripts-ts": "^3.1.0",
     "react-test-renderer": "^18.1.0",
@@ -39,7 +39,7 @@
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/material": "^5.9.1",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   }
 }

@@ -1,19 +1,16 @@
 import TextField from '@mui/material/TextField';
 import React, { Component } from "react";
 import { InputImplement } from '../../types/input.implement';
-import { NumberInputProps } from './number.interface';
-
-type ValueType = number | null;
-
+import { NumberInputProps, NumberInputValueType } from './number.interface';
 
 interface IState {
-    value: ValueType,
+    value: NumberInputValueType,
     error: boolean
 }
 
-export class NumberInput extends Component<NumberInputProps, IState> implements InputImplement<ValueType> {
+export class NumberInput extends Component<NumberInputProps, IState> implements InputImplement<NumberInputValueType> {
     state: IState = {
-        value: null,
+        value: this.props.defaultValue || null,
         error: false
     }
 
@@ -29,16 +26,22 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
         }
     }
 
-    async setValue(value: ValueType): Promise<any> {
-        return await this.setState({ ...this.state, value })
+    async setValue(value: NumberInputValueType): Promise<any> {
+        if (value === this.state.value) return Promise.resolve()
+
+        const setStatePromise = await this.setState({ ...this.state, value })
+        if (typeof this.props.onChangeValue === "function") {
+            this.props.onChangeValue(value as NumberInputValueType)
+        }
+        return setStatePromise
     }
 
-    getValue(): ValueType {
+    getValue(): NumberInputValueType {
         return this.state.value || null;
     }
 
     async clear(): Promise<any> {
-        return await this.setValue(null)
+        return await this.setValue(this.props.defaultValue || null)
     }
 
     validation(): boolean {
@@ -54,7 +57,8 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
     }
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setValue(parseInt(event.target.value, 10) || null)
+        const value = isNaN(parseInt(event.target.value, 10)) ? null : parseInt(event.target.value, 10);
+        this.setValue(value)
     };
 
     private onClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -63,6 +67,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
     }
 
     render() {
-        return <TextField {...this.props} variant={this.props.variant || "standard"} error={this.state.error} onChange={this.onChange} onClick={this.onClick} value={this.state.value || ''} />
+        const { onChangeValue, ...restProps } = this.props;
+        return <TextField {...restProps} variant={this.props.variant || "standard"} error={this.state.error} onChange={this.onChange} onClick={this.onClick} value={String(this.state.value)} />
     }
 }

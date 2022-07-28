@@ -1,22 +1,23 @@
-import TextField from '@mui/material/TextField';
+import { Checkbox, FormControlLabel } from '@mui/material';
+import { grey, pink, red } from '@mui/material/colors';
 import React, { Component } from "react";
 import { InputImplement } from '../../types/input.implement';
-import { TextInputProps, TextInputValueType } from './text.types';
+import { CheckboxInputProps, CheckboxInputValueType } from './checkbox.interface';
 
 interface IState {
-    value: TextInputValueType,
+    value: CheckboxInputValueType,
     error: boolean
 }
 
-export class TextInput extends Component<TextInputProps, IState> implements InputImplement<TextInputValueType> {
+export class CheckboxInput extends Component<CheckboxInputProps, IState> implements InputImplement<CheckboxInputValueType> {
     state: IState = {
-        value: this.props.defaultValue || null,
+        value: this.props.defaultChecked || false,
         error: false
     }
 
     validationTimeout: NodeJS.Timeout | undefined;
 
-    shouldComponentUpdate(nextProps: TextInputProps, nextState: IState) {
+    shouldComponentUpdate(nextProps: CheckboxInputProps, nextState: IState) {
 
         switch (true) {
             case this.state.value !== nextState.value:
@@ -26,22 +27,22 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
         }
     }
 
-    async setValue(value: TextInputValueType): Promise<any> {
+    async setValue(value: CheckboxInputValueType): Promise<any> {
         if (value === this.state.value) return Promise.resolve()
 
         const setStatePromise = await this.setState({ ...this.state, value })
         if (typeof this.props.onChangeValue === "function") {
-            this.props.onChangeValue(value as TextInputValueType)
+            this.props.onChangeValue(value as CheckboxInputValueType)
         }
         return setStatePromise
     }
 
-    getValue(): TextInputValueType {
-        return this.state.value || null;
+    getValue(): CheckboxInputValueType {
+        return this.state.value || false;
     }
 
     async clear(): Promise<any> {
-        return await this.setValue(this.props.defaultValue || null)
+        return await this.setValue(this.props.checked || this.props.defaultChecked || false)
     }
 
     validation(): boolean {
@@ -57,7 +58,7 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
     }
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setValue(event.target.value || null)
+        this.setValue(event.target.checked || false)
     };
 
     private onClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -66,7 +67,17 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
     }
 
     render() {
-        const { onChangeValue, ...restProps } = this.props;
-        return <TextField {...restProps} variant={this.props.variant || "standard"} error={this.state.error} onChange={this.onChange} onClick={this.onClick} value={this.state.value || ''} />
+        const { defaultChecked, onChangeValue, ...restProps } = this.props;
+        const label = this.props.label + (this.props.required ? ' *' : '')
+        return (
+            <FormControlLabel onClick={this.onClick} control={
+                <Checkbox
+                    {...restProps}
+                    sx={{ color: this.state.error ? red[700] : grey[700] }}
+                    checked={this.state.value}
+                    onChange={this.onChange}
+                />
+            } style={{ userSelect: 'none' }} label={label} />
+        )
     }
 }
