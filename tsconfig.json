@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "ES5",
-		"module": "esnext",
+		"module": "ESNext",
 		"jsx": "react",
 		"sourceMap": true,
 		"outDir": "/dist",
@@ -12,7 +12,7 @@
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
-		"declaration": true
+		"declaration": true,
 		// "declarationDir": "types",
 		// "emitDeclarationOnly": true
 	},

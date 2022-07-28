@@ -4,6 +4,6 @@ import { TextInput } from "./text.input";
 
 
 export interface TextInputProps extends BaseInput<TextInput>, Omit<TextFieldProps, '*'> {
-    type: "text"
+    type: "text",
     // selector: string;
 }

@@ -63,7 +63,6 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
     }
 
     render() {
-        console.log('render NumberInput')
         return <TextField {...this.props} variant={this.props.variant || "standard"} error={this.state.error} onChange={this.onChange} onClick={this.onClick} value={this.state.value || ''} />
     }
 }

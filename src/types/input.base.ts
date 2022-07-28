@@ -1,5 +1,5 @@
-export type InputTypes = "text" | "number"
-
 export interface BaseInput<Input> {
-    selector?: string;
+    selector: string;
+    required?: boolean;
+    wrapper?: (children: JSX.Element) => JSX.Element
 }

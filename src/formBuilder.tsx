@@ -1,61 +1,54 @@
 import { Box } from '@mui/material';
-import React, { Component } from 'react';
-import { NumberInputProps } from './inputs/number/number.interface';
-
-import { TextInputProps } from './inputs/text/text.interface';
-import { InputTypes } from './types/input.base';
+import React, { Component, Fragment } from 'react';
+import { setToObject } from './helpers/object.helper';
+import { OutputValues } from './types/builder.outputValues';
+import { Input, InputGetValueTypes, InputProps, InputTypes } from './types/input';
 import { Value } from './types/value.interface';
 
-import { TextInput } from './inputs/text/text.input';
+import { ItemsInput } from './inputs/items/items.input';
 import { NumberInput } from './inputs/number/number.input';
-import { setToObject } from './helpers/object.helper';
+import { TextInput } from './inputs/text/text.input';
+import { ObjectLiteral } from 'typeorm';
 
-type Input = TextInputProps | NumberInputProps
 
-type OutputValues = {
-    data: Value,
-    validation: {
-        status: boolean,
-        inputs: Input[]
-    }
-}
 
 interface FormBuilderImplements {
     getValues: () => OutputValues;
     setValues: (values: Value) => Promise<void>;
     clear: () => Promise<void>;
 }
+
 interface IProps {
-    inputs: Input[]
+    inputs: InputProps[]
 }
 
 export class FormBuilder extends Component<IProps> implements FormBuilderImplements {
 
-    private inputRefs: { [key: string]: any } = {}
-    private inputs: { [key in InputTypes]: any } = {
+    private inputRefs: { [key: string]: Input } = {}
+    private inputs: { [key in InputTypes]: React.ElementType } = {
         text: TextInput,
-        number: NumberInput
+        number: NumberInput,
+        items: ItemsInput,
     }
-
+    private defaultValues: ObjectLiteral = {};
 
     public getValues = (): OutputValues => {
-        const data: Value = {};
-        const invalidInputs: Input[] = [];
+        const data: ObjectLiteral = this.defaultValues || {};
+
+        const invalidInputs: InputProps[] = [];
 
         this.props.inputs.forEach(inputProps => {
-            const input = this.inputRefs[inputProps.selector || ""]
-            const isValid = input.validation()
+            const input = this.inputRefs[inputProps.selector]
+            const isValid = input.validation();
 
-            if (inputProps.required && !isValid) {
+            if ((inputProps.required || inputProps.type === "items") && !isValid) {
                 invalidInputs.push(inputProps)
             }
 
             const value = input.getValue();
-            setToObject(inputProps.selector || "", value, data)
-
-            
-            // data[inputProps.selector || ""] = input.getValue();
+            setToObject(inputProps.selector, value, data)
         })
+
         return {
             data,
             validation: {
@@ -65,12 +58,45 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
         }
     }
 
-    public setValues = async (value: Value): Promise<any> => {
-        const setValues = Object.keys(value).map(async selector => {
-            const input = this.inputRefs[selector]
-            if (input) {
-                await input.setValue(value[selector])
+    private setObjectValues(object: ObjectLiteral, path: string[] = []) {
+        for (const key in object) {
+            const value = object[key]
+
+
+            if (typeof value === "object" && !Array.isArray(value)) {
+                path.push(key)
+                this.setObjectValues(value, path)
+            } else {
+                this.setNormalValue([...path, key].join('.'), value)
             }
+
+        }
+    }
+
+    private async setNormalValue(selector: string, value: InputGetValueTypes) {
+        const input = this.inputRefs[selector]
+        if (input && value) {
+            await input.setValue(value)
+        }
+    }
+
+    public setValues = async (value: ObjectLiteral): Promise<any> => {
+        this.defaultValues = value;
+
+        const setValues = Object.keys(value).map(async selector => {
+            const valueItem = value[selector];
+
+            if (typeof valueItem === "object" && !Array.isArray(valueItem)) {
+
+                this.setObjectValues(valueItem, [selector])
+
+            } else {
+
+                this.setNormalValue(selector, valueItem)
+
+            }
+
+
         })
         return await Promise.all(setValues)
     }
@@ -85,17 +111,23 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
         return await Promise.all(clearValues)
     }
 
-    private renderInput = (input: Input, index: number) => {
-        return React.createElement(this.inputs[input.type], { key: index, ref: (el) => this.inputRefs[input.selector || ""] = el, ...input })
+    private renderInput = (input: InputProps, index: number) => {
+        console.log(input)
+        const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...input });
+        return (
+            <Fragment key={index}>
+                {input.wrapper ? input.wrapper(element) : element}
+            </Fragment>
+        )
     }
 
-    render() {
+    render(): JSX.Element {
         return (
-            <div style={{ backgroundColor: 'silver' }}>
+            <Box bgcolor={'silver'}>
                 <Box>
                     {this.props.inputs.map(this.renderInput)}
                 </Box>
-            </div >
+            </Box>
         )
     }
 }
