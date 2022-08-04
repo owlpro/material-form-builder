@@ -3,7 +3,7 @@ import { InputProps } from "../../types/input";
 import { BaseInput } from "../../types/input.base";
 
 export type ItemsInputValueType = ObjectLiteral[] | null;
-export interface ItemsInputProps extends Omit<BaseInput, 'onChangeValue'> {
+export interface ItemsInputProps extends Omit<BaseInput<ItemsInputValueType>, 'onChangeValue'> {
     type: "items",
     inputs: InputProps[],
 }

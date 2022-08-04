@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import React, { Component, Fragment } from 'react';
-import { setToObject } from './helpers/object.helper';
+import { selectFromObject, setToObject } from './helpers/object.helper';
 import { OutputValues } from './types/builder.outputValues';
 import { Input, InputGetValueTypes, InputProps, InputTypes } from './types/input';
 
@@ -46,7 +46,12 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
             if ((inputProps.required || inputProps.type === "items" || inputProps.type === "custom") && !isValid) {
                 invalidInputs.push(inputProps)
             }
-            const value = input.getValue();
+            let value = input.getValue();
+            if (inputProps.getMutator && typeof inputProps.getMutator === "function") {
+                let mutatedValue = inputProps.getMutator(value)
+                value = mutatedValue !== undefined ? mutatedValue : value;
+            }
+
             setToObject(inputProps.selector, value, data)
         })
         return {
@@ -71,9 +76,32 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
     }
 
     private async setNormalValue(selector: string, value: InputGetValueTypes) {
-        const input = this.inputRefs[selector]
-        if (input && value) {
-            await input.setValue(value)
+        const regex = new RegExp('^(' + selector + ')\\[.*\\=.*\\]\\..*')
+        const keyValueSelectors = Object.keys(this.inputRefs).filter(i => regex.test(i))
+        if (Array.isArray(value) && keyValueSelectors.length) {
+            await Promise.all(keyValueSelectors.map(async keyValueSelector => {
+                let valueItem = selectFromObject(keyValueSelector.replace(selector, ''), value)
+                const input = this.inputRefs[keyValueSelector]
+                if (!input || valueItem === undefined) return false;
+
+                const inputProps = this.props.inputs.find(i => i.selector === keyValueSelector)
+                if (inputProps?.setMutator && typeof inputProps.setMutator === "function") {
+                    const mutatedValue = inputProps.setMutator(valueItem);
+                    valueItem = mutatedValue !== undefined ? mutatedValue : valueItem;
+                }
+                await input.setValue(valueItem)
+            }))
+        } else {
+            const input = this.inputRefs[selector]
+            if (input && value) {
+                const inputProps = this.props.inputs.find(i => i.selector === selector)
+                if (inputProps?.setMutator && typeof inputProps.setMutator === "function") {
+                    const mutatedValue = inputProps.setMutator(value);
+                    value = mutatedValue !== undefined ? mutatedValue : value;
+                }
+
+                await input.setValue(value)
+            }
         }
     }
 
@@ -101,10 +129,12 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
     }
 
     private renderInput = (input: InputProps, index: number): JSX.Element => {
-        const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...input });
+        const { wrapper, getMutator, setMutator, ...props } = input
+
+        const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...props });
         return (
             <Fragment key={index}>
-                {input.wrapper ? input.wrapper(element) : element}
+                {wrapper ? wrapper(element) : element}
             </Fragment>
         )
     }
