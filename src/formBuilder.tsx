@@ -10,6 +10,9 @@ import { TextInput } from './inputs/text/text.input';
 import { CustomInput } from './inputs/custom/custom.input';
 import { ObjectLiteral } from './types/helper.types';
 import { CheckboxInput } from './inputs/checkbox/checkbox.input';
+import { MobileInput } from './inputs/mobile/mobile.input';
+import { OtpInput } from './inputs/otp/otp.input';
+import { PasswordInput } from './inputs/password/password.input';
 
 
 
@@ -31,7 +34,10 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
         number: NumberInput,
         items: ItemsInput,
         custom: CustomInput,
-        checkbox: CheckboxInput
+        checkbox: CheckboxInput,
+        mobile: MobileInput,
+        otp: OtpInput,
+        password: PasswordInput
     }
     private defaultValues: ObjectLiteral = {};
 
