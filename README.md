@@ -3,9 +3,9 @@
   <a href="https://mui.com/" rel="noopener" target="_blank">
   <img width="150" src="https://raw.githubusercontent.com/mui/material-ui/master/docs/public/static/logo.svg" alt="MUI logo"></a>
 </p>
-<h1 align="center">Pishdeh</h1>
+<h1 align="center">MFB</h1>
 
-**pishdeh-form-builder** is easy form builder Based on material ui 5 (**MUI**)
+**material-form-builder** is easy form builder Based on material ui 5 (**MUI**)
 
 ## Installation
 
@@ -18,20 +18,20 @@ Material UI is available as an [npm package](https://www.npmjs.com/package/@mui/
 **npm:**
 
 ```sh
-npm install @owlpro/pishdeh-form-builder
+npm install material-form-builder
 ```
 
 **yarn:**
 
 ```sh
-yarn add @owlpro/pishdeh-form-builder
+yarn add material-form-builder
 ```
 
 **basic usage:**
 
 ```ts
 import React, { useRef } from 'react'
-import { FormBuilder } from '@owlpro/pishdeh-form-builder'
+import { FormBuilder } from 'material-form-builder'
 
 const App = () => {
     const builderRef = useRef(null);
