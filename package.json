@@ -1,6 +1,6 @@
 {
   "name": "@owlpro/pishdeh-form-builder",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "FormBuilder For React.js",
   "main": "dist/index.js",
   "repository": {
@@ -11,7 +11,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "rollup -c",
+    "build": "rm -rf ./dist && yarn cache clean && rollup -c",
     "watch": "rm -rf ./dist && yarn cache clean && rollup -cw"
   },
   "eslintConfig": {

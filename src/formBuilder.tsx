@@ -4,15 +4,15 @@ import { selectFromObject, setToObject } from './helpers/object.helper';
 import { OutputValues } from './types/builder.outputValues';
 import { Input, InputGetValueTypes, InputProps, InputTypes } from './types/input';
 
-import { ItemsInput } from './inputs/items/items.input';
-import { NumberInput } from './inputs/number/number.input';
-import { TextInput } from './inputs/text/text.input';
-import { CustomInput } from './inputs/custom/custom.input';
-import { ObjectLiteral } from './types/helper.types';
 import { CheckboxInput } from './inputs/checkbox/checkbox.input';
+import { CustomInput } from './inputs/custom/custom.input';
+import { ItemsInput } from './inputs/items/items.input';
 import { MobileInput } from './inputs/mobile/mobile.input';
+import { NumberInput } from './inputs/number/number.input';
 import { OtpInput } from './inputs/otp/otp.input';
 import { PasswordInput } from './inputs/password/password.input';
+import { TextInput } from './inputs/text/text.input';
+import { ObjectLiteral } from './types/helper.types';
 
 
 
@@ -148,9 +148,7 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
     render(): JSX.Element {
         return (
             <Fragment>
-                <Box bgcolor={'silver'}>
-                    {this.props.inputs.map(this.renderInput)}
-                </Box>
+                {this.props.inputs.map(this.renderInput)}
             </Fragment>
         )
     }
