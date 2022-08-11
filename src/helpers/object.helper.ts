@@ -22,7 +22,7 @@ export const selectFromObject = (selector: string, data: any) => {
 }
 
 export const setToObject = (selector: string, value: any, object: any) => {
-    value = typeof value !== 'boolean' && !Array.isArray(value) && value && !isNaN(value) ? parseInt(value, 10) : value
+    // value = typeof value !== 'boolean' && !Array.isArray(value) && value && !isNaN(value) ? parseInt(value, 10) : value
     const regex = new RegExp('.*[.*=.*]')
     let splitSelector = selector.split('.')
     if (splitSelector.length > 1) {

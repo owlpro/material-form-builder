@@ -14,9 +14,9 @@ interface IState {
 }
 
 const StylesImage = styled('img')({
-    borderRadius: 5,
-    height: 15,
-    width: 20
+    borderRadius: 4,
+    height: 22,
+    width: 28
 });
 
 
@@ -36,6 +36,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
             case this.state.country.dialCode !== nextState.country.dialCode:
+                // case this.props.variant !== this.props.variant:
                 return true;
             default: return false;
         }
@@ -129,17 +130,35 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
 
     render() {
         const { onChangeValue, ...restProps } = this.props;
-
+        const isOutlined = this.props.variant === "outlined";
+        let inputWidth = 207;
+        switch (this.props.variant) {
+            case "outlined": inputWidth = 235; break;
+            case "filled": inputWidth = 231; break;
+            default: break;
+        }
         return (
-            <Box sx={{ display: 'inline-flex', alignItems: 'flex-end', width: '207px' }}>
+            <Box sx={{
+                display: 'inline-flex',
+                alignItems: 'flex-end',
+                width: this.props.fullWidth ? '100%' : inputWidth,
+                position: 'relative'
+            }}>
                 <Select
                     value={this.state.country.dialCode}
                     onChange={this.onChangeCountry}
                     variant="standard"
                     margin='none'
-                    sx={{ minWidth: '65px', position: 'relative', zIndex: 2 }}
+                    sx={{
+                        width: '65px',
+                        position: 'absolute',
+                        zIndex: 2,
+                        left: (isOutlined ? '8px' : 0),
+                        top: (isOutlined ? '5px' : '18px'),
+                        bottom: 2
+                    }}
                     renderValue={(value) => {
-                        return <Typography textAlign={'center'}>
+                        return <Typography paddingLeft={'8px'}>
                             +{value}
                         </Typography>;
                     }}
@@ -147,11 +166,18 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
                 >
                     {countries.map((country, index) => {
                         return (
-                            <MenuItem key={index} value={country.dialCode} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', minWidth: '100px' }}>
-                                <StylesImage src={country.flag} />
+                            <MenuItem key={index} value={country.dialCode} sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                minWidth: '100px',
+                                paddingRight: '8px',
+                                paddingLeft: '8px'
+                            }}>
                                 <Typography display={'inline'}>
                                     +{country.dialCode}
                                 </Typography>
+                                <StylesImage src={country.flag} />
                             </MenuItem>
                         )
                     })}
@@ -162,15 +188,12 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
                     onChange={this.onChange}
                     onClick={this.onClick}
                     value={this.state.value || ''}
-
                     inputRef={el => this.inputRef = el}
-                    sx={{ position: 'relative', right: '65px' }}
-
                     InputProps={{
-                        sx: { width: '207px' },
+                        sx: { width: this.props.fullWidth ? '100%' : inputWidth },
                         startAdornment: (
                             <InputAdornment position='start'>
-                                <Box ml={'60px'}></Box>
+                                <Box ml={'56px'}></Box>
                             </InputAdornment>
                         )
                     }}

@@ -11,27 +11,21 @@ export type Country = {
 }
 export const countries: Country[] = [
     {
-        title: 'US',
-        dialCode: '1',
-        mask: '(...) ... ....',
-        flag: USFlag,
-    },
-    {
         title: 'IR',
         dialCode: '98',
-        mask: '... (...) ....',
+        mask: '(...) ... ....',
         flag: IRFlag,
-    },
-    {
-        title: 'AU',
-        dialCode: '91',
-        mask: '... ... (....) .',
-        flag: AUFlag,
     },
     {
         title: 'AE',
         dialCode: '971',
-        mask: '... - (...) .... # .',
+        mask: '. ... ....',
         flag: AEFlag,
+    },
+    {
+        title: 'US',
+        dialCode: '1',
+        mask: '... ... ....',
+        flag: USFlag,
     },
 ]
