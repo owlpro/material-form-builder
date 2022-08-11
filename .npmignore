@@ -1,4 +1,4 @@
-./src
+/src
 yarn.lock
 tsconfig.json
 rollup.config
@@ -7,4 +7,4 @@ rollup.config
 node_modules
 .npmignore
 .prettierrc
-./all_flags
+/all_flags

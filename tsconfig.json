@@ -1,21 +1,21 @@
 {
-	"compilerOptions": {
-		"target": "ES5",
-		"module": "ESNext",
-		"jsx": "react",
-		"sourceMap": true,
-		"outDir": "/dist",
-		"strict": true,
-		"allowJs": true,
-		"moduleResolution": "node",
-		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true,
-		"declaration": true,
-		// "declarationDir": "types",
-		// "emitDeclarationOnly": true
-	},
-	"include": ["src/**/*"],
-	"exclude": ["node_modules", "dist"]
+    "compilerOptions": {
+        "target": "ES5",
+        "module": "ES2015",
+        "jsx": "react",
+        "sourceMap": true,
+        "outDir": "/dist",
+        "strict": true,
+        "allowJs": true,
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "declaration": true
+        // "declarationDir": "types",
+        // "emitDeclarationOnly": true
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"]
 }
