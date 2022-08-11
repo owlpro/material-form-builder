@@ -1,11 +1,11 @@
 {
-  "name": "@owlpro/pishdeh-form-builder",
-  "version": "0.4.3",
+  "name": "material-form-builder",
+  "version": "0.4.4",
   "description": "FormBuilder For React.js",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/owlpro/pishdeh.git"
+    "url": "git+https://github.com/owlpro/material-form-builder.git"
   },
   "author": "OwlPro",
   "license": "MIT",
@@ -47,15 +47,20 @@
     "react-dom": "^18.0.0"
   },
   "bugs": {
-    "url": "https://github.com/owlpro/pishdeh/issues"
+    "url": "https://github.com/owlpro/material-form-builder/issues"
   },
-  "homepage": "https://github.com/owlpro/pishdeh#readme",
+  "homepage": "https://github.com/owlpro/material-form-builder#readme",
   "keywords": [
     "form",
     "form-builder",
     "form-maker",
     "form-generator",
     "generate-form",
-    "build-form"
+    "build-form",
+    "react-form-builder",
+    "typescript-form-builder",
+    "material-form-builder",
+    "mui-form-builder",
+    "material-ui-form-builder"
   ]
 }
