@@ -1,7 +1,6 @@
+import AEFlag from './flags/ae.svg'
 import IRFlag from './flags/ir.svg'
 import USFlag from './flags/us.svg'
-import AUFlag from './flags/au.svg'
-import AEFlag from './flags/ae.svg'
 
 export type Country = {
     title: string

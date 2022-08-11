@@ -7,3 +7,4 @@ rollup.config
 node_modules
 .npmignore
 .prettierrc
+./all_flags

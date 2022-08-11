@@ -1,12 +1,15 @@
 {
-  "name": "pishdeh-form-builder",
-  "version": "0.4.0",
+  "name": "@owlpro/pishdeh-form-builder",
+  "version": "0.4.1",
   "description": "FormBuilder For React.js",
   "main": "dist/index.js",
-  "repository": "https://github.com/owlpro/pishdeh.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/owlpro/pishdeh.git"
+  },
   "author": "OwlPro",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "scripts": {
     "build": "rollup -c",
     "watch": "rm -rf ./dist && yarn cache clean && rollup -cw"
@@ -42,5 +45,17 @@
     "@mui/material": "^5.9.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/owlpro/pishdeh/issues"
+  },
+  "homepage": "https://github.com/owlpro/pishdeh#readme",
+  "keywords": [
+    "form",
+    "form-builder",
+    "form-maker",
+    "form-generator",
+    "generate-form",
+    "build-form"
+  ]
 }
