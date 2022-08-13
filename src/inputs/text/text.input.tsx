@@ -57,7 +57,16 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
     }
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setValue(event.target.value || null)
+        let value: TextInputValueType = event.target.value;
+        if(this.props.formatter && typeof this.props.formatter === "function"){
+            const formattedValue = this.props.formatter(value)
+            if(formattedValue !== undefined){
+                value = formattedValue;
+            }
+        }
+
+        this.setValue(value || null)
+
     };
 
     private onClick = (event: React.MouseEvent<HTMLElement>) => {

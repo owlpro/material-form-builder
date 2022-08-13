@@ -5,4 +5,5 @@ export interface BaseInput<ValueType = any> {
     onChangeValue?: (value: ValueType) => void
     getMutator?: (value: any) => any
     setMutator?: (value: any) => any
+    formatter?: (value: ValueType) => ValueType
 }

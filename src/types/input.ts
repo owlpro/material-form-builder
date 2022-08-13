@@ -12,6 +12,8 @@ import { OtpInput } from '../inputs/otp/otp.input'
 import { OtpInputProps } from '../inputs/otp/otp.types'
 import { PasswordInput } from '../inputs/password/password.input'
 import { PasswordInputProps } from '../inputs/password/password.types'
+import { SelectInput } from '../inputs/select/select.input'
+import { SelectInputProps } from '../inputs/select/select.types'
 import { TextInput } from '../inputs/text/text.input'
 import { TextInputProps } from '../inputs/text/text.types'
 
@@ -24,7 +26,9 @@ export type InputProps =
     | MobileInputProps
     | OtpInputProps
     | PasswordInputProps
-export type Input = TextInput | NumberInput | ItemsInput | CustomInput | CheckboxInput | MobileInput | OtpInput | PasswordInput
+    | SelectInputProps
+
+export type Input = TextInput | NumberInput | ItemsInput | CustomInput | CheckboxInput | MobileInput | OtpInput | PasswordInput | SelectInput
 
 export type InputGetValueTypes = ReturnType<Input['getValue']>
 export type InputTypes = InputProps['type']

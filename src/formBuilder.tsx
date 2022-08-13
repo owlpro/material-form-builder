@@ -13,6 +13,7 @@ import { OtpInput } from './inputs/otp/otp.input';
 import { PasswordInput } from './inputs/password/password.input';
 import { TextInput } from './inputs/text/text.input';
 import { ObjectLiteral } from './types/helper.types';
+import { SelectInput } from './inputs/select/select.input';
 
 
 
@@ -37,7 +38,8 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
         checkbox: CheckboxInput,
         mobile: MobileInput,
         otp: OtpInput,
-        password: PasswordInput
+        password: PasswordInput,
+        select: SelectInput
     }
     private defaultValues: ObjectLiteral = {};
 

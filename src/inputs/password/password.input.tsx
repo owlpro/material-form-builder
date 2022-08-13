@@ -1,3 +1,5 @@
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Box, IconButton, InputAdornment } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { Component } from "react";
 import { InputImplement } from '../../types/input.implement';
@@ -5,13 +7,15 @@ import { PasswordInputProps, PasswordInputValueType } from './password.types';
 
 interface IState {
     value: PasswordInputValueType,
-    error: boolean
+    error: boolean,
+    showPassword: boolean,
 }
 
 export class PasswordInput extends Component<PasswordInputProps, IState> implements InputImplement<PasswordInputValueType> {
     state: IState = {
         value: this.props.defaultValue || null,
-        error: false
+        error: false,
+        showPassword: false
     }
 
     validationTimeout: NodeJS.Timeout | undefined;
@@ -21,6 +25,7 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
+            case this.state.showPassword !== nextState.showPassword:
                 return true;
             default: return false;
         }
@@ -57,16 +62,52 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
     }
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let value: PasswordInputValueType = event.target.value;
+        if(this.props.formatter && typeof this.props.formatter === "function"){
+            const formattedValue = this.props.formatter(value)
+            if(formattedValue !== undefined){
+                value = formattedValue;
+            }
+        }
+
         this.setValue(event.target.value || null)
     };
 
-    private onClick = (event: React.MouseEvent<HTMLElement>) => {
+    private onFocus = () => {
         clearTimeout(this.validationTimeout)
         this.setState({ ...this.state, error: false })
     }
 
+    private handleClickShowPassword = () => {
+        this.setState({ ...this.state, showPassword: !this.state.showPassword })
+    }
+
     render() {
         const { onChangeValue, ...restProps } = this.props;
-        return <TextField {...restProps} variant={this.props.variant || "standard"} error={this.state.error} onChange={this.onChange} onClick={this.onClick} value={this.state.value || ''} />
+        let variantWidth = '207px';
+        if(this.props.variant === "outlined") variantWidth = "235px";
+        if(this.props.variant === "filled") variantWidth = "231px";
+        const inputWidth = this.props.fullWidth ? '100%' : variantWidth;
+        return (
+            <TextField
+                {...restProps}
+                sx={{...this.props.sx, width: inputWidth}}
+                type={this.state.showPassword ? 'text' : 'password'}
+                variant={this.props.variant || "standard"}
+                error={this.state.error}
+                onChange={this.onChange}
+                onFocus={this.onFocus}
+                value={this.state.value || ''}
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton onClick={this.handleClickShowPassword}>
+                                {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                        </InputAdornment>
+                    )
+                }}
+            />
+        )
     }
 }

@@ -62,7 +62,14 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
     }
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value.replace(/[^0-9]/g, '')
+        let value: OtpInputValueType = event.target.value.replace(/[^0-9]/g, '')
+        if(this.props.formatter && typeof this.props.formatter === "function"){
+            const formattedValue = this.props.formatter(value)
+            if(formattedValue !== undefined){
+                value = formattedValue;
+            }
+        }
+
         this.setValue(value || null)
     };
 

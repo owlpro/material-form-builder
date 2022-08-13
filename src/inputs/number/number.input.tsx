@@ -57,7 +57,14 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
     }
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = isNaN(parseInt(event.target.value, 10)) ? null : parseInt(event.target.value, 10);
+        let value: NumberInputValueType = isNaN(parseInt(event.target.value, 10)) ? null : parseInt(event.target.value, 10);
+        if(this.props.formatter && typeof this.props.formatter === "function"){
+            const formattedValue = this.props.formatter(value)
+            if(formattedValue !== undefined){
+                value = formattedValue;
+            }
+        }
+
         this.setValue(value)
     };
 
