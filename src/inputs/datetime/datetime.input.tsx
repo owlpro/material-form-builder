@@ -58,7 +58,7 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
     }
 
     onChange = (event: any) => {
-        let value: DatetimeInputValueType = event;
+        let value = event.toDate ? event.toDate() : event;
         this.setValue(value || null)
     };
 

@@ -1,9 +1,9 @@
 import TextField from '@mui/material/TextField';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React, { Component } from "react";
 import { InputImplement } from '../../types/input.implement';
 import { DateInputProps, DateInputValueType } from './date.types';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 interface IState {
     value: DateInputValueType,
@@ -28,7 +28,7 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
         }
     }
 
-    async setValue(value: DateInputValueType): Promise<any> {        
+    async setValue(value: DateInputValueType): Promise<any> {
         if (value === this.state.value) return Promise.resolve()
         const setStatePromise = await this.setState({ ...this.state, value })
         if (typeof this.props.onChangeValue === "function") {
@@ -58,10 +58,8 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
     }
 
     onChange = (event: any) => {
-
-        let value: DateInputValueType = event;
+        let value = event.toDate ? event.toDate() : event;
         this.setValue(value || null)
-
     };
 
     private onClick = (event: React.MouseEvent<HTMLElement>) => {

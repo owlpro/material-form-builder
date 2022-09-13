@@ -58,12 +58,12 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
     }
 
     onChange = (event: any) => {
-        let value: TimeInputValueType = event;
+        let value = event.toDate ? event.toDate() : event;
         this.setValue(value || null)
 
     };
 
-    private onClick = (event: React.MouseEvent<HTMLElement>) => {
+    private onClick = () => {
         clearTimeout(this.validationTimeout)
         this.setState({ ...this.state, error: false })
     }
