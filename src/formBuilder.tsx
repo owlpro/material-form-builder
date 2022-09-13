@@ -1,4 +1,3 @@
-import { Box } from '@mui/material';
 import React, { Component, Fragment } from 'react';
 import { selectFromObject, setToObject } from './helpers/object.helper';
 import { OutputValues } from './types/builder.outputValues';
@@ -6,14 +5,17 @@ import { Input, InputGetValueTypes, InputProps, InputTypes } from './types/input
 
 import { CheckboxInput } from './inputs/checkbox/checkbox.input';
 import { CustomInput } from './inputs/custom/custom.input';
+import { DateInput } from './inputs/date/date.input';
+import { DatetimeInput } from './inputs/datetime/datetime.input';
 import { ItemsInput } from './inputs/items/items.input';
 import { MobileInput } from './inputs/mobile/mobile.input';
 import { NumberInput } from './inputs/number/number.input';
 import { OtpInput } from './inputs/otp/otp.input';
 import { PasswordInput } from './inputs/password/password.input';
-import { TextInput } from './inputs/text/text.input';
-import { ObjectLiteral } from './types/helper.types';
 import { SelectInput } from './inputs/select/select.input';
+import { TextInput } from './inputs/text/text.input';
+import { TimeInput } from './inputs/time/time.input';
+import { ObjectLiteral } from './types/helper.types';
 
 
 
@@ -39,7 +41,10 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
         mobile: MobileInput,
         otp: OtpInput,
         password: PasswordInput,
-        select: SelectInput
+        select: SelectInput,
+        date: DateInput,
+        time: TimeInput,
+        datetime: DatetimeInput,
     }
     private defaultValues: ObjectLiteral = {};
 
@@ -117,7 +122,7 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
         this.defaultValues = value;
         const setValues = Object.keys(value).map(async selector => {
             const valueItem = value[selector];
-            if (typeof valueItem === "object" && !Array.isArray(valueItem)) {
+            if (typeof valueItem === "object" && !Array.isArray(valueItem) && !(valueItem instanceof Date)) {
                 this.setObjectValues(valueItem, [selector])
             } else {
                 this.setNormalValue(selector, valueItem)
