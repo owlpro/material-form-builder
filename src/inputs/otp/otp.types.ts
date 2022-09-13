@@ -4,6 +4,7 @@ import { BaseInput } from '../../types/input.base'
 export type OtpInputValueType = string | null
 export interface OtpInputProps extends BaseInput<OtpInputValueType> {
     type: 'otp'
+
     defaultValue?: OtpInputValueType
 
     /** * @default standard */
@@ -11,6 +12,8 @@ export interface OtpInputProps extends BaseInput<OtpInputValueType> {
 
     /** * @default 4 */
     digits?: number
+
+    autoFocus?: boolean
 
     /** @default 55 */
     height?: number

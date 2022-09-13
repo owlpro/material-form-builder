@@ -31,6 +31,13 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
         }
     }
 
+    componentDidMount(): void {
+        if (this.props.autoFocus) {
+            this.setState({ ...this.state, isInputFocused: true })
+            this.inputRef?.focus()
+        }
+    }
+
     async setValue(value: OtpInputValueType): Promise<any> {
         if (value === this.state.value) return Promise.resolve()
 
@@ -63,9 +70,9 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         let value: OtpInputValueType = event.target.value.replace(/[^0-9]/g, '')
-        if(this.props.formatter && typeof this.props.formatter === "function"){
+        if (this.props.formatter && typeof this.props.formatter === "function") {
             const formattedValue = this.props.formatter(value)
-            if(formattedValue !== undefined){
+            if (formattedValue !== undefined) {
                 value = formattedValue;
             }
         }
@@ -116,6 +123,7 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
                     justifyContent: 'space-between',
                 }}>
                     <input
+                        autoFocus={this.props.autoFocus}
                         style={{ position: 'absolute', zIndex: -1, opacity: 0 }}
                         onChange={this.onChange}
                         onBlur={this.onBlur}
