@@ -1,9 +1,8 @@
-import { Box, CircularProgress, FormControl, InputAdornment, InputLabel, ListSubheader, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { Box, CircularProgress, FormControl, Grow, InputLabel, ListSubheader, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import React, { Component } from "react";
 import { InputImplement } from '../../types/input.implement';
 import { SelectInputProps, SelectInputValueType } from './select.types';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 interface IState {
     value: SelectInputValueType,
     error: boolean
@@ -79,11 +78,15 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
         let variantWidth = '207px';
         if (this.props.variant === "outlined") variantWidth = "235px";
         if (this.props.variant === "filled") variantWidth = "231px";
+
         const LoadingComponent = (props: any) => (
-            <Box sx={{paddingRight: '16px', paddingTop: '4px'}}>
-                <CircularProgress size={24} />
-            </Box>
+            <Grow in={true} timeout={550}>
+                <Box sx={{ paddingRight: '16px', paddingTop: '4px' }}>
+                    <CircularProgress size={24} />
+                </Box>
+            </Grow>
         )
+
         const inputWidth = this.props.fullWidth ? '100%' : variantWidth;
 
         return <FormControl sx={{ width: inputWidth }} variant={variant || "standard"}>
