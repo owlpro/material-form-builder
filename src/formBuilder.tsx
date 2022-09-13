@@ -16,6 +16,7 @@ import { SelectInput } from './inputs/select/select.input';
 import { TextInput } from './inputs/text/text.input';
 import { TimeInput } from './inputs/time/time.input';
 import { ObjectLiteral } from './types/helper.types';
+import { MaskInput } from './inputs/mask/mask.input';
 
 
 
@@ -45,6 +46,7 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
         date: DateInput,
         time: TimeInput,
         datetime: DatetimeInput,
+        mask: MaskInput,
     }
     private defaultValues: ObjectLiteral = {};
 
