@@ -42,6 +42,16 @@ export class CustomInput extends Component<CustomInputProps, IState> implements 
         return true;
     }
 
+    public click = () => {
+        // this.inputRef?.click()
+    }
+    public focus = () => {
+        // this.inputRef?.focus()
+    }
+    public blur = () => {
+        // this.inputRef?.blur()
+    }
+
     render() {
         const { element, ...rest } = this.props;
         const render = React.createElement(element, { ref: (el: Input) => this.elementRef = el, ...rest });

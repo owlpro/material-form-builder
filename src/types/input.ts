@@ -6,6 +6,8 @@ import { DateInput } from '../inputs/date/date.input'
 import { DateInputProps } from '../inputs/date/date.types'
 import { DatetimeInput } from '../inputs/datetime/datetime.input'
 import { DatetimeInputProps } from '../inputs/datetime/datetime.types'
+import { FileInput } from '../inputs/file/file.input'
+import { FileInputProps } from '../inputs/file/file.types'
 import { ItemsInput } from '../inputs/items/items.input'
 import { ItemsInputProps } from '../inputs/items/items.interface'
 import { MaskInput } from '../inputs/mask/mask.input'
@@ -39,6 +41,7 @@ export type InputProps =
     | TimeInputProps
     | DatetimeInputProps
     | MaskInputProps
+    | FileInputProps
 
 export type Input =
     | TextInput
@@ -54,6 +57,7 @@ export type Input =
     | TimeInput
     | DatetimeInput
     | MaskInput
+    | FileInput
 
 export type InputGetValueTypes = ReturnType<Input['getValue']>
 export type InputTypes = InputProps['type']

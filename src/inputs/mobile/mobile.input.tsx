@@ -128,6 +128,16 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
 
     }
 
+    public click = () => {
+        this.inputRef?.click()
+    }
+    public focus = () => {
+        this.inputRef?.focus()
+    }
+    public blur = () => {
+        this.inputRef?.blur()
+    }
+
     render() {
         const { onChangeValue, ...restProps } = this.props;
         const isOutlined = this.props.variant === "outlined";

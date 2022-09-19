@@ -18,6 +18,8 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
 
     validationTimeout: NodeJS.Timeout | undefined;
 
+    inputRef: HTMLInputElement | null | undefined;
+    
     shouldComponentUpdate(nextProps: DateInputProps, nextState: IState) {
 
         switch (true) {
@@ -67,6 +69,16 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
         this.setState({ ...this.state, error: false })
     }
 
+    public click = () => {
+        this.inputRef?.click()
+    }
+    public focus = () => {
+        this.inputRef?.focus()
+    }
+    public blur = () => {
+        this.inputRef?.blur()
+    }
+
     render() {
         const { onChangeValue, dateAdapter, variant, required, ...restProps } = this.props;
         return (
@@ -75,7 +87,14 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
                     {...restProps}
                     value={this.state.value}
                     onChange={this.onChange}
-                    renderInput={(params: any) => <TextField {...params} variant={variant || 'standard'} required={required || false} error={this.state.error} onClick={this.onClick} />}
+                    renderInput={(params: any) => <TextField
+                        {...params}
+                        variant={variant || 'standard'}
+                        required={required || false}
+                        error={this.state.error}
+                        onClick={this.onClick}
+                        inputRef={el => this.inputRef = el}
+                    />}
                 />
             </LocalizationProvider>
         )

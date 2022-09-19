@@ -17,6 +17,8 @@ import { TextInput } from './inputs/text/text.input';
 import { TimeInput } from './inputs/time/time.input';
 import { ObjectLiteral } from './types/helper.types';
 import { MaskInput } from './inputs/mask/mask.input';
+import { FileInput } from './inputs/file/file.input';
+import { InputActions } from './types/input.base';
 
 
 
@@ -30,7 +32,14 @@ interface IProps {
     inputs: InputProps[]
 }
 
-export class FormBuilder extends Component<IProps> implements FormBuilderImplements {
+interface IState {
+    isMounted: boolean
+}
+
+export class FormBuilder extends Component<IProps, IState> implements FormBuilderImplements {
+    state: IState = {
+        isMounted: false
+    }
 
     private inputRefs: { [key: string]: Input } = {}
     private inputs: { [key in InputTypes]: React.ElementType } = {
@@ -47,8 +56,18 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
         time: TimeInput,
         datetime: DatetimeInput,
         mask: MaskInput,
+        file: FileInput
     }
+
     private defaultValues: ObjectLiteral = {};
+
+    componentDidMount() {
+        this.setState({ ...this.state, isMounted: true })
+    }
+
+    componentWillUnmount(): void {
+        this.setState({ ...this.state, isMounted: false })
+    }
 
     public getValues = (): OutputValues => {
         const data: ObjectLiteral = this.defaultValues || {};
@@ -145,11 +164,18 @@ export class FormBuilder extends Component<IProps> implements FormBuilderImpleme
 
     private renderInput = (input: InputProps, index: number): JSX.Element => {
         const { wrapper, getMutator, setMutator, ...props } = input
-
-        const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...props });
+        const actions: InputActions = {
+            setValue: (data: any) => { if (this.state.isMounted) this.inputRefs[input.selector].setValue(data) },
+            getValue: () => { if (this.state.isMounted) this.inputRefs[input.selector].getValue() },
+            clear: () => { if (this.state.isMounted) this.inputRefs[input.selector].clear() },
+            click: () => { if (this.state.isMounted) this.inputRefs[input.selector].click() },
+            focus: () => { if (this.state.isMounted) this.inputRefs[input.selector].focus() },
+            blur: () => { if (this.state.isMounted) this.inputRefs[input.selector].blur() }
+        };
+        const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...props, actions });
         return (
             <Fragment key={index}>
-                {wrapper ? wrapper(element) : element}
+                {wrapper ? wrapper(element, actions) : element}
             </Fragment>
         )
     }

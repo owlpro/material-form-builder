@@ -82,6 +82,18 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
         this.setState({ ...this.state, showPassword: !this.state.showPassword })
     }
 
+    inputRef: HTMLInputElement | null | undefined;
+
+    public click = () => {
+        this.inputRef?.click()
+    }
+    public focus = () => {
+        this.inputRef?.focus()
+    }
+    public blur = () => {
+        this.inputRef?.blur()
+    }
+    
     render() {
         const { onChangeValue, ...restProps } = this.props;
         let variantWidth = '207px';
@@ -98,6 +110,7 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
                 onChange={this.onChange}
                 onFocus={this.onFocus}
                 value={this.state.value || ''}
+                inputRef={el => this.inputRef = el}
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">

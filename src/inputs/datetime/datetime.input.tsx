@@ -67,6 +67,17 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
         this.setState({ ...this.state, error: false })
     }
 
+    inputRef: HTMLInputElement | null | undefined;
+    public click = () => {
+        this.inputRef?.click()
+    }
+    public focus = () => {
+        this.inputRef?.focus()
+    }
+    public blur = () => {
+        this.inputRef?.blur()
+    }
+
     render() {
         const { onChangeValue, dateAdapter, variant, required, ...restProps } = this.props;
         return (
@@ -76,7 +87,15 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
                     ampm={this.props.ampm || false}
                     value={this.state.value}
                     onChange={this.onChange}
-                    renderInput={(params: any) => <TextField {...params} variant={variant || 'standard'} required={required || false} error={this.state.error} onClick={this.onClick} />}
+                    renderInput={(params: any) => <TextField
+                        {...params}
+                        variant={variant || 'standard'}
+                        required={required || false}
+                        error={this.state.error}
+                        onClick={this.onClick}
+                        inputRef={el => this.inputRef = el}
+                    />
+                    }
                 />
             </LocalizationProvider>
         )

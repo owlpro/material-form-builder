@@ -17,6 +17,8 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
 
     validationTimeout: NodeJS.Timeout | undefined;
 
+    inputRef: HTMLInputElement | null | undefined;
+
     shouldComponentUpdate(nextProps: CheckboxInputProps, nextState: IState) {
 
         switch (true) {
@@ -66,6 +68,16 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
         this.setState({ ...this.state, error: false })
     }
 
+    public click = () => {
+        this.inputRef?.click()
+    }
+    public focus = () => {
+        this.inputRef?.focus()
+    }
+    public blur = () => {
+        this.inputRef?.blur()
+    }
+
     render() {
         const { defaultChecked, onChangeValue, ...restProps } = this.props;
         const label = this.props.label + (this.props.required ? ' *' : '')
@@ -76,6 +88,7 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
                     sx={{ color: this.state.error ? red[700] : grey[700] }}
                     checked={this.state.value}
                     onChange={this.onChange}
+                    inputRef={el => this.inputRef = el}
                 />
             } style={{ userSelect: 'none' }} label={label} />
         )

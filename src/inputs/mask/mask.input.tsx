@@ -81,6 +81,16 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
         this.setState({ ...this.state, error: false })
     }
 
+    public click = () => {
+        this.inputRef?.click()
+    }
+    public focus = () => {
+        this.inputRef?.focus()
+    }
+    public blur = () => {
+        this.inputRef?.blur()
+    }
+
     render() {
         const { onChangeValue, ...restProps } = this.props;
         return <TextField

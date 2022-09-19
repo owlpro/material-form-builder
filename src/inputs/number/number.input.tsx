@@ -58,9 +58,9 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         let value: NumberInputValueType = isNaN(parseInt(event.target.value, 10)) ? null : parseInt(event.target.value, 10);
-        if(this.props.formatter && typeof this.props.formatter === "function"){
+        if (this.props.formatter && typeof this.props.formatter === "function") {
             const formattedValue = this.props.formatter(value)
-            if(formattedValue !== undefined){
+            if (formattedValue !== undefined) {
                 value = formattedValue;
             }
         }
@@ -73,8 +73,28 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
         this.setState({ ...this.state, error: false })
     }
 
+    inputRef: HTMLInputElement | null | undefined;
+
+    public click = () => {
+        this.inputRef?.click()
+    }
+    public focus = () => {
+        this.inputRef?.focus()
+    }
+    public blur = () => {
+        this.inputRef?.blur()
+    }
+
     render() {
         const { onChangeValue, ...restProps } = this.props;
-        return <TextField {...restProps} variant={this.props.variant || "standard"} error={this.state.error} onChange={this.onChange} onClick={this.onClick} value={String(this.state.value)} />
+        return <TextField
+            {...restProps}
+            variant={this.props.variant || "standard"}
+            error={this.state.error}
+            onChange={this.onChange}
+            onClick={this.onClick}
+            value={String(this.state.value)}
+            inputRef={el => this.inputRef = el}
+        />
     }
 }

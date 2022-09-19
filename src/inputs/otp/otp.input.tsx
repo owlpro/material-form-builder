@@ -90,6 +90,16 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
         this.setState({ ...this.state, isInputFocused: false })
     }
 
+    public click = () => {
+        this.inputRef?.click()
+    }
+    public focus = () => {
+        this.inputRef?.focus()
+    }
+    public blur = () => {
+        this.inputRef?.blur()
+    }
+
     render() {
         const settings = {
             digits: this.props.digits || 4,

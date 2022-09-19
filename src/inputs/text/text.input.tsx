@@ -16,6 +16,8 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
 
     validationTimeout: NodeJS.Timeout | undefined;
 
+    inputRef: HTMLInputElement | undefined
+
     shouldComponentUpdate(nextProps: TextInputProps, nextState: IState) {
 
         switch (true) {
@@ -58,9 +60,9 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         let value: TextInputValueType = event.target.value;
-        if(this.props.formatter && typeof this.props.formatter === "function"){
+        if (this.props.formatter && typeof this.props.formatter === "function") {
             const formattedValue = this.props.formatter(value)
-            if(formattedValue !== undefined){
+            if (formattedValue !== undefined) {
                 value = formattedValue;
             }
         }
@@ -74,8 +76,26 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
         this.setState({ ...this.state, error: false })
     }
 
+    public click = () => {
+        this.inputRef?.click()
+    }
+    public focus = () => {
+        this.inputRef?.focus()
+    }
+    public blur = () => {
+        this.inputRef?.blur()
+    }
+
     render() {
         const { onChangeValue, ...restProps } = this.props;
-        return <TextField {...restProps} variant={this.props.variant || "standard"} error={this.state.error} onChange={this.onChange} onClick={this.onClick} value={this.state.value || ''} />
+        return <TextField
+            {...restProps}
+            variant={this.props.variant || "standard"}
+            error={this.state.error}
+            onChange={this.onChange}
+            onClick={this.onClick}
+            value={this.state.value || ''}
+            inputRef={el => this.inputRef = el}
+        />
     }
 }

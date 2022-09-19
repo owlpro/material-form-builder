@@ -96,6 +96,10 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         }
     }
 
+    public click = () => { }
+    public focus = () => { }
+    public blur = () => { }
+
     render() {
         return <Box>
             <Button onClick={this.addItem}>add item</Button>

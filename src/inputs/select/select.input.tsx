@@ -73,6 +73,18 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
         this.setState({ ...this.state, error: false })
     }
 
+    inputRef: HTMLInputElement | null | undefined;
+
+    public click = () => {
+        this.inputRef?.click()
+    }
+    public focus = () => {
+        this.inputRef?.focus()
+    }
+    public blur = () => {
+        this.inputRef?.blur()
+    }
+
     render() {
         const { onChangeValue, variant, ...restProps } = this.props;
         let variantWidth = '207px';
@@ -99,6 +111,7 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
                 onChange={this.onChange}
                 disabled={this.props.loading}
                 IconComponent={this.props.loading ? LoadingComponent : ArrowDropDownIcon}
+                inputRef={el => this.inputRef = el}
             >
                 {!this.props.options.length ? (
                     <ListSubheader sx={{ textAlign: 'center' }}>Items Not Found</ListSubheader>
