@@ -1,4 +1,5 @@
-import { Box, Button } from "@mui/material";
+import { Add, Delete, Remove, RemoveCircleRounded } from "@mui/icons-material";
+import { Box, IconButton } from "@mui/material";
 import React, { Component } from "react";
 import { FormBuilder } from "../../formBuilder";
 import { randomString } from "../../helpers/general.helper";
@@ -96,22 +97,41 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         }
     }
 
+    removeAll = () => {
+        return this.setValue(null);
+    }
+
     public click = () => { }
     public focus = () => { }
     public blur = () => { }
 
+    renderItem = (key: string) => {
+        return (
+            <Box key={key} display="flex" alignItems="center">
+                <IconButton onClick={this.removeItem(key)}>{this.props.removeIcon ? this.props.removeIcon : <Remove />}</IconButton>
+                <FormBuilder inputs={this.props.inputs} ref={el => this.formBuilderRef[key] = el} />
+            </Box>
+        )
+    }
+
     render() {
-        return <Box>
-            <Button onClick={this.addItem}>add item</Button>
-            <Button onClick={() => this.setValue(null)}>remove all</Button>
-            {this.state.items.map((key) => {
-                return (
-                    <Box key={key}>
-                        <Button onClick={this.removeItem(key)}>remove</Button>
-                        <FormBuilder inputs={this.props.inputs} ref={el => this.formBuilderRef[key] = el} />
+        return (
+            <Box>
+                {this.props.renderHeader ? (
+                    this.props.renderHeader(this.addItem, this.removeAll)
+                ) : (
+                    <Box>
+                        <IconButton onClick={this.addItem}><Add /></IconButton>
+                        <IconButton onClick={this.removeAll}><Delete /></IconButton>
                     </Box>
-                )
-            })}
-        </Box>
+                )}
+
+                {this.state.items.map((key) =>
+                    this.props.itemWrapper
+                        ? this.props.itemWrapper(this.renderItem(key))
+                        : this.renderItem(key)
+                )}
+            </Box>
+        )
     }
 }
