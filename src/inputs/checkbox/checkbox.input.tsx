@@ -1,5 +1,5 @@
 import { Checkbox, FormControlLabel } from '@mui/material';
-import { grey, pink, red } from '@mui/material/colors';
+import { grey, red } from '@mui/material/colors';
 import React, { Component } from "react";
 import { InputImplement } from '../../types/input.implement';
 import { CheckboxInputProps, CheckboxInputValueType } from './checkbox.interface';
@@ -79,7 +79,7 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
     }
 
     render() {
-        const { defaultChecked, onChangeValue, ...restProps } = this.props;
+        const { defaultChecked, onChangeValue, visible, ...restProps } = this.props;
         const label = this.props.label + (this.props.required ? ' *' : '')
         return (
             <FormControlLabel onClick={this.onClick} control={

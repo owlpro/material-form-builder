@@ -83,7 +83,7 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
 
 
     render() {
-        const { onChangeValue, dateAdapter, variant, required, ...restProps } = this.props;
+        const { onChangeValue, dateAdapter, variant, required, visible, ...restProps } = this.props;
         return (
             <LocalizationProvider dateAdapter={dateAdapter || AdapterDayjs}>
                 <TimePicker

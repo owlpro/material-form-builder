@@ -79,7 +79,7 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
     }
 
     render() {
-        const { onChangeValue, dateAdapter, variant, required, ...restProps } = this.props;
+        const { onChangeValue, dateAdapter, variant, required, visible, ...restProps } = this.props;
         return (
             <LocalizationProvider dateAdapter={dateAdapter || AdapterDayjs}>
                 <DateTimePicker

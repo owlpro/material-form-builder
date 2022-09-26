@@ -2,7 +2,6 @@ import { Autocomplete, AutocompleteRenderInputParams } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { Component } from "react";
 import { InputImplement } from '../../types/input.implement';
-import { TextInputProps } from '../text/text.types';
 import { AutocompleteInputProps, AutocompleteOptionType, AutocompleteValueType } from './autocomplete.types';
 
 interface IState {
@@ -91,7 +90,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
     }
 
     render() {
-        const { defaultValue, onChangeValue, InputProps, renderInput, label, variant, required, ...restProps } = this.props;
+        const { defaultValue, onChangeValue, InputProps, renderInput, label, variant, required, visible, ...restProps } = this.props;
         return (
             <Autocomplete
                 {...restProps}

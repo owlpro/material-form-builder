@@ -87,7 +87,7 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
     }
 
     render() {
-        const { onChangeValue, ...restProps } = this.props;
+        const { onChangeValue, visible, ...restProps } = this.props;
         return <TextField
             {...restProps}
             variant={this.props.variant || "standard"}

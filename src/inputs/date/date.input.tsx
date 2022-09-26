@@ -19,7 +19,7 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
     validationTimeout: NodeJS.Timeout | undefined;
 
     inputRef: HTMLInputElement | null | undefined;
-    
+
     shouldComponentUpdate(nextProps: DateInputProps, nextState: IState) {
 
         switch (true) {
@@ -80,7 +80,7 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
     }
 
     render() {
-        const { onChangeValue, dateAdapter, variant, required, ...restProps } = this.props;
+        const { onChangeValue, dateAdapter, variant, required, visible, ...restProps } = this.props;
         return (
             <LocalizationProvider dateAdapter={dateAdapter || AdapterDayjs}>
                 <DatePicker

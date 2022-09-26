@@ -139,7 +139,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
     }
 
     render() {
-        const { onChangeValue, ...restProps } = this.props;
+        const { onChangeValue, visible, ...restProps } = this.props;
         const isOutlined = this.props.variant === "outlined";
         let inputWidth = 207;
         switch (this.props.variant) {

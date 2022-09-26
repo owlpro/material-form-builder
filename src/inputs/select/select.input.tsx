@@ -85,7 +85,7 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
     }
 
     render() {
-        const { onChangeValue, variant, ...restProps } = this.props;
+        const { onChangeValue, variant,visible, ...restProps } = this.props;
         let variantWidth = '207px';
         if (this.props.variant === "outlined") variantWidth = "235px";
         if (this.props.variant === "filled") variantWidth = "231px";

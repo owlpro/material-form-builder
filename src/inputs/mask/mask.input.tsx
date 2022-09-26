@@ -92,7 +92,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
     }
 
     render() {
-        const { onChangeValue, ...restProps } = this.props;
+        const { onChangeValue, visible, ...restProps } = this.props;
         return <TextField
             {...restProps}
             variant={this.props.variant || "standard"}

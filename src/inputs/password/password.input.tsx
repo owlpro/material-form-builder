@@ -1,5 +1,5 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Box, IconButton, InputAdornment } from '@mui/material';
+import { IconButton, InputAdornment } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { Component } from "react";
 import { InputImplement } from '../../types/input.implement';
@@ -63,9 +63,9 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         let value: PasswordInputValueType = event.target.value;
-        if(this.props.formatter && typeof this.props.formatter === "function"){
+        if (this.props.formatter && typeof this.props.formatter === "function") {
             const formattedValue = this.props.formatter(value)
-            if(formattedValue !== undefined){
+            if (formattedValue !== undefined) {
                 value = formattedValue;
             }
         }
@@ -93,17 +93,17 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
     public blur = () => {
         this.inputRef?.blur()
     }
-    
+
     render() {
-        const { onChangeValue, ...restProps } = this.props;
+        const { onChangeValue, visible, ...restProps } = this.props;
         let variantWidth = '207px';
-        if(this.props.variant === "outlined") variantWidth = "235px";
-        if(this.props.variant === "filled") variantWidth = "231px";
+        if (this.props.variant === "outlined") variantWidth = "235px";
+        if (this.props.variant === "filled") variantWidth = "231px";
         const inputWidth = this.props.fullWidth ? '100%' : variantWidth;
         return (
             <TextField
                 {...restProps}
-                sx={{...this.props.sx, width: inputWidth}}
+                sx={{ ...this.props.sx, width: inputWidth }}
                 type={this.state.showPassword ? 'text' : 'password'}
                 variant={this.props.variant || "standard"}
                 error={this.state.error}
