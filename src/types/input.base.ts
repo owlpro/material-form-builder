@@ -5,15 +5,16 @@ export interface InputActions {
     click: () => void
     focus: () => void
     blur: () => void
+    copy?: () => void
 }
 
 export interface BaseInput<ValueType = any> {
     selector: string
-    required?: boolean,
+    required?: boolean
     /**
      * @default true
      */
-    visible?: boolean,
+    visible?: boolean
     wrapper?: (children: JSX.Element, actions: InputActions) => JSX.Element
     onChangeValue?: (value: ValueType) => void
     getMutator?: (value: any) => any

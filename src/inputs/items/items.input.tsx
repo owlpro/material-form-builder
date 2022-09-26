@@ -1,4 +1,4 @@
-import { Add, Delete, Remove, RemoveCircleRounded } from "@mui/icons-material";
+import { Add, CopyAll, Delete, Remove, RemoveCircleRounded } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
 import React, { Component } from "react";
 import { FormBuilder } from "../../formBuilder";
@@ -53,20 +53,23 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         }
         return values;
     }
+
     getValue(): any {
         const items = this.exportFormBuilderData();
         return items.map(item => item.data)
     }
 
     async clear(): Promise<any> {
-        const clearAllPromise = Object.keys(this.formBuilderRef).map(async key => {
-            const builder = this.formBuilderRef[key]
-            if (builder) {
-                return await builder.clear()
-            }
-        })
+        return await this.removeAll()
 
-        return await Promise.all(clearAllPromise);
+        // const clearAllPromise = Object.keys(this.formBuilderRef).map(async key => {
+        //     const builder = this.formBuilderRef[key]
+        //     if (builder) {
+        //         return await builder.clear()
+        //     }
+        // })
+
+        // return await Promise.all(clearAllPromise);
     }
 
     validation(): boolean {
@@ -82,6 +85,16 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
             return state;
         })
         return random;
+    }
+
+    copyItem = (key: string) => async () => {
+        const newKey = await this.addItem()
+        const builder = this.formBuilderRef[key]
+        if(builder){
+            const copyData = builder.getValues().data;
+            this.formBuilderRef[newKey]?.setValues(copyData)
+        }
+
     }
 
     removeItem = (key: string) => async () => {
@@ -110,9 +123,12 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
             <Box key={key} display="flex" alignItems="center">
                 <IconButton onClick={this.removeItem(key)}>{this.props.removeIcon ? this.props.removeIcon : <Remove />}</IconButton>
                 <FormBuilder inputs={this.props.inputs} ref={el => this.formBuilderRef[key] = el} />
+                <IconButton onClick={this.copyItem(key)}>{this.props.copyIcon ? this.props.copyIcon : <CopyAll />}</IconButton>
             </Box>
         )
     }
+
+
 
     render() {
         return (

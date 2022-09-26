@@ -178,6 +178,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
             focus: () => { if (this.state.isMounted) this.inputRefs[input.selector].focus() },
             blur: () => { if (this.state.isMounted) this.inputRefs[input.selector].blur() }
         };
+
         const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...props, actions });
         return (
             <Fragment key={index}>
