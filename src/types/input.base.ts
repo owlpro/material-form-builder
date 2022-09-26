@@ -9,7 +9,11 @@ export interface InputActions {
 
 export interface BaseInput<ValueType = any> {
     selector: string
-    required?: boolean
+    required?: boolean,
+    /**
+     * @default true
+     */
+    visible?: boolean,
     wrapper?: (children: JSX.Element, actions: InputActions) => JSX.Element
     onChangeValue?: (value: ValueType) => void
     getMutator?: (value: any) => any

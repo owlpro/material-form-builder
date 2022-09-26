@@ -61,7 +61,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         autocomplete: AutocompleteInput
     }
 
-    private defaultValues: ObjectLiteral = {};
+    private defaultValues: ObjectLiteral | null = null;
 
     componentDidMount() {
         this.setState({ ...this.state, isMounted: true })
@@ -78,17 +78,19 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
 
         this.props.inputs.forEach(inputProps => {
             const input = this.inputRefs[inputProps.selector]
-            const isValid = input.validation();
-            if ((inputProps.required || inputProps.type === "items" || inputProps.type === "custom") && !isValid) {
-                invalidInputs.push(inputProps)
-            }
-            let value = input.getValue();
-            if (inputProps.getMutator && typeof inputProps.getMutator === "function") {
-                let mutatedValue = inputProps.getMutator(value)
-                value = mutatedValue !== undefined ? mutatedValue : value;
-            }
+            if (input) {
+                const isValid = input.validation();
+                if ((inputProps.required || inputProps.type === "items" || inputProps.type === "custom") && !isValid) {
+                    invalidInputs.push(inputProps)
+                }
+                let value = input.getValue();
+                if (inputProps.getMutator && typeof inputProps.getMutator === "function") {
+                    let mutatedValue = inputProps.getMutator(value)
+                    value = mutatedValue !== undefined ? mutatedValue : value;
+                }
 
-            setToObject(inputProps.selector, value, data)
+                setToObject(inputProps.selector, value, data)
+            }
         })
         return {
             data,
@@ -164,7 +166,9 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         return await Promise.all(clearValues)
     }
 
-    private renderInput = (input: InputProps, index: number): JSX.Element => {
+    private renderInput = (input: InputProps, index: number): JSX.Element | null => {
+        if (input.visible === false) return null;
+
         const { wrapper, getMutator, setMutator, ...props } = input
         const actions: InputActions = {
             setValue: (data: any) => { if (this.state.isMounted) this.inputRefs[input.selector].setValue(data) },

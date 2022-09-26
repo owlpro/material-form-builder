@@ -1,10 +1,10 @@
-import { InputProps } from "./input"
-import { Value } from "./value.interface"
+import { ObjectLiteral } from './helper.types'
+import { InputProps } from './input'
 
 export type OutputValues = {
-    data: ObjectLiteral,
+    data: ObjectLiteral
     validation: {
-        status: boolean,
+        status: boolean
         inputs: InputProps[]
     }
 }
