@@ -65,7 +65,6 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
 
     onChange = (event: SelectChangeEvent<any>) => {
         this.setValue(event.target.value || null)
-
     };
 
     private onOpen = () => {
@@ -107,7 +106,7 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
                 {...restProps}
                 id={`${this.props.selector + "-select-label"}`}
                 onOpen={this.onOpen}
-                value={this.state.value || ""}
+                value={this.state.value || (this.props.multiple ? [] : "")}
                 onChange={this.onChange}
                 disabled={this.props.loading}
                 IconComponent={this.props.loading ? LoadingComponent : ArrowDropDownIcon}

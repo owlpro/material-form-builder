@@ -1,3 +1,5 @@
+import { AutocompleteInput } from '../inputs/autocomplete/autocomplete.input'
+import { AutocompleteInputProps } from '../inputs/autocomplete/autocomplete.types'
 import { CheckboxInput } from '../inputs/checkbox/checkbox.input'
 import { CheckboxInputProps } from '../inputs/checkbox/checkbox.interface'
 import { CustomInput } from '../inputs/custom/custom.input'
@@ -42,6 +44,7 @@ export type InputProps =
     | DatetimeInputProps
     | MaskInputProps
     | FileInputProps
+    | AutocompleteInputProps
 
 export type Input =
     | TextInput
@@ -58,6 +61,7 @@ export type Input =
     | DatetimeInput
     | MaskInput
     | FileInput
+    | AutocompleteInput
 
 export type InputGetValueTypes = ReturnType<Input['getValue']>
 export type InputTypes = InputProps['type']

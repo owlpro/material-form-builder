@@ -3,11 +3,14 @@ import { selectFromObject, setToObject } from './helpers/object.helper';
 import { OutputValues } from './types/builder.outputValues';
 import { Input, InputGetValueTypes, InputProps, InputTypes } from './types/input';
 
+import { AutocompleteInput } from './inputs/autocomplete/autocomplete.input';
 import { CheckboxInput } from './inputs/checkbox/checkbox.input';
 import { CustomInput } from './inputs/custom/custom.input';
 import { DateInput } from './inputs/date/date.input';
 import { DatetimeInput } from './inputs/datetime/datetime.input';
+import { FileInput } from './inputs/file/file.input';
 import { ItemsInput } from './inputs/items/items.input';
+import { MaskInput } from './inputs/mask/mask.input';
 import { MobileInput } from './inputs/mobile/mobile.input';
 import { NumberInput } from './inputs/number/number.input';
 import { OtpInput } from './inputs/otp/otp.input';
@@ -16,8 +19,6 @@ import { SelectInput } from './inputs/select/select.input';
 import { TextInput } from './inputs/text/text.input';
 import { TimeInput } from './inputs/time/time.input';
 import { ObjectLiteral } from './types/helper.types';
-import { MaskInput } from './inputs/mask/mask.input';
-import { FileInput } from './inputs/file/file.input';
 import { InputActions } from './types/input.base';
 
 
@@ -56,7 +57,8 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         time: TimeInput,
         datetime: DatetimeInput,
         mask: MaskInput,
-        file: FileInput
+        file: FileInput,
+        autocomplete: AutocompleteInput
     }
 
     private defaultValues: ObjectLiteral = {};
