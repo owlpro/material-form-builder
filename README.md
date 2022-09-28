@@ -7,8 +7,6 @@
 <h2 align="center" style="font-weight: 800; letter-spacing: 1px;font-size: 32px;">material form builder (MFB)</h2>
 
 
-<a href="#quick-access" style="position: fixed;right:0;bottom:0">move to up</a>
-
 ## quick access
 
 - [Component Props](#component-props)
@@ -164,8 +162,11 @@ builderRef.current
 <br>
 
 # License
-This project is licensed under the terms of the [MIT license.](LICENCE)
+This project is licensed under the terms of the [MIT license.]()
 
 # Sponsoring services
 [mentasystem.net](https://mentasystem.net/)
+
+
+<a href="#quick-access">back to top</a>
 
