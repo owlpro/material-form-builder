@@ -6,13 +6,10 @@
 
 <h2 align="center" style="font-weight: 800; letter-spacing: 1px;font-size: 32px;">material form builder (MFB)</h2>
 
+## Quick Access
 
-## quick access
-
-- [Component Props](#component-props)
-    - [getValues](#get-values-prop)
-    - [setValues](#set-values-prop)
-    - [clear](#clear-prop)
+-   [Component Props](#component-props) | [getValues](#get-values-prop) | [setValues](#set-values-prop) | [clear](#clear-prop)
+-   [Type Of Inputs](#type-of-inputs)
 
 # **introduction**
 
@@ -23,7 +20,7 @@ You can create a branch of inputs with different structures with a few lines of 
 
 # Installation
 
-## dependencies
+## Dependencies
 
 Material UI (^5.x.x) is available as an [npm package](https://www.npmjs.com/package/@mui/material).
 
@@ -100,11 +97,19 @@ const App = () => {
 <hr>
 
 ## Component Props:
-| key  | description | usage |
-| --- | --- | --- |
-| getValues  | get value data from form builder | [usage](#get-values-prop) |
-| setValues  | set your data into inputs | [usage](#set-values-prop) |
-| clear  | clear all inputs data  | [usage](#clear-prop) |
+
+| key    | description | link                     |
+| ------ | ----------- | ------------------------ |
+| inputs | inputs data | [usage](#type-of-inputs) |
+| ref    | react ref   | -                        |
+
+## Ref Avilable Methods:
+
+| key       | description                      | usage                     |
+| --------- | -------------------------------- | ------------------------- |
+| getValues | get value data from form builder | [usage](#get-values-prop) |
+| setValues | set your data into inputs        | [usage](#set-values-prop) |
+| clear     | clear all inputs data            | [usage](#clear-prop)      |
 
 <hr>
 
@@ -124,6 +129,7 @@ const App = () => {
     }
 }
 ```
+
 <hr>
 
 ## Set Values Prop
@@ -133,7 +139,7 @@ const App = () => {
 ```js
 builderRef.current
     ?.setValues({
-        id: 1,
+        tid: 1,
         person_name: 'john',
         person_family: 'doe',
     })
@@ -141,6 +147,7 @@ builderRef.current
         console.log('all promises were fulfilled !')
     })
 ```
+
 ### The data entered in the inputs will be set and if additional values are received, they will be returned
 
 <p align="center" background="silver" style="background-color: #fff;">
@@ -153,20 +160,52 @@ builderRef.current
 `builderRef.current?.clear()` usage:
 
 ```js
-builderRef.current
-    ?.clear().then(() => {
-        console.log('all promises were fulfilled !')
-    })
+builderRef.current?.clear().then(() => {
+    console.log('all promises were fulfilled !')
+})
 ```
+
+# Type Of Inputs
+
+| type         | description        | usage                                                   |
+| ------------ | ------------------ | ------------------------------------------------------- |
+| text         | text input         | [text input usage](docs/inputs/text.md)                 |
+| number       | number input       | [number input usage](docs/inputs/number.md)             |
+| checkbox     | checkbox input     | [checkbox input usage](docs/inputs/checkbox.md)         |
+| password     | password input     | [password input usage](docs/inputs/password.md)         |
+| select       | select input       | [select input usage](docs/inputs/select.md)             |
+| autocomplete | autocomplete input | [autocomplete input usage](docs/inputs/autocomplete.md) |
+| mobile       | mobile input       | [mobile input usage](docs/inputs/mobile.md)             |
+| otp          | otp input          | [otp input usage](docs/inputs/otp.md)                   |
+| mask         | mask input         | [mask input usage](docs/inputs/mask.md)                 |
+| date         | date input         | [date input usage](docs/inputs/date.md)                 |
+| time         | time input         | [time input usage](docs/inputs/time.md)                 |
+| datetime     | datetime input     | [datetime input usage](docs/inputs/datetime.md)         |
+| file         | file input         | [file input usage](docs/inputs/file.md)                 |
+| items        | items input        | [items input usage](docs/inputs/items.md)               |
+| custom       | custom input       | [custom input usage](docs/inputs/custom.md)             |
 
 <br>
 
+# Basic Input Props
+
+| key           | type             | description | sample |
+| ------------- | ---------------- | ----------- | ------ |
+| selector      | string           | -           | -      |
+| defaultValue  | Input Value Type | -           | -      |
+| required      | boolean          | -           | -      |
+| visible       | boolean          | -           | -      |
+| wrapper       | function         | -           | -      |
+| onChangeValue | function         | -           | -      |
+| getMutator    | function         | -           | -      |
+| setMutator    | function         | -           | -      |
+
 # License
+
 This project is licensed under the terms of the [MIT license.]()
 
 # Sponsoring services
+
 [mentasystem.net](https://mentasystem.net/)
 
-
 <a href="#quick-access">back to top</a>
-
