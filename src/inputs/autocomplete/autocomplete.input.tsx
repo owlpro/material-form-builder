@@ -113,11 +113,12 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         let variantWidth = '207px';
         if (this.props.variant === "outlined") variantWidth = "235px";
         if (this.props.variant === "filled") variantWidth = "231px";
+        const inputWidth = this.props.fullWidth ? '100%' : variantWidth;
 
         return (
             <Autocomplete
                 {...restProps}
-                sx={{ width: variantWidth, display: 'inline-flex', ...this.props.sx }}
+                sx={{ width: inputWidth, display: 'inline-flex', ...this.props.sx }}
                 key={this.state.key}
                 options={this.props.options}
                 getOptionLabel={(option) => this.optionGetter(option, 'label')}
