@@ -9,3 +9,4 @@ node_modules
 .prettierrc
 /all_flags
 README.md
+/docs
