@@ -35,8 +35,8 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
     shouldComponentUpdate(nextProps: AutocompleteInputProps, nextState: IState) {
         switch (true) {
             case this.state.key !== nextState.key:
-                case this.state.value !== nextState.value:
-                case this.getValueForCheck(this.state.value) !== this.getValueForCheck(nextState.value):
+            case this.state.value !== nextState.value:
+            case this.getValueForCheck(this.state.value) !== this.getValueForCheck(nextState.value):
             case this.state.error !== nextState.error:
             case this.props.options?.map((i) => this.optionGetter(i, 'value')).join('@') !== nextProps.options?.map((i) => this.optionGetter(i, 'value')).join('@'):
                 return true;
@@ -110,9 +110,14 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
 
     render() {
         const { defaultValue, onChangeValue, InputProps, renderInput, label, variant, required, visible, ...restProps } = this.props;
+        let variantWidth = '207px';
+        if (this.props.variant === "outlined") variantWidth = "235px";
+        if (this.props.variant === "filled") variantWidth = "231px";
+
         return (
             <Autocomplete
                 {...restProps}
+                sx={{ width: variantWidth, display: 'inline-flex', ...this.props.sx }}
                 key={this.state.key}
                 options={this.props.options}
                 getOptionLabel={(option) => this.optionGetter(option, 'label')}
