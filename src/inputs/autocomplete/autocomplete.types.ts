@@ -3,17 +3,19 @@ import { Variant } from '../../types/helper.types'
 import { BaseInput } from '../../types/input.base'
 import { TextInputProps } from '../text/text.types'
 
-export type AutocompleteOptionType = {
-    label: string
-    value: string
-} | string
-export type AutocompleteValueType = AutocompleteOptionType[] | undefined | null
+export type AutocompleteOptionType =
+    | {
+          label: string
+          value: string
+      }
+    | string
+export type AutocompleteValueType = AutocompleteOptionType | AutocompleteOptionType[] | null
 
 export interface AutocompleteInputProps
-    extends BaseInput<AutocompleteOptionType[]>,
-        Omit<AutocompleteProps<AutocompleteOptionType, true, false, true, 'div'>, 'renderInput'> {
-    type: 'autocomplete',
-    variant?: Variant,
+    extends BaseInput<AutocompleteValueType>,
+        Omit<AutocompleteProps<AutocompleteOptionType, boolean, boolean, boolean, 'div'>, 'renderInput'> {
+    type: 'autocomplete'
+    variant?: Variant
     // options: AutocompleteOptionType[]
     label?: string
     // defaultValue?: AutocompleteOptionType[]
