@@ -67,6 +67,11 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
         this.setValue(event.target.value || null)
     };
 
+    private onClick = (event: React.MouseEvent<HTMLElement>) => {
+        clearTimeout(this.validationTimeout)
+        this.setState({ ...this.state, error: false })
+    }
+
     private onOpen = () => {
         clearTimeout(this.validationTimeout)
         this.setState({ ...this.state, error: false })
@@ -85,7 +90,7 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
     }
 
     render() {
-        const { onChangeValue, variant,visible, ...restProps } = this.props;
+        const { onChangeValue, variant, visible, required, ...restProps } = this.props;
         let variantWidth = '207px';
         if (this.props.variant === "outlined") variantWidth = "235px";
         if (this.props.variant === "filled") variantWidth = "231px";
@@ -100,8 +105,8 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
 
         const inputWidth = this.props.fullWidth ? '100%' : variantWidth;
 
-        return <FormControl sx={{ width: inputWidth }} variant={variant || "standard"}>
-            <InputLabel id={`${this.props.selector + "-select-label"}`}>{this.props.label}</InputLabel>
+        return <FormControl sx={{ width: inputWidth }} variant={variant || "standard"} error={this.state.error} onClick={this.onClick}>
+            <InputLabel required={required} id={`${this.props.selector + "-select-label"}`}>{this.props.label}</InputLabel>
             <Select
                 {...restProps}
                 id={`${this.props.selector + "-select-label"}`}
