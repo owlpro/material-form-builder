@@ -13,3 +13,11 @@ export const mask = (value: string, pattern: string, placeholder = '') => {
         v = value.toString()
     return pattern.replace(/\./g, (_) => v[i++] || placeholder)
 }
+
+export const isArray = (data: any): boolean => {
+    return Array.isArray(data)
+}
+
+export const isNull = (data: any): boolean => {
+    return data === null
+}

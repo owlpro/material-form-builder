@@ -173,7 +173,6 @@ builderRef.current?.clear().then(() => {
 | number       | number input       | [number input usage](docs/inputs/number.md)             |
 | checkbox     | checkbox input     | [checkbox input usage](docs/inputs/checkbox.md)         |
 | password     | password input     | [password input usage](docs/inputs/password.md)         |
-| select       | select input       | [select input usage](docs/inputs/select.md)             |
 | autocomplete | autocomplete input | [autocomplete input usage](docs/inputs/autocomplete.md) |
 | mobile       | mobile input       | [mobile input usage](docs/inputs/mobile.md)             |
 | otp          | otp input          | [otp input usage](docs/inputs/otp.md)                   |

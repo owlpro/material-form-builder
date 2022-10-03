@@ -1,20 +1,18 @@
-import { Autocomplete, AutocompleteRenderInputParams } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
+import { Autocomplete, AutocompleteRenderInputParams, Box, CircularProgress, IconButton, InputAdornment, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import React, { Component } from "react";
-import { randomString } from '../../helpers/general.helper';
+import React, { Component, Fragment } from "react";
+import { isNull } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
-import { AutocompleteInputProps, AutocompleteOptionType, AutocompleteValueType } from './autocomplete.types';
-
+import { AutocompleteExportType, AutocompleteInputProps, AutocompleteOptionType, AutocompleteValueType } from './autocomplete.types';
 interface IState {
-    key: string,
-    value: AutocompleteValueType,
+    value: AutocompleteValueType | null,
     error: boolean
 }
 
-export class AutocompleteInput extends Component<AutocompleteInputProps, IState> implements Omit<InputImplement<AutocompleteValueType>, 'onChange'> {
+export class AutocompleteInput extends Component<AutocompleteInputProps, IState> implements Omit<InputImplement<AutocompleteExportType>, 'onChange'> {
     state: IState = {
-        key: randomString(10),
-        value: this.getDefaultsValue(),
+        value: this.getValuesFrom(this.props.defaultValue || null),
         error: false
     }
 
@@ -22,48 +20,72 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
 
     inputRef: HTMLInputElement | undefined
 
-    private getDefaultsValue() {
-        return this.props.defaultValue || null
-
-        // return typeof this.props.defaultValue?.[0] === "string"
-        //     ? this.props.defaultValue
-        //     : this.props.options.filter(option => this.props.defaultValue?.some(
-        //         item =>
-        //             (typeof item === "string" ? item : item?.value) === (typeof option === "string" ? option : option?.value))) || null
-    }
-
     shouldComponentUpdate(nextProps: AutocompleteInputProps, nextState: IState) {
         switch (true) {
-            case this.state.key !== nextState.key:
             case this.state.value !== nextState.value:
-            case this.getValueForCheck(this.state.value) !== this.getValueForCheck(nextState.value):
+            case this.getValueForCheck(this.state.value || undefined) !== this.getValueForCheck(nextState.value || undefined):
             case this.state.error !== nextState.error:
             case this.props.options?.map((i) => this.optionGetter(i, 'value')).join('@') !== nextProps.options?.map((i) => this.optionGetter(i, 'value')).join('@'):
+            case this.props.loading !== nextProps.loading:
+            case this.props.loadingText !== nextProps.loadingText:
                 return true;
             default: return false;
         }
     }
 
-    async setValue(value: AutocompleteValueType): Promise<any> {
-        if (value && this.getValueForCheck(value) === this.getValueForCheck(this.state.value)) return Promise.resolve()
-        const setStatePromise = await this.setState({ ...this.state, value })
+    private getValuesFrom(value: AutocompleteExportType) {
+        if (!value) return null;
+        if (this.props.multiple && !Array.isArray(value)) return null;
+        if (!this.props.multiple && Array.isArray(value)) return null;
+        if (this.props.freeSolo && !this.props.multiple) {
+            const exists = this.props.options.find(i => (typeof i === "string" ? i : i.value) === value || (typeof i === "string" ? i : i.label) === value);
+            return exists || { label: value?.toString() || "", value: value?.toString() || "" }
+        }
+
+        if (this.props.freeSolo && this.props.multiple && typeof value === "object" && Array.isArray(value)) {
+            const outputOptions = value.map(valueItem => {
+                const exists = this.props.options.find(i => (typeof i === "string" ? i : i.value) === valueItem)
+                return exists || { label: valueItem?.toString().trim() || "", value: valueItem?.toString().trim() || "" }
+            })
+            return outputOptions;
+        }
+        if (typeof value === "object" && Array.isArray(value)) {
+            return this.props.options.filter(i => value.indexOf(typeof i === "string" ? i : i.value) > -1);
+        } else if (value) {
+            return this.props.options.find(i => (typeof i === "string" ? i : i.value) === value);
+        }
+        return undefined;
+    }
+
+    componentDidUpdate(props: AutocompleteInputProps) {
+        if (this.props.options?.map((i) => this.optionGetter(i, 'value')).join('@') !== props.options?.map((i) => this.optionGetter(i, 'value')).join('@')) {
+            this.clear()
+        }
+    }
+
+    async setValue(value: AutocompleteExportType): Promise<any> {
+        const valueToSet = this.getValuesFrom(value)
+        const setStatePromise = await this.setState({ ...this.state, value: valueToSet })
         if (typeof this.props.onChangeValue === "function") {
-            this.props.onChangeValue(value as AutocompleteValueType)
+            this.props.onChangeValue(value as AutocompleteExportType)
         }
         return setStatePromise
     }
 
-    getValue(): AutocompleteValueType {
-        return this.state.value;
+    getValue(): AutocompleteExportType {
+        return (
+            Array.isArray(this.state.value)
+                ? this.state.value.map(i => typeof i === "string" ? i : i.value)
+                : typeof this.state.value === "string" ? this.state.value : this.state.value?.value
+        ) || (this.props.multiple ? [] : null)
     }
 
-    async clear(): Promise<any> {
-        await this.setState({ ...this.state, key: randomString(10) })
-        return await this.setValue(this.getDefaultsValue() || null)
+    async clear(withoutDefaults = false): Promise<any> {
+        return await this.setValue((!withoutDefaults ? this.props.defaultValue : null) || null)
     }
 
     validation(): boolean {
-        if (!this.state.value || (Array.isArray(this.state.value) && this.state.value.length < 1) && this.props.required) {
+        if (!this.getValueForCheck(this.state.value) && this.props.required) {
             clearTimeout(this.validationTimeout)
             this.setState({ ...this.state, error: true })
             this.validationTimeout = setTimeout(() => {
@@ -74,8 +96,12 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         return true;
     }
 
-    onChange = (_: React.SyntheticEvent, value: AutocompleteOptionType | AutocompleteValueType) => {
-        !value ? this.clear() : this.setValue(value || null)
+    onChange = (_: React.SyntheticEvent, option: any) => {
+        if (Array.isArray(option)) {
+            this.setValue(option.map(i => typeof i === "string" ? i : i.value))
+        } else {
+            this.setValue(typeof option === "string" ? option : option.value)
+        }
     };
 
     private onClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -94,39 +120,43 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
     }
 
     private optionGetter(item: AutocompleteOptionType, selector: "value" | "label" = "value") {
-        return typeof item === "string" ? (item ?? "") : (item[selector] ?? "")
+        return typeof item === "string" || typeof item === "number" || isNull(item) ? (item ?? "") : (item?.[selector] ?? "")
     }
 
-    private getValueForCheck(value: AutocompleteValueType) {
-        switch (typeof value) {
-            case "string":
-                return value;
-            case "object":
-                return Array.isArray(value) ? value.map(i => typeof i === "string" ? i : i.value).join('@') : value?.value
-            default:
-                return null;
+    private getValueForCheck(value: AutocompleteValueType | undefined | null) {
+        return !isNull(value) && Array.isArray(value) ? value.join('@') : value;
+    }
+
+    private onInputBlur = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
+        if (!this.props.multiple && this.props.freeSolo) {
+            this.setValue(event.target.value)
         }
     }
 
     render() {
-        const { defaultValue, onChangeValue, InputProps, renderInput, label, variant, required, visible, ...restProps } = this.props;
+        const { defaultValue, onChangeValue, InputProps, renderInput, label, placeholder, variant, required, visible, ...restProps } = this.props;
         let variantWidth = '207px';
         if (this.props.variant === "outlined") variantWidth = "235px";
         if (this.props.variant === "filled") variantWidth = "231px";
         const inputWidth = this.props.fullWidth ? '100%' : variantWidth;
-
         return (
             <Autocomplete
                 {...restProps}
                 sx={{ width: inputWidth, display: 'inline-flex', ...this.props.sx }}
-                key={this.state.key}
                 options={this.props.options}
-                getOptionLabel={(option) => this.optionGetter(option, 'label')}
+                getOptionLabel={(option) => typeof option === "object" ? option.label : (option.toString())}
                 multiple={this.props.multiple}
                 freeSolo={this.props.freeSolo}
                 onChange={this.onChange}
-                disableClearable={this.props.disableClearable}
-                defaultValue={this.props.defaultValue}
+                disableClearable
+                size={this.props.size || "small"}
+                value={this.state.value || (this.props.multiple ? [] : (this.props.freeSolo ? "" : null))}
+                disabled={this.props.disabled || this.props.loading}
+                autoSelect
+                isOptionEqualToValue={(option, value: any) => {
+                    if (!value) return false;
+                    return typeof option === "string" ? option === (typeof value === "string" ? value : value.value.toString()) : option.value.toString() === (typeof value === "string" ? value : value.value.toString());
+                }}
                 renderInput={renderInput ? (params: any) => {
                     params.inputRef = (el: any) => this.inputRef = el
                     params.error = this.state.error;
@@ -135,15 +165,54 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
                     params.required = required
                     params.onClick = this.onClick
                     return renderInput(params)
-                } : ((params: AutocompleteRenderInputParams) => <TextField
-                    {...params}
-                    {...InputProps}
-                    label={label}
-                    variant={variant || "standard"}
-                    required={required}
-                    onClick={this.onClick}
-                    error={this.state.error}
-                    inputRef={el => this.inputRef = el} />
+                } : ((params: AutocompleteRenderInputParams) => (
+                    <TextField
+                        {...params}
+                        {...InputProps}
+                        label={label}
+                        placeholder={placeholder}
+                        variant={variant || "standard"}
+                        required={required}
+                        onClick={this.onClick}
+                        error={this.state.error}
+                        inputRef={el => this.inputRef = el}
+                        // value={!this.props.multiple && this.props.freeSolo ? this.state.value : undefined}
+                        // value={""}
+                        InputProps={{
+                            ...InputProps?.InputProps,
+                            ...params.InputProps,
+                            onBlur: this.onInputBlur,
+                            // value: !this.props.multiple && this.props.freeSolo ? (this.state.value || "") : undefined,
+                            // value: "",
+                            endAdornment: (
+                                this.props.loading ? (
+                                    <Box display="flex" alignItems="center">
+                                        {this.props.loadingText ? (
+                                            <Typography mr={1} fontSize={"14px"}>
+                                                {this.props.loadingText}
+                                            </Typography>
+                                        ) : null}
+                                        <CircularProgress size={18} />
+                                    </Box>
+                                ) : (
+                                    <Fragment>
+                                        {params.InputProps.endAdornment}
+                                        {!this.props.disableClearable && this.getValueForCheck(this.state.value) ? (
+                                            <InputAdornment position="end">
+                                                <IconButton size="small" onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    this.clear(true)
+                                                }}>
+                                                    <ClearIcon fontSize="small" />
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ) : null}
+                                    </Fragment>
+                                )
+                            )
+                        }}
+                    />
+                )
                 )}
             />
         )
