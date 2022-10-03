@@ -98,20 +98,6 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
         if (this.props.variant === "outlined") variantWidth = "235px";
         if (this.props.variant === "filled") variantWidth = "231px";
 
-        const LoadingComponent = (props: any) => (
-            // <Grow in={true} timeout={550}>
-
-            <Box display="flex" alignItems="center">
-                {this.props.loadingText ? (
-                    <Typography mr={1} fontSize={"14px"}>
-                        {this.props.loadingText}
-                    </Typography>
-                ) : null}
-                <CircularProgress size={18} />
-            </Box>
-            // </Grow>
-        )
-
         const inputWidth = this.props.fullWidth ? '100%' : variantWidth;
 
         return (
