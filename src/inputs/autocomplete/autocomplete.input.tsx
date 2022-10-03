@@ -1,7 +1,7 @@
 import ClearIcon from '@mui/icons-material/Clear';
 import { Autocomplete, AutocompleteRenderInputParams, Box, CircularProgress, IconButton, InputAdornment, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { isNull } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { AutocompleteExportType, AutocompleteInputProps, AutocompleteOptionType, AutocompleteValueType } from './autocomplete.types';
@@ -176,38 +176,34 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
                         onClick={this.onClick}
                         error={this.state.error}
                         inputRef={el => this.inputRef = el}
-                        // value={!this.props.multiple && this.props.freeSolo ? this.state.value : undefined}
-                        // value={""}
                         InputProps={{
                             ...InputProps?.InputProps,
                             ...params.InputProps,
                             onBlur: this.onInputBlur,
-                            // value: !this.props.multiple && this.props.freeSolo ? (this.state.value || "") : undefined,
-                            // value: "",
                             endAdornment: (
                                 this.props.loading ? (
-                                    <Box display="flex" alignItems="center">
-                                        {this.props.loadingText ? (
-                                            <Typography mr={1} fontSize={"14px"}>
-                                                {this.props.loadingText}
-                                            </Typography>
-                                        ) : null}
-                                        <CircularProgress size={18} />
-                                    </Box>
+                                    <InputAdornment position='end'>
+                                        <Box display="flex" alignItems="center">
+                                            {this.props.loadingText ? (
+                                                <Typography mr={1} fontSize={"14px"}>
+                                                    {this.props.loadingText}
+                                                </Typography>
+                                            ) : null}
+                                            <CircularProgress size={18} />
+                                        </Box>
+                                    </InputAdornment>
                                 ) : (
-                                    <Fragment>
+                                    <InputAdornment position="end">
                                         {params.InputProps.endAdornment}
                                         {!this.props.disableClearable && this.getValueForCheck(this.state.value) ? (
-                                            <InputAdornment position="end">
-                                                <IconButton size="small" onClick={(e) => {
-                                                    e.stopPropagation()
-                                                    this.clear(true)
-                                                }}>
-                                                    <ClearIcon fontSize="small" />
-                                                </IconButton>
-                                            </InputAdornment>
+                                            <IconButton size="small" onClick={(e) => {
+                                                e.stopPropagation()
+                                                this.clear(true)
+                                            }}>
+                                                <ClearIcon fontSize="small" />
+                                            </IconButton>
                                         ) : null}
-                                    </Fragment>
+                                    </InputAdornment>
                                 )
                             )
                         }}
