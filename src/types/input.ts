@@ -28,6 +28,8 @@ import { TextInput } from '../inputs/text/text.input'
 import { TextInputProps } from '../inputs/text/text.types'
 import { TimeInput } from '../inputs/time/time.input'
 import { TimeInputProps } from '../inputs/time/time.types'
+import { ToggleInput } from '../inputs/toggle/toggle.input'
+import { ToggleInputProps } from '../inputs/toggle/toggle.types'
 
 export type InputProps =
     | TextInputProps
@@ -45,6 +47,7 @@ export type InputProps =
     | MaskInputProps
     | FileInputProps
     | AutocompleteInputProps
+    | ToggleInputProps
 
 export type Input =
     | TextInput
@@ -62,6 +65,7 @@ export type Input =
     | MaskInput
     | FileInput
     | AutocompleteInput
+    | ToggleInput
 
 export type InputGetValueTypes = ReturnType<Input['getValue']>
 export type InputTypes = InputProps['type']

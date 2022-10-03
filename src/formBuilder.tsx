@@ -18,6 +18,7 @@ import { PasswordInput } from './inputs/password/password.input';
 import { SelectInput } from './inputs/select/select.input';
 import { TextInput } from './inputs/text/text.input';
 import { TimeInput } from './inputs/time/time.input';
+import { ToggleInput } from './inputs/toggle/toggle.input';
 import { ObjectLiteral } from './types/helper.types';
 import { InputActions } from './types/input.base';
 
@@ -58,7 +59,8 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         datetime: DatetimeInput,
         mask: MaskInput,
         file: FileInput,
-        autocomplete: AutocompleteInput
+        autocomplete: AutocompleteInput,
+        toggle: ToggleInput,
     }
 
     private defaultValues: ObjectLiteral | null = null;
