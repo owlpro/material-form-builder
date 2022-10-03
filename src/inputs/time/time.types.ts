@@ -1,3 +1,4 @@
+import { TextFieldProps } from '@mui/material'
 import { TimePickerProps } from '@mui/x-date-pickers'
 import { MuiPickersAdapter } from '@mui/x-date-pickers/internals'
 import { Variant } from '../../types/helper.types'
@@ -11,5 +12,6 @@ export interface TimeInputProps
     dateAdapter?: new (...args: any) => MuiPickersAdapter<unknown>
     variant?: Variant
     defaultValue?: TimeInputValueType
-    fullWidth?: boolean
+    fullWidth?: boolean,
+    inputProps?: TextFieldProps
 }
