@@ -10,5 +10,6 @@ export interface DatetimeInputProps
     type: 'datetime'
     dateAdapter?: new (...args: any) => MuiPickersAdapter<unknown>
     variant?: Variant
-    defaultValue?: DatetimeInputValueType
+    defaultValue?: DatetimeInputValueType,
+    fullWidth?: boolean
 }

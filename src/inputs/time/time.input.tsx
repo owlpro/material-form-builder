@@ -1,9 +1,9 @@
 import TextField from '@mui/material/TextField';
-import { DatePicker, LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React, { Component } from "react";
 import { InputImplement } from '../../types/input.implement';
 import { TimeInputProps, TimeInputValueType } from './time.types';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 interface IState {
     value: TimeInputValueType,
@@ -91,15 +91,17 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
                     ampm={this.props.ampm || false}
                     value={this.state.value}
                     onChange={this.onChange}
-                    renderInput={(params: any) => <TextField
-                        {...params}
-                        variant={variant || "standard"}
-                        required={required || false}
-                        error={this.state.error}
-                        onClick={this.onClick}
-                        inputRef={el => this.inputRef = el}
-                    />
-                    }
+                    inputRef={el => this.inputRef = el}
+                    renderInput={(params: any) => (
+                        <TextField
+                            {...params}
+                            fullWidth={this.props.fullWidth || false}
+                            variant={variant || "standard"}
+                            required={required || false}
+                            error={this.state.error}
+                            onClick={this.onClick}
+                        />
+                    )}
                 />
             </LocalizationProvider>
         )

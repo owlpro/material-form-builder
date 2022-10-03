@@ -87,14 +87,17 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
                     {...restProps}
                     value={this.state.value}
                     onChange={this.onChange}
-                    renderInput={(params: any) => <TextField
-                        {...params}
-                        variant={variant || 'standard'}
-                        required={required || false}
-                        error={this.state.error}
-                        onClick={this.onClick}
-                        inputRef={el => this.inputRef = el}
-                    />}
+                    inputRef={el => this.inputRef = el}
+                    renderInput={(params: any) => (
+                        <TextField
+                            {...params}
+                            fullWidth={this.props.fullWidth || false}
+                            variant={variant || 'standard'}
+                            required={required || false}
+                            error={this.state.error}
+                            onClick={this.onClick}
+                        />
+                    )}
                 />
             </LocalizationProvider>
         )
