@@ -1,10 +1,19 @@
 import ClearIcon from '@mui/icons-material/Clear';
-import { Autocomplete, AutocompleteRenderInputParams, Box, CircularProgress, IconButton, InputAdornment, Typography } from '@mui/material';
+import { Autocomplete, AutocompleteRenderInputParams, Box, CircularProgress, Grow, IconButton, InputAdornment, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { Component } from "react";
 import { isNull } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { AutocompleteExportType, AutocompleteInputProps, AutocompleteOptionType, AutocompleteValueType } from './autocomplete.types';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+
+const LoadingComponent = (props: any) => (
+    <Grow in={true} timeout={550}>
+        <Box sx={{ paddingRight: '8px', paddingTop: '4px' }}>
+            <CircularProgress size={18} />
+        </Box>
+    </Grow>
+)
 interface IState {
     value: AutocompleteValueType | null,
     error: boolean
@@ -153,7 +162,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
                 value={this.state.value || (this.props.multiple ? [] : (this.props.freeSolo ? "" : null))}
                 disabled={this.props.disabled || this.props.loading}
                 clearOnBlur={this.props.multiple || (this.props.multiple && this.props.freeSolo) || (!this.props.multiple && !this.props.freeSolo)}
-                // autoSelect
+                popupIcon={this.props.loading ? <LoadingComponent /> : (this.props.popupIcon || <ArrowDropDownIcon />)}
                 isOptionEqualToValue={(option, value: any) => {
                     if (!value) return false;
                     return typeof option === "string" ? option === (typeof value === "string" ? value : value.value.toString()) : option.value.toString() === (typeof value === "string" ? value : value.value.toString());
@@ -182,30 +191,17 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
                             ...params.InputProps,
                             onBlur: this.onInputBlur,
                             endAdornment: (
-                                this.props.loading ? (
-                                    <InputAdornment position='end'>
-                                        <Box display="flex" alignItems="center">
-                                            {this.props.loadingText ? (
-                                                <Typography mr={1} fontSize={"14px"}>
-                                                    {this.props.loadingText}
-                                                </Typography>
-                                            ) : null}
-                                            <CircularProgress size={18} />
-                                        </Box>
-                                    </InputAdornment>
-                                ) : (
-                                    <InputAdornment position="end">
-                                        {params.InputProps.endAdornment}
-                                        {!this.props.disableClearable && this.getValueForCheck(this.state.value) ? (
-                                            <IconButton size="small" onClick={(e) => {
-                                                e.stopPropagation()
-                                                this.clear(true)
-                                            }}>
-                                                <ClearIcon fontSize="small" />
-                                            </IconButton>
-                                        ) : null}
-                                    </InputAdornment>
-                                )
+                                <InputAdornment position="end">
+                                    {params.InputProps.endAdornment}
+                                    {!this.props.disableClearable && this.getValueForCheck(this.state.value) ? (
+                                        <IconButton size="small" onClick={(e) => {
+                                            e.stopPropagation()
+                                            this.clear(true)
+                                        }}>
+                                            <ClearIcon fontSize="small" />
+                                        </IconButton>
+                                    ) : null}
+                                </InputAdornment>
                             )
                         }}
                     />

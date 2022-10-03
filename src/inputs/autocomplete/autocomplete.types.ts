@@ -19,7 +19,6 @@ export interface AutocompleteInputProps
     label?: string
     renderInput?: (params: TextInputProps) => React.ReactNode
     InputProps?: TextInputProps
-    // options: AutocompleteOptionType[]
     defaultValue?: AutocompleteExportType,
     loading?: boolean
 }
