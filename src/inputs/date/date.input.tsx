@@ -60,7 +60,7 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
     }
 
     onChange = (event: any) => {
-        let value = event.toDate ? event.toDate() : event;
+        let value = event && event.toDate ? event.toDate() : event;
         this.setValue(value || null)
     };
 
