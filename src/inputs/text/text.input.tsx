@@ -31,11 +31,10 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
     async setValue(value: TextInputValueType): Promise<any> {
         if (value === this.state.value) return Promise.resolve()
 
-        const setStatePromise = await this.setState({ ...this.state, value })
         if (typeof this.props.onChangeValue === "function") {
             this.props.onChangeValue(value as TextInputValueType)
         }
-        return setStatePromise
+        return await this.setState({ ...this.state, value })
     }
 
     getValue(): TextInputValueType {
