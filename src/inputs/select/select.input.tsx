@@ -8,6 +8,14 @@ interface IState {
     error: boolean
 }
 
+const LoadingComponent = (props: any) => (
+    <Grow in={true} timeout={550}>
+        <Box sx={{ paddingRight: '16px', paddingTop: '4px' }}>
+            <CircularProgress size={18} />
+        </Box>
+    </Grow>
+)
+
 export class SelectInput extends Component<SelectInputProps, IState> implements InputImplement<SelectInputValueType> {
     state: IState = {
         value: this.props.defaultValue || null,
@@ -111,20 +119,8 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
                     value={this.state.value || (this.props.multiple ? [] : "")}
                     onChange={this.onChange}
                     disabled={this.props.disabled || this.props.loading}
-                    IconComponent={this.props.loading ? () => <Fragment /> : (this.props.IconComponent || ArrowDropDownIcon)}
+                    IconComponent={this.props.loading ? LoadingComponent: (this.props.IconComponent || ArrowDropDownIcon)}
                     inputRef={el => this.inputRef = el}
-                    endAdornment={(
-                        <InputAdornment position='end'>
-                            <Box display="flex" alignItems="center">
-                                {this.props.loadingText ? (
-                                    <Typography mr={1} fontSize={"14px"}>
-                                        {this.props.loadingText}
-                                    </Typography>
-                                ) : null}
-                                <CircularProgress size={18} />
-                            </Box>
-                        </InputAdornment>
-                    )}
                 >
                     {!this.props.options.length ? (
                         <ListSubheader sx={{ textAlign: 'center' }}>

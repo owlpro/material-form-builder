@@ -12,5 +12,4 @@ export interface SelectInputProps extends BaseInput<SelectInputValueType>, Omit<
     defaultValue?: SelectInputValueType,
     listSubheaderText?: string
     loading?: boolean,
-    loadingText?: string,
 }
