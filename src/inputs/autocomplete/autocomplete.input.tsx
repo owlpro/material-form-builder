@@ -149,10 +149,11 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
                 freeSolo={this.props.freeSolo}
                 onChange={this.onChange}
                 disableClearable
-                size={this.props.size || "small"}
+                size={this.props.size || !variant || variant === "standard" ? "small" : "medium"}
                 value={this.state.value || (this.props.multiple ? [] : (this.props.freeSolo ? "" : null))}
                 disabled={this.props.disabled || this.props.loading}
-                autoSelect
+                clearOnBlur={this.props.multiple || (this.props.multiple && this.props.freeSolo) || (!this.props.multiple && !this.props.freeSolo)}
+                // autoSelect
                 isOptionEqualToValue={(option, value: any) => {
                     if (!value) return false;
                     return typeof option === "string" ? option === (typeof value === "string" ? value : value.value.toString()) : option.value.toString() === (typeof value === "string" ? value : value.value.toString());
