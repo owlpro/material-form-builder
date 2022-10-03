@@ -91,7 +91,10 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
                     renderInput={(params: any) => (
                         <TextField
                             {...params}
-                            {...this.props.inputProps}
+                            inputProps={{
+                                ...params.inputProps,
+                                ...this.props.inputProps
+                            }}
                             fullWidth={this.props.fullWidth || false}
                             variant={variant || 'standard'}
                             required={required || false}
