@@ -8,7 +8,9 @@ export type SelectOptionType = {
 }
 export interface SelectInputProps extends BaseInput<SelectInputValueType>, Omit<SelectProps, 'defaultValue'> {
     type: 'select',
-    loading?: boolean,
     options: SelectOptionType[],
-    defaultValue?: SelectInputValueType
+    defaultValue?: SelectInputValueType,
+    listSubheaderText?: string
+    loading?: boolean,
+    loadingText?: string,
 }
