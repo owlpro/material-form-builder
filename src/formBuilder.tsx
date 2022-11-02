@@ -76,8 +76,12 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
 
     componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any): void {
         this.props.inputs.forEach((item) => {
-            if(item.visible === true && prevProps.inputs.find(i => i.selector === item.selector)?.visible === false && this.defaultValues && Object.keys(this.defaultValues).length){                
-                this.setValues(this.defaultValues)
+            if (
+                item.visible === true
+                && prevProps.inputs.find(i => i.selector === item.selector)?.visible === false
+                && this.defaultValues && Object.keys(this.defaultValues).length
+            ) {
+                this.setValue(item.selector, this.defaultValues[item.selector])
             }
         })
     }
@@ -154,15 +158,20 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         }
     }
 
+    private async setValue(selector: string, value: InputGetValueTypes) {
+
+        if (typeof value === "object" && !Array.isArray(value) && !(value instanceof Date)) {
+            return await this.setObjectValues(value, [selector])
+        } else {
+            return await this.setNormalValue(selector, value)
+        }
+    }
+
     public setValues = async (value: ObjectLiteral): Promise<any> => {
         this.defaultValues = value;
         const setValues = Object.keys(value).map(async selector => {
             const valueItem = value[selector];
-            if (typeof valueItem === "object" && !Array.isArray(valueItem) && !(valueItem instanceof Date)) {
-                this.setObjectValues(valueItem, [selector])
-            } else {
-                this.setNormalValue(selector, valueItem)
-            }
+            return this.setValue(selector, valueItem)
         })
         return await Promise.all(setValues)
     }
@@ -188,7 +197,6 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
             focus: () => { if (this.state.isMounted) this.inputRefs[input.selector].focus() },
             blur: () => { if (this.state.isMounted) this.inputRefs[input.selector].blur() }
         };
-
         const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...props, actions });
         const output = (
             <Fragment key={index}>
