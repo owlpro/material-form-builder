@@ -21,6 +21,7 @@ import { TimeInput } from './inputs/time/time.input';
 import { ToggleInput } from './inputs/toggle/toggle.input';
 import { ObjectLiteral } from './types/helper.types';
 import { InputActions } from './types/input.base';
+import { Box } from '@mui/material';
 
 
 
@@ -71,6 +72,14 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
 
     componentWillUnmount(): void {
         this.setState({ ...this.state, isMounted: false })
+    }
+
+    componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any): void {
+        this.props.inputs.forEach((item) => {
+            if(item.visible === true && prevProps.inputs.find(i => i.selector === item.selector)?.visible === false && this.defaultValues && Object.keys(this.defaultValues).length){                
+                this.setValues(this.defaultValues)
+            }
+        })
     }
 
     public getValues = (): OutputValues => {
@@ -170,7 +179,6 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
 
     private renderInput = (input: InputProps, index: number): JSX.Element | null => {
         if (input.visible === false) return null;
-
         const { wrapper, getMutator, setMutator, ...props } = input
         const actions: InputActions = {
             setValue: (data: any) => { if (this.state.isMounted) this.inputRefs[input.selector].setValue(data) },
@@ -182,11 +190,17 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         };
 
         const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...props, actions });
-        return (
+        const output = (
             <Fragment key={index}>
                 {wrapper ? wrapper(element, actions) : element}
             </Fragment>
         )
+        // if (input.visible === false) {
+        //     return <Box key={index}>
+        //         {output}
+        //     </Box>
+        // }
+        return output;
     }
 
     render(): JSX.Element {
