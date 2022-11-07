@@ -37,6 +37,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
             case this.props.options?.map((i) => this.optionGetter(i, 'value')).join('@') !== nextProps.options?.map((i) => this.optionGetter(i, 'value')).join('@'):
             case this.props.loading !== nextProps.loading:
             case this.props.loadingText !== nextProps.loadingText:
+            case this.props.label !== nextProps.label:
                 return true;
             default: return false;
         }

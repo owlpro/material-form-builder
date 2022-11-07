@@ -26,6 +26,7 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
             case this.state.showPassword !== nextState.showPassword:
+            case this.props.label !== nextProps.label:
                 return true;
             default: return false;
         }

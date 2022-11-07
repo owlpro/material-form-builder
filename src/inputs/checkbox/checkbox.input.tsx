@@ -24,6 +24,7 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
+            case this.props.label !== nextProps.label:
                 return true;
             default: return false;
         }
