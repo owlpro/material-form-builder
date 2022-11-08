@@ -25,7 +25,7 @@ You can create a branch of inputs with different structures with a few lines of 
 Material UI (^5.x.x) is available as an [npm package](https://www.npmjs.com/package/@mui/material).
 
 ```sh
-npm install @mui/material @mui/x-date-pickers @mui/icons-material @emotion/styled dayjs
+npm install @mui/material @mui/x-date-pickers @mui/icons-material @emotion/react @emotion/styled dayjs
 ```
 
 ## material-form-builder
