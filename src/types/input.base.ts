@@ -14,7 +14,7 @@ export interface BaseInput<ValueType = any> {
     /**
      * @default true
      */
-    visible?: boolean
+    visible?: ((e: any) => boolean | undefined) | boolean
     wrapper?: (children: JSX.Element, actions: InputActions) => JSX.Element
     onChangeValue?: (value: ValueType) => void
     getMutator?: (value: any) => any

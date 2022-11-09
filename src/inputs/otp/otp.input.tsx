@@ -43,7 +43,7 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
 
         const setStatePromise = await this.setState({ ...this.state, value })
         if (typeof this.props.onChangeValue === "function") {
-            this.props.onChangeValue(value as OtpInputValueType)
+            await this.props.onChangeValue(value as OtpInputValueType)
         }
         return setStatePromise
     }

@@ -34,7 +34,7 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
 
         const setStatePromise = await this.setState({ ...this.state, value })
         if (typeof this.props.onChangeValue === "function") {
-            this.props.onChangeValue(value as ToggleInputValueType)
+            await this.props.onChangeValue(value as ToggleInputValueType)
         }
         return setStatePromise
     }

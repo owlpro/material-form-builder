@@ -35,7 +35,7 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
 
         const setStatePromise = await this.setState({ ...this.state, value })
         if (typeof this.props.onChangeValue === "function") {
-            this.props.onChangeValue(value as CheckboxInputValueType)
+            await this.props.onChangeValue(value as CheckboxInputValueType)
         }
         return setStatePromise
     }

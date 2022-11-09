@@ -63,7 +63,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
         const setStatePromise = await this.setState({ ...this.state, value })
 
         if (typeof this.props.onChangeValue === "function") {
-            this.props.onChangeValue(value as MobileInputValueType)
+            await this.props.onChangeValue(value as MobileInputValueType)
         }
         return setStatePromise
     }

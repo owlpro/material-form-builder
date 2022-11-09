@@ -120,7 +120,7 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
                     value={this.state.value || (this.props.multiple ? [] : "")}
                     onChange={this.onChange}
                     disabled={this.props.disabled || this.props.loading}
-                    IconComponent={this.props.loading ? LoadingComponent: (this.props.IconComponent || ArrowDropDownIcon)}
+                    IconComponent={this.props.loading ? LoadingComponent : (this.props.IconComponent || ArrowDropDownIcon)}
                     inputRef={el => this.inputRef = el}
                 >
                     {!this.props.options.length ? (

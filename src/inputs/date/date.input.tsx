@@ -35,7 +35,7 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
         if (value === this.state.value) return Promise.resolve()
         const setStatePromise = await this.setState({ ...this.state, value })
         if (typeof this.props.onChangeValue === "function") {
-            this.props.onChangeValue(value as DateInputValueType)
+            await this.props.onChangeValue(value as DateInputValueType)
         }
         return setStatePromise
     }

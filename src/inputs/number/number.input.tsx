@@ -29,11 +29,11 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
 
     async setValue(value: NumberInputValueType): Promise<any> {
         if (value === this.state.value) return Promise.resolve()
-
+        const setStatePromise = await this.setState({ ...this.state, value })
         if (typeof this.props.onChangeValue === "function") {
-            this.props.onChangeValue(value as NumberInputValueType)
+            await this.props.onChangeValue(value as NumberInputValueType)
         }
-        return await this.setState({ ...this.state, value })
+        return setStatePromise
     }
 
     getValue(): NumberInputValueType {

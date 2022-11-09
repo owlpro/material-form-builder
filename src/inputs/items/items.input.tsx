@@ -38,7 +38,7 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
             const key = await this.addItem();
             const formBuilderRef = this.formBuilderRef[key];
             if (formBuilderRef) {
-                formBuilderRef.setValues(object)
+                return await formBuilderRef.setValues(object)
             }
         }))
     }

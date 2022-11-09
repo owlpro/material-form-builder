@@ -77,7 +77,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         const valueToSet = this.getValuesFrom(value)
         const setStatePromise = await this.setState({ ...this.state, value: valueToSet })
         if (typeof this.props.onChangeValue === "function") {
-            this.props.onChangeValue(value as AutocompleteExportType)
+            await this.props.onChangeValue(value as AutocompleteExportType)
         }
         return setStatePromise
     }

@@ -22,11 +22,12 @@ import { ToggleInput } from './inputs/toggle/toggle.input';
 import { ObjectLiteral } from './types/helper.types';
 import { InputActions } from './types/input.base';
 import { Box } from '@mui/material';
+import { Visibility } from '@mui/icons-material';
 
 
 
 interface FormBuilderImplements {
-    getValues: () => OutputValues;
+    getValues: (validation: boolean) => OutputValues;
     setValues: (values: ObjectLiteral) => Promise<void>;
     clear: () => Promise<void>;
 }
@@ -76,17 +77,14 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
 
     componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any): void {
         this.props.inputs.forEach((item) => {
-            if (
-                item.visible === true
-                && prevProps.inputs.find(i => i.selector === item.selector)?.visible === false
-                && this.defaultValues && Object.keys(this.defaultValues).length
-            ) {
+            const isVisible = this.lastVisibilityOfInputs[item.selector]
+            if(isVisible && this.defaultValues && Object.keys(this.defaultValues).length){
                 this.setValue(item.selector, this.defaultValues[item.selector])
             }
         })
     }
 
-    public getValues = (): OutputValues => {
+    public getValues = (validation = true): OutputValues => {
         const data: ObjectLiteral = this.defaultValues || {};
 
         const invalidInputs: InputProps[] = [];
@@ -94,9 +92,11 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         this.props.inputs.forEach(inputProps => {
             const input = this.inputRefs[inputProps.selector]
             if (input) {
-                const isValid = input.validation();
-                if ((inputProps.required || inputProps.type === "items" || inputProps.type === "custom") && !isValid) {
-                    invalidInputs.push(inputProps)
+                if (validation) {
+                    const isValid = input.validation();
+                    if ((inputProps.required || inputProps.type === "items" || inputProps.type === "custom") && !isValid) {
+                        invalidInputs.push(inputProps)
+                    }
                 }
                 let value = input.getValue();
                 if (inputProps.getMutator && typeof inputProps.getMutator === "function") {
@@ -116,14 +116,14 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         }
     }
 
-    private setObjectValues(object: ObjectLiteral, path: string[] = []) {
+    private async setObjectValues(object: ObjectLiteral, path: string[] = []): Promise<any> {
         for (const key in object) {
             const value = object[key]
             if (typeof value === "object" && !Array.isArray(value)) {
                 path.push(key)
-                this.setObjectValues(value, path)
+                return await this.setObjectValues(value, path)
             } else {
-                this.setNormalValue([...path, key].join('.'), value)
+                return await this.setNormalValue([...path, key].join('.'), value)
             }
         }
     }
@@ -132,7 +132,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         const regex = new RegExp('^(' + selector + ')\\[.*\\=.*\\]\\..*')
         const keyValueSelectors = Object.keys(this.inputRefs).filter(i => regex.test(i))
         if (Array.isArray(value) && keyValueSelectors.length) {
-            await Promise.all(keyValueSelectors.map(async keyValueSelector => {
+            return await Promise.all(keyValueSelectors.map(async keyValueSelector => {
                 let valueItem = selectFromObject(keyValueSelector.replace(selector, ''), value)
                 const input = this.inputRefs[keyValueSelector]
                 if (!input || valueItem === undefined) return false;
@@ -142,7 +142,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
                     const mutatedValue = inputProps.setMutator(valueItem);
                     valueItem = mutatedValue !== undefined ? mutatedValue : valueItem;
                 }
-                await input.setValue(valueItem)
+                return await input.setValue(valueItem)
             }))
         } else {
             const input = this.inputRefs[selector]
@@ -153,13 +153,12 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
                     value = mutatedValue !== undefined ? mutatedValue : value;
                 }
 
-                await input.setValue(value)
+                return await input?.setValue(value)
             }
         }
     }
 
     private async setValue(selector: string, value: InputGetValueTypes) {
-
         if (typeof value === "object" && !Array.isArray(value) && !(value instanceof Date)) {
             return await this.setObjectValues(value, [selector])
         } else {
@@ -171,7 +170,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         this.defaultValues = value;
         const setValues = Object.keys(value).map(async selector => {
             const valueItem = value[selector];
-            return this.setValue(selector, valueItem)
+            return await this.setValue(selector, valueItem)
         })
         return await Promise.all(setValues)
     }
@@ -186,8 +185,28 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         return await Promise.all(clearValues)
     }
 
+    private lastVisibilityOfInputs: ObjectLiteral = {}
+
+    private checkVisibility = (input: InputProps): boolean => {
+        let visible: boolean | undefined = true;
+
+        if (typeof input.visible === "function") {
+            visible = input.visible(this.getValues(false)?.data);
+        } else {
+            visible = input.visible;
+        }
+
+        const output = visible === true || visible === undefined ? true : false;
+
+        this.lastVisibilityOfInputs[input.selector] = output;
+
+        return output;
+    }
+
     private renderInput = (input: InputProps, index: number): JSX.Element | null => {
-        if (input.visible === false) return null;
+
+        if (!this.checkVisibility(input)) return null;
+
         const { wrapper, getMutator, setMutator, ...props } = input
         const actions: InputActions = {
             setValue: (data: any) => { if (this.state.isMounted) this.inputRefs[input.selector].setValue(data) },
