@@ -52,7 +52,7 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
         if (typeof this.props.onChangeValue === "function") {
             await this.props.onChangeValue(value as FileInputValueType)
         }
-
+        this.props.callParentForUpdate()
         return setStatePromise
     }
 

@@ -33,6 +33,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
         if (typeof this.props.onChangeValue === "function") {
             await this.props.onChangeValue(value as NumberInputValueType)
         }
+        this.props.callParentForUpdate()
         return setStatePromise
     }
 

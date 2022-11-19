@@ -37,6 +37,7 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
         if (typeof this.props.onChangeValue === "function") {
             await this.props.onChangeValue(value as CheckboxInputValueType)
         }
+        this.props.callParentForUpdate()
         return setStatePromise
     }
 

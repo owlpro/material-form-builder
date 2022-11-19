@@ -79,6 +79,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         if (typeof this.props.onChangeValue === "function") {
             await this.props.onChangeValue(value as AutocompleteExportType)
         }
+        this.props.callParentForUpdate()
         return setStatePromise
     }
 

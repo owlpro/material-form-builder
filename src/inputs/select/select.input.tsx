@@ -51,6 +51,7 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
         if (typeof this.props.onChangeValue === "function") {
             this.props.onChangeValue(value as SelectInputValueType)
         }
+        this.props.callParentForUpdate()
         return setStatePromise
     }
 

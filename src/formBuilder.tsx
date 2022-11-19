@@ -78,7 +78,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
     componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any): void {
         this.props.inputs.forEach((item) => {
             const isVisible = this.lastVisibilityOfInputs[item.selector]
-            if(isVisible && this.defaultValues && Object.keys(this.defaultValues).length){
+            if (isVisible && this.defaultValues && Object.keys(this.defaultValues).length) {
                 this.setValue(item.selector, this.defaultValues[item.selector])
             }
         })
@@ -203,6 +203,10 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         return output;
     }
 
+    private onUpdateInputs = () => {
+        this.forceUpdate()
+    }
+
     private renderInput = (input: InputProps, index: number): JSX.Element | null => {
 
         if (!this.checkVisibility(input)) return null;
@@ -216,7 +220,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
             focus: () => { if (this.state.isMounted) this.inputRefs[input.selector].focus() },
             blur: () => { if (this.state.isMounted) this.inputRefs[input.selector].blur() }
         };
-        const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...props, actions });
+        const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...props, actions, callParentForUpdate: this.onUpdateInputs });
         const output = (
             <Fragment key={index}>
                 {wrapper ? wrapper(element, actions) : element}

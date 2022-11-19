@@ -38,6 +38,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
         if (typeof this.props.onChangeValue === "function") {
             await this.props.onChangeValue(value as MaskInputValueType)
         }
+        this.props.callParentForUpdate()
         return setStatePromise
     }
 
