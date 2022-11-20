@@ -35,7 +35,7 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
         if (typeof this.props.onChangeValue === "function") {
             await this.props.onChangeValue(value as TimeInputValueType)
         }
-        this.props.callParentForUpdate()
+        if(typeof this.props.callParentForUpdate === "function") this.props.callParentForUpdate()
         return setStatePromise
     }
 

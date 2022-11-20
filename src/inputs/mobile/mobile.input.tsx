@@ -65,7 +65,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
         if (typeof this.props.onChangeValue === "function") {
             await this.props.onChangeValue(value as MobileInputValueType)
         }
-        this.props.callParentForUpdate()
+        if(typeof this.props.callParentForUpdate === "function") this.props.callParentForUpdate()
         return setStatePromise
     }
 

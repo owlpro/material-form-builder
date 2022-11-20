@@ -45,7 +45,7 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
         if (typeof this.props.onChangeValue === "function") {
             await this.props.onChangeValue(value as OtpInputValueType)
         }
-        this.props.callParentForUpdate()
+        if(typeof this.props.callParentForUpdate === "function") this.props.callParentForUpdate()
         return setStatePromise
     }
 

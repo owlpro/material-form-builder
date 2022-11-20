@@ -35,7 +35,7 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
         if (typeof this.props.onChangeValue === "function") {
             this.props.onChangeValue(value as DatetimeInputValueType)
         }
-        this.props.callParentForUpdate()
+        if(typeof this.props.callParentForUpdate === "function") this.props.callParentForUpdate()
         return setStatePromise
     }
 

@@ -39,7 +39,7 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
         if (typeof this.props.onChangeValue === "function") {
             await this.props.onChangeValue(value as PasswordInputValueType)
         }
-        this.props.callParentForUpdate()
+        if(typeof this.props.callParentForUpdate === "function") this.props.callParentForUpdate()
         return setStatePromise
     }
 
