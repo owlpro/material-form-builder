@@ -76,10 +76,10 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
     async setValue(value: AutocompleteExportType): Promise<any> {
         const valueToSet = this.getValuesFrom(value)
         const setStatePromise = await this.setState({ ...this.state, value: valueToSet })
+        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
         if (typeof this.props.onChangeValue === "function") {
             await this.props.onChangeValue(value as AutocompleteExportType)
         }
-        if(typeof this.props.callParentForUpdate === "function") this.props.callParentForUpdate()
         return setStatePromise
     }
 
@@ -145,7 +145,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
     }
 
     render() {
-        const { defaultValue, onChangeValue, InputProps, renderInput, label, placeholder, variant, required, visible, ...restProps } = this.props;
+        const { defaultValue, onChangeValue, InputProps, renderInput, label, placeholder, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
         let variantWidth = '207px';
         if (this.props.variant === "outlined") variantWidth = "235px";
         if (this.props.variant === "filled") variantWidth = "231px";

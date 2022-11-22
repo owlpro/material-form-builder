@@ -30,10 +30,10 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
     async setValue(value: NumberInputValueType): Promise<any> {
         if (value === this.state.value) return Promise.resolve()
         const setStatePromise = await this.setState({ ...this.state, value })
+        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
         if (typeof this.props.onChangeValue === "function") {
             await this.props.onChangeValue(value as NumberInputValueType)
         }
-        if(typeof this.props.callParentForUpdate === "function") this.props.callParentForUpdate()
         return setStatePromise
     }
 
@@ -87,7 +87,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
     }
 
     render() {
-        const { onChangeValue, visible, ...restProps } = this.props;
+        const { onChangeValue, visible, _call_parent_for_update, ...restProps } = this.props;
         return <TextField
             {...restProps}
             variant={this.props.variant || "standard"}

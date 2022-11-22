@@ -48,11 +48,10 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
         if (this.inputRef && value) {
             this.inputRef.files = value
         }
-
+        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
         if (typeof this.props.onChangeValue === "function") {
             await this.props.onChangeValue(value as FileInputValueType)
         }
-        if(typeof this.props.callParentForUpdate === "function") this.props.callParentForUpdate()
         return setStatePromise
     }
 
@@ -100,7 +99,7 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
     }
 
     render() {
-        const { onChangeValue, label, helperText, FormControlProps, InputLabelProps, FormHelperTextProps, InputProps, multiple, visible, ...restProps } = this.props;
+        const { onChangeValue, label, helperText, FormControlProps, InputLabelProps, FormHelperTextProps, InputProps, multiple, visible, _call_parent_for_update, ...restProps } = this.props;
         return (
             <FormControl {...FormControlProps} variant={FormControlProps?.variant ?? 'standard'} >
 

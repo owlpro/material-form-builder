@@ -77,8 +77,9 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
 
     componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any): void {
         this.props.inputs.forEach((item) => {
-            const isVisible = this.lastVisibilityOfInputs[item.selector]
-            if (isVisible && this.defaultValues && Object.keys(this.defaultValues).length) {
+            const prevVisible = this.lastVisibilityOfInputs[item.selector]?.prev
+            const nowVisible = this.lastVisibilityOfInputs[item.selector]?.now
+            if ((prevVisible !== nowVisible) && this.defaultValues && Object.keys(this.defaultValues).length) {
                 this.setValue(item.selector, this.defaultValues[item.selector])
             }
         })
@@ -198,17 +199,21 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
 
         const output = visible === true || visible === undefined ? true : false;
 
-        this.lastVisibilityOfInputs[input.selector] = output;
+        const prev = this.lastVisibilityOfInputs[input.selector]?.now;
+        if (prev !== undefined) {
+            this.lastVisibilityOfInputs = { ...this.lastVisibilityOfInputs, [input.selector]: { prev, now: output } };
+        } else {
+            this.lastVisibilityOfInputs = { ...this.lastVisibilityOfInputs, [input.selector]: { prev, now: output } };
+        }
 
         return output;
     }
 
     private onUpdateInputs = () => {
-        this.forceUpdate()
+        return this.forceUpdate()
     }
 
     private renderInput = (input: InputProps, index: number): JSX.Element | null => {
-
         if (!this.checkVisibility(input)) return null;
 
         const { wrapper, getMutator, setMutator, ...props } = input
@@ -220,22 +225,17 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
             focus: () => { if (this.state.isMounted) this.inputRefs[input.selector].focus() },
             blur: () => { if (this.state.isMounted) this.inputRefs[input.selector].blur() }
         };
-        const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...props, actions, callParentForUpdate: this.onUpdateInputs });
+        const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...props, actions, _call_parent_for_update: this.onUpdateInputs });
         const output = (
             <Fragment key={index}>
                 {wrapper ? wrapper(element, actions) : element}
             </Fragment>
         )
-        // if (input.visible === false) {
-        //     return <Box key={index}>
-        //         {output}
-        //     </Box>
-        // }
         return output;
     }
 
     render(): JSX.Element {
-        return (
+        return !this.state.isMounted ? <Fragment /> : (
             <Fragment>
                 {this.props.inputs.map(this.renderInput)}
             </Fragment>

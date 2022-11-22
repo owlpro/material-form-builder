@@ -34,10 +34,10 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
         if (value === this.state.value) return Promise.resolve()
 
         const setStatePromise = await this.setState({ ...this.state, value })
+        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
         if (typeof this.props.onChangeValue === "function") {
             await this.props.onChangeValue(value as TextInputValueType)
         }
-        if(typeof this.props.callParentForUpdate === "function") this.props.callParentForUpdate()
         return setStatePromise;
     }
 
@@ -90,7 +90,7 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
     }
 
     render() {
-        const { onChangeValue, visible, formatter, ...restProps } = this.props;
+        const { onChangeValue, visible, formatter, _call_parent_for_update, ...restProps } = this.props;
         return <TextField
             {...restProps}
             variant={this.props.variant || "standard"}

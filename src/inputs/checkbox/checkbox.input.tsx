@@ -34,10 +34,10 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
         if (value === this.state.value) return Promise.resolve()
 
         const setStatePromise = await this.setState({ ...this.state, value })
+        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
         if (typeof this.props.onChangeValue === "function") {
             await this.props.onChangeValue(value as CheckboxInputValueType)
         }
-        if(typeof this.props.callParentForUpdate === "function") this.props.callParentForUpdate()
         return setStatePromise
     }
 
@@ -81,7 +81,7 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
     }
 
     render() {
-        const { defaultChecked, onChangeValue, visible, ...restProps } = this.props;
+        const { defaultChecked, onChangeValue, visible, _call_parent_for_update, ...restProps } = this.props;
         const label = this.props.label + (this.props.required ? ' *' : '')
         return (
             <FormControlLabel onClick={this.onClick} control={

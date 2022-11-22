@@ -61,11 +61,10 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
         }
 
         const setStatePromise = await this.setState({ ...this.state, value })
-
+        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
         if (typeof this.props.onChangeValue === "function") {
             await this.props.onChangeValue(value as MobileInputValueType)
         }
-        if(typeof this.props.callParentForUpdate === "function") this.props.callParentForUpdate()
         return setStatePromise
     }
 
@@ -141,7 +140,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
     }
 
     render() {
-        const { onChangeValue, visible, ...restProps } = this.props;
+        const { onChangeValue, visible, _call_parent_for_update, ...restProps } = this.props;
         const isOutlined = this.props.variant === "outlined";
         let inputWidth = 207;
         switch (this.props.variant) {
