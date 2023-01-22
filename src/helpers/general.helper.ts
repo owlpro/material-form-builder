@@ -21,3 +21,9 @@ export const isArray = (data: any): boolean => {
 export const isNull = (data: any): boolean => {
     return data === null
 }
+
+export const checkValue = (value: any): boolean => {
+    if(value === null) return false;
+    if(value === undefined) return false;
+    return true;
+}
