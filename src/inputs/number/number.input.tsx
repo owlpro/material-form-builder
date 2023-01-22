@@ -1,5 +1,6 @@
 import TextField from '@mui/material/TextField';
 import React, { Component } from "react";
+import { checkValue } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { NumberInputProps, NumberInputValueType } from './number.interface';
 
@@ -38,11 +39,11 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
     }
 
     getValue(): NumberInputValueType {
-        return this.state.value || null;
+        return checkValue(this.state.value) ? this.state.value : null;
     }
 
     async clear(): Promise<any> {
-        return await this.setValue(this.props.defaultValue || null)
+        return await this.setValue(checkValue(this.props.defaultValue) ? this.props.defaultValue : null)
     }
 
     validation(): boolean {
@@ -94,7 +95,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
             error={this.state.error}
             onChange={this.onChange}
             onClick={this.onClick}
-            value={String(this.state.value)}
+            value={checkValue(this.state.value) ? this.state.value : ""}
             inputRef={el => this.inputRef = el}
         />
     }
