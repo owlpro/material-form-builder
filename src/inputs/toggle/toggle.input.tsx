@@ -1,5 +1,6 @@
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import React, { Component } from "react";
+import { checkValue } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { ToggleInputProps, ToggleInputValueType } from './toggle.types';
 
@@ -10,7 +11,7 @@ interface IState {
 
 export class ToggleInput extends Component<ToggleInputProps, IState> implements InputImplement<ToggleInputValueType> {
     state: IState = {
-        value: this.props.defaultValue || null,
+        value: checkValue(this.props.defaultValue) ? (this.props.defaultValue === undefined ? null : this.props.defaultValue) : null,
         error: false
     }
 
@@ -19,7 +20,6 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
     inputRef: HTMLInputElement | undefined
 
     shouldComponentUpdate(nextProps: ToggleInputProps, nextState: IState) {
-
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
@@ -31,7 +31,6 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
 
     async setValue(value: ToggleInputValueType): Promise<any> {
         if (value === this.state.value) return Promise.resolve()
-
         const setStatePromise = await this.setState({ ...this.state, value })
         if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
         if (typeof this.props.onChangeValue === "function") {
@@ -41,7 +40,7 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
     }
 
     getValue(): ToggleInputValueType {
-        return this.state.value || null;
+        return checkValue(this.state.value) ? this.state.value : null;
     }
 
     async clear(): Promise<any> {
@@ -61,7 +60,7 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
     }
 
     onChange = (_: React.MouseEvent<HTMLElement>, value: ToggleInputValueType) => {
-        this.setValue(value || null)
+        this.setValue(checkValue(value) ? value : (this.props.enforceValueSet ? this.state.value : null))
     };
 
     private onClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -80,7 +79,7 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
     }
 
     render() {
-        const { onChangeValue, visible, formatter, defaultValue, label, _call_parent_for_update, ...restProps } = this.props;
+        const { onChangeValue, visible, formatter, defaultValue, label, _call_parent_for_update, enforceValueSet, ...restProps } = this.props;
         return (
             <ToggleButtonGroup
                 {...restProps}
@@ -88,18 +87,10 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
                 value={this.state.value}
                 exclusive={this.props.exclusive === false ? false : true}
                 onChange={this.onChange}
+            // onClick={this.onClick}
             >
                 {this.props.options.map((option, key) => <ToggleButton key={`${key}-${option.value}`} value={option.value}>{option.label}</ToggleButton>)}
             </ToggleButtonGroup>
         )
-        // return <TextField
-        //     {...restProps}
-        //     // variant={this.props.variant || "standard"}
-        //     error={this.state.error}
-        //     onChange={this.onChange}
-        //     onClick={this.onClick}
-        //     value={this.state.value || ''}
-        //     inputRef={el => this.inputRef = el}
-        // />
     }
 }

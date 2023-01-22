@@ -12,5 +12,6 @@ export interface ToggleInputProps extends BaseInput<ToggleInputValueType>, Omit<
     options: ToggleInputOptionType[]
     defaultValue?: ToggleInputValueType
     exclusive?: boolean
-    label?: string
+    label?: string,
+    enforceValueSet?: boolean
 }
