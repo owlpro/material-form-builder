@@ -47,7 +47,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
     }
 
     validation(): boolean {
-        if (!this.state.value && this.props.required) {
+        if (!checkValue(this.state.value) && this.props.required) {
             clearTimeout(this.validationTimeout)
             this.setState({ ...this.state, error: true })
             this.validationTimeout = setTimeout(() => {
