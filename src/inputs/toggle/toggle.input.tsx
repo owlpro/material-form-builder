@@ -24,6 +24,7 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
             case this.props.label !== nextProps.label:
+            case this.props.options.map(i => i.value).join('@') !== nextProps.options.map(i => i.value).join('@'):
                 return true;
             default: return false;
         }
@@ -48,7 +49,7 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
     }
 
     validation(): boolean {
-        if (!this.state.value && this.props.required) {
+        if (!checkValue(this.state.value) && this.props.required) {
             clearTimeout(this.validationTimeout)
             this.setState({ ...this.state, error: true })
             this.validationTimeout = setTimeout(() => {
