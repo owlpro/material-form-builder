@@ -23,24 +23,37 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
 
     shouldComponentUpdate(nextProps: ItemsInputProps, nextState: IState) {
         switch (true) {
-            case this.state.items.length !== nextState.items.length:
+            case JSON.stringify(this.state.items) !== JSON.stringify(nextState.items):
                 return true;
             default: return false;
         }
     }
 
+    private sleep = (ms: number) => {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     async setValue(values: ItemsInputValueType): Promise<any> {
-        await this.setState({ ...this.state, items: [] })
         this.formBuilderRef = {}
 
+        await this.setState({ ...this.state, items: [] })
+
         if (!values) return Promise.resolve()
+
         return await Promise.all(values.map(async (object) => {
             const key = await this.addItem();
-            const formBuilderRef = this.formBuilderRef[key];
-            if (formBuilderRef) {
-                return await formBuilderRef.setValues(object)
-            }
+            return this.setItemValue(key, object)
         }))
+    }
+
+    private setItemValue = async (key: string, object: any): Promise<any> => {
+        const formBuilderRef = this.formBuilderRef[key];
+        if (!formBuilderRef) {
+            await this.sleep(5)
+            return await this.setItemValue(key, object)
+        }
+
+        return formBuilderRef.setValues(object)
     }
 
     exportFormBuilderData = (): OutputValues[] => {
@@ -61,15 +74,6 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
 
     async clear(): Promise<any> {
         return await this.removeAll()
-
-        // const clearAllPromise = Object.keys(this.formBuilderRef).map(async key => {
-        //     const builder = this.formBuilderRef[key]
-        //     if (builder) {
-        //         return await builder.clear()
-        //     }
-        // })
-
-        // return await Promise.all(clearAllPromise);
     }
 
     validation(): boolean {
@@ -122,7 +126,7 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         return (
             <Box key={key} display="flex" alignItems="center">
                 <IconButton onClick={this.removeItem(key)}>{this.props.removeIcon ? this.props.removeIcon : <Remove />}</IconButton>
-                <FormBuilder inputs={this.props.inputs} ref={el => this.formBuilderRef[key] = el} />
+                <FormBuilder inputs={this.props.inputs} ref={el => this.formBuilderRef = { ...this.formBuilderRef, [key]: el }} />
                 <IconButton onClick={this.copyItem(key)}>{this.props.copyIcon ? this.props.copyIcon : <CopyAll />}</IconButton>
             </Box>
         )
