@@ -1,4 +1,4 @@
-import { Add, CopyAll, Delete, Remove, RemoveCircleRounded } from "@mui/icons-material";
+import { Add, CopyAll, Delete, Remove } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
 import React, { Component } from "react";
 import { FormBuilder } from "../../formBuilder";
@@ -90,8 +90,8 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
     copyItem = (key: string) => async () => {
         const newKey = await this.addItem()
         const builder = this.formBuilderRef[key]
-        if(builder){
-            const copyData = builder.getValues().data;
+        if (builder) {
+            const copyData = builder.getValues(false).data;
             this.formBuilderRef[newKey]?.setValues(copyData)
         }
 
