@@ -1,7 +1,6 @@
-import { AutocompleteProps, AutocompleteRenderInputParams, ChipTypeMap, TextFieldProps } from '@mui/material'
+import { AutocompleteProps, TextFieldProps } from '@mui/material'
 import { Variant } from '../../types/helper.types'
 import { BaseInput } from '../../types/input.base'
-import { TextInputProps } from '../text/text.types'
 
 export type AutocompleteOptionType = {
     label: string
@@ -17,8 +16,8 @@ export interface AutocompleteInputProps
     type: 'autocomplete'
     variant?: Variant
     label?: string
-    renderInput?: (params: TextInputProps) => React.ReactNode
-    InputProps?: TextInputProps
-    defaultValue?: AutocompleteExportType,
+    renderInput?: (params: TextFieldProps) => React.ReactNode
+    InputProps?: TextFieldProps
+    defaultValue?: AutocompleteExportType
     loading?: boolean
 }
