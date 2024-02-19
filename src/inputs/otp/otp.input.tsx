@@ -140,6 +140,7 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
                         onBlur={this.onBlur}
                         value={this.state.value || ""}
                         maxLength={settings.digits}
+                        inputMode='numeric'
                         ref={el => this.inputRef = el}
                     />
                     {boxes.map((key) => {

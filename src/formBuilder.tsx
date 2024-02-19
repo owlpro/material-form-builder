@@ -214,12 +214,12 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
 
         const { wrapper, getMutator, setMutator, ...props } = input
         const actions: InputActions = {
-            setValue: (data: any) => { if (this.state.isMounted) this.inputRefs[input.selector].setValue(data) },
-            getValue: () => { if (this.state.isMounted) this.inputRefs[input.selector].getValue() },
-            clear: () => { if (this.state.isMounted) this.inputRefs[input.selector].clear() },
-            click: () => { if (this.state.isMounted) this.inputRefs[input.selector].click() },
-            focus: () => { if (this.state.isMounted) this.inputRefs[input.selector].focus() },
-            blur: () => { if (this.state.isMounted) this.inputRefs[input.selector].blur() }
+            setValue: (data: any) => { if (this.state.isMounted) return this.inputRefs[input.selector].setValue(data) },
+            getValue: () => { if (this.state.isMounted) return this.inputRefs[input.selector].getValue() },
+            clear: () => { if (this.state.isMounted) return this.inputRefs[input.selector].clear() },
+            click: () => { if (this.state.isMounted) return this.inputRefs[input.selector].click() },
+            focus: () => { if (this.state.isMounted) return this.inputRefs[input.selector].focus() },
+            blur: () => { if (this.state.isMounted) return this.inputRefs[input.selector].blur() }
         };
         const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...props, actions, _call_parent_for_update: this.onUpdateInputs });
         const output = (
