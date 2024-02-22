@@ -88,7 +88,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
     }
 
     render() {
-        const { onChangeValue, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { onChangeValue, defaultValue, visible, _call_parent_for_update, ...restProps } = this.props;
         return <TextField
             {...restProps}
             variant={this.props.variant || "standard"}
