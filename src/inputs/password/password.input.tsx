@@ -72,7 +72,7 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
             }
         }
 
-        this.setValue(event.target.value || null)
+        this.setValue(value || null)
     };
 
     private onFocus = () => {

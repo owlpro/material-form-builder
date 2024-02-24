@@ -64,6 +64,14 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         let value: MaskInputValueType = event.target.value;
+
+        if (this.props.formatter && typeof this.props.formatter === "function") {
+            const formattedValue = this.props.formatter(value)
+            if (formattedValue !== undefined) {
+                value = formattedValue;
+            }
+        }
+        
         this.normalizeValue(value)
     };
 
@@ -96,7 +104,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
     }
 
     render() {
-        const { onChangeValue, visible, _call_parent_for_update, defaultValue, ...restProps } = this.props;
+        const { onChangeValue, formatter, visible, _call_parent_for_update, defaultValue, ...restProps } = this.props;
         return <TextField
             {...restProps}
             variant={this.props.variant || "standard"}
