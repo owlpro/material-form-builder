@@ -125,9 +125,13 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
     renderItem = (key: string) => {
         return (
             <Box key={key} display="flex" alignItems="center">
-                <IconButton onClick={this.removeItem(key)}>{this.props.removeIcon ? this.props.removeIcon : <Remove />}</IconButton>
+                {this.props.removeIcon !== false ? (
+                    <IconButton onClick={this.removeItem(key)}>{this.props.removeIcon ? this.props.removeIcon : <Remove />}</IconButton>
+                ) : null}
                 <FormBuilder inputs={this.props.inputs} ref={el => this.formBuilderRef = { ...this.formBuilderRef, [key]: el }} />
-                <IconButton onClick={this.copyItem(key)}>{this.props.copyIcon ? this.props.copyIcon : <CopyAll />}</IconButton>
+                {this.props.copyIcon !== false ? (
+                    <IconButton onClick={this.copyItem(key)}>{this.props.copyIcon ? this.props.copyIcon : <CopyAll />}</IconButton>
+                ) : null}
             </Box>
         )
     }

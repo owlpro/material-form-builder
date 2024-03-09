@@ -8,6 +8,6 @@ export interface ItemsInputProps extends Omit<BaseInput<ItemsInputValueType>, 'o
     inputs: InputProps[]
     itemWrapper?: (children: JSX.Element) => JSX.Element
     renderHeader?: (addItem: Function, removeAll: Function) => JSX.Element
-    removeIcon?: JSX.Element | React.ReactNode,
-    copyIcon?: JSX.Element | React.ReactNode
+    removeIcon?: JSX.Element | React.ReactNode | boolean,
+    copyIcon?: JSX.Element | React.ReactNode | boolean
 }
