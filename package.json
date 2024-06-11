@@ -1,6 +1,6 @@
 {
   "name": "material-form-builder",
-  "version": "0.17.2",
+  "version": "0.18.0",
   "description": "FormBuilder For React.js",
   "main": "dist/index.js",
   "repository": {
@@ -35,6 +35,7 @@
     "rollup": "^2.73.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-dts": "^4.2.2",
+    "rollup-plugin-minify": "^1.0.3",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-terser": "^7.0.2",
