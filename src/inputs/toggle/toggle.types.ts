@@ -7,11 +7,12 @@ export type ToggleInputOptionType = {
     value: any
 }
 
-export interface ToggleInputProps extends BaseInput<ToggleInputValueType>, Omit<ToggleButtonGroupProps, 'defaultValue'> {
+export interface ToggleInputProps extends BaseInput<ToggleInputValueType>, Omit<ToggleButtonGroupProps, 'defaultValue' | 'ref'> {
     type: 'toggle'
     options: ToggleInputOptionType[]
     defaultValue?: ToggleInputValueType
     exclusive?: boolean
-    label?: string,
-    enforceValueSet?: boolean
+    label?: string
+    enforceValueSet?: boolean,
+    ref?: Function
 }

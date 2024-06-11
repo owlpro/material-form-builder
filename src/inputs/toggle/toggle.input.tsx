@@ -84,7 +84,7 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
     }
 
     render() {
-        const { onChangeValue, visible, formatter, defaultValue, label, _call_parent_for_update, enforceValueSet, ...restProps } = this.props;
+        const { onChangeValue, visible, formatter, defaultValue, label, _call_parent_for_update, enforceValueSet, ref, ...restProps } = this.props;
         return (
             <ToggleButtonGroup
                 {...restProps}

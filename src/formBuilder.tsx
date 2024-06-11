@@ -62,9 +62,12 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
     }
 
     private defaultValues: ObjectLiteral | null = null;
+    private didMountEvent: Function[] = [];
 
     componentDidMount() {
-        this.setState({ ...this.state, isMounted: true })
+        this.setState({ ...this.state, isMounted: true }, () => {
+            this.didMountEvent.map((func: Function) => func())
+        })
     }
 
     componentWillUnmount(): void {
@@ -164,6 +167,14 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
     }
 
     public setValues = async (value: ObjectLiteral): Promise<any> => {
+        if (!this.state.isMounted) {
+            this.didMountEvent.push(() => this.staticSetValues(value))
+        } else {
+            this.staticSetValues(value)
+        }
+    }
+
+    private staticSetValues = async (value: ObjectLiteral): Promise<any> => {
         this.defaultValues = value;
         const setValues = Object.keys(value).map(async selector => {
             const valueItem = value[selector];
@@ -209,30 +220,47 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         return this.forceUpdate()
     }
 
+    private executeAction = (selector: string, action: string, value?: any) => {
+
+        if (!this.state.isMounted) {
+            // @ts-ignore
+            this.didMountEvent.push(() => (this.inputRefs[`${selector}`][`${action}`]()))
+        } else {
+            // @ts-ignore
+            this.inputRefs[`${selector}`][`${action}`]()
+        }
+    }
+
     private renderInput = (input: InputProps, index: number): JSX.Element | null => {
         if (!this.checkVisibility(input)) return null;
 
-        const { wrapper, getMutator, setMutator, ...props } = input
+        const { wrapper, getMutator, setMutator, ref, ...props } = input
         const actions: InputActions = {
             setValue: (data: any) => this.inputRefs[input.selector].setValue(data as any),
             getValue: () => this.inputRefs[input.selector].getValue(),
             clear: () => this.inputRefs[input.selector].clear(),
             click: () => this.inputRefs[input.selector].click(),
-            focus: () => this.inputRefs[input.selector].focus(),
-            blur: () => this.inputRefs[input.selector].blur()
+            focus: () => this.executeAction(input.selector, 'focus'),
+            blur: () => this.executeAction(input.selector, 'blur')
+            // this.inputRefs[input.selector].blur()
         };
 
-        const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...props, actions, _call_parent_for_update: this.onUpdateInputs });
+        const refSetter = (el: Input) => {
+            this.inputRefs[input.selector] = el
+            if (typeof (ref) === "function") ref(el)
+        }
+
+        const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => refSetter(el), ...props, actions, _call_parent_for_update: this.onUpdateInputs });
         const output = (
             <Fragment key={index}>
-                {wrapper ? wrapper(element, actions as InputActions) : element}
+                {wrapper ? wrapper(element as JSX.Element, actions as InputActions) : element}
             </Fragment>
         )
         return output;
     }
 
     render(): JSX.Element {
-        return !this.state.isMounted ? <Fragment /> : (
+        return (
             <Fragment>
                 {this.props.inputs.map(this.renderInput)}
             </Fragment>

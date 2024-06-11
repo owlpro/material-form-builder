@@ -20,5 +20,6 @@ export interface BaseInput<ValueType = any> {
     getMutator?: (value: any) => any
     setMutator?: (value: any) => any
     formatter?: (value: ValueType) => ValueType
-    _call_parent_for_update?: () => any
+    _call_parent_for_update?: () => any,
+    ref?: any
 }

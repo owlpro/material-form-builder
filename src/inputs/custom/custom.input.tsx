@@ -55,7 +55,7 @@ export class CustomInput extends Component<CustomInputProps, IState> implements 
     }
 
     render() {
-        const { element, ...rest } = this.props;
+        const { element, ref, ...rest } = this.props;
         const render = React.createElement(element, { ref: (el: Input) => this.elementRef = el, ...rest });
 
         return (

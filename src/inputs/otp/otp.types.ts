@@ -47,4 +47,5 @@ export interface OtpInputProps extends BaseInput<OtpInputValueType> {
 
     /** @default #323232 */
     color?: CSSProperties['color']
+    ref?: Function
 }

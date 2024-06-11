@@ -3,7 +3,7 @@ import { Variant } from '../../types/helper.types'
 import { BaseInput } from '../../types/input.base'
 
 export type FileInputValueType = FileList | null
-export interface FileInputProps extends BaseInput<FileInputValueType>, Omit<InputProps, ''> {
+export interface FileInputProps extends BaseInput<FileInputValueType>, Omit<InputProps, 'ref'> {
     type: 'file'
     label?: string
     defaultValue?: FileInputValueType
@@ -13,5 +13,6 @@ export interface FileInputProps extends BaseInput<FileInputValueType>, Omit<Inpu
     InputLabelProps?: InputLabelProps
     FormHelperTextProps?: FormHelperTextProps
     multiple?: boolean
-    InputProps?: InputBaseComponentProps
+    InputProps?: InputBaseComponentProps,
+    ref?: Function
 }

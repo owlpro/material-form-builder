@@ -12,7 +12,7 @@ export type AutocompleteExportType = AutocompleteFragType | AutocompleteFragType
 
 export interface AutocompleteInputProps
     extends BaseInput<AutocompleteExportType>,
-        Omit<AutocompleteProps<any, boolean, true, boolean, 'div'>, 'renderInput' | 'defaultValue'> {
+        Omit<AutocompleteProps<any, boolean, true, boolean, 'div'>, 'renderInput' | 'defaultValue' | 'ref'> {
     type: 'autocomplete'
     variant?: Variant
     label?: string
@@ -20,4 +20,5 @@ export interface AutocompleteInputProps
     InputProps?: TextFieldProps
     defaultValue?: AutocompleteExportType
     loading?: boolean
+    ref?: Function
 }
