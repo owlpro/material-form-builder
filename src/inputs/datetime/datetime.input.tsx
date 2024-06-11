@@ -29,22 +29,26 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
         }
     }
 
-    async setValue(value: DatetimeInputValueType): Promise<any> {
-        if (value === this.state.value) return Promise.resolve()
-        const setStatePromise = await this.setState({ ...this.state, value })
-        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
-        if (typeof this.props.onChangeValue === "function") {
-            this.props.onChangeValue(value as DatetimeInputValueType)
-        }
-        return setStatePromise
+    setValue(value: DatetimeInputValueType): Promise<DatetimeInputValueType> {
+        if (value === this.state.value) return Promise.resolve(value)
+
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, value }, () => {
+                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
+                if (typeof this.props.onChangeValue === "function") {
+                    this.props.onChangeValue(value as DatetimeInputValueType)
+                }
+                resolve(value)
+            })
+        })
     }
 
     getValue(): DatetimeInputValueType {
         return this.state.value || null;
     }
 
-    async clear(): Promise<any> {
-        return await this.setValue(this.props.defaultValue || null)
+    clear(): Promise<DatetimeInputValueType> {
+        return this.setValue(this.props.defaultValue || null)
     }
 
     validation(): boolean {

@@ -29,22 +29,26 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
         }
     }
 
-    async setValue(value: TimeInputValueType): Promise<any> {
-        if (value === this.state.value) return Promise.resolve()
-        const setStatePromise = await this.setState({ ...this.state, value })
-        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
-        if (typeof this.props.onChangeValue === "function") {
-            await this.props.onChangeValue(value as TimeInputValueType)
-        }
-        return setStatePromise
+    setValue(value: TimeInputValueType): Promise<TimeInputValueType> {
+        if (value === this.state.value) return Promise.resolve(value)
+
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, value }, () => {
+                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
+                if (typeof this.props.onChangeValue === "function") {
+                    this.props.onChangeValue(value as TimeInputValueType)
+                }
+                resolve(value)
+            })
+        })
     }
 
     getValue(): TimeInputValueType {
         return this.state.value || null;
     }
 
-    async clear(): Promise<any> {
-        return await this.setValue(this.props.defaultValue || null)
+    clear(): Promise<TimeInputValueType> {
+        return this.setValue(this.props.defaultValue || null)
     }
 
     validation(): boolean {

@@ -1,10 +1,8 @@
 import { FormControl, FormHelperText, Input, InputLabel } from '@mui/material';
-import TextField from '@mui/material/TextField';
 import React, { Component } from "react";
 import { randomString } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { FileInputProps, FileInputValueType } from './file.types';
-import ReactDOM from 'react-dom';
 
 interface IState {
     value: FileInputValueType,
@@ -40,27 +38,30 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
         }
     }
 
-    async setValue(value: FileInputValueType): Promise<any> {
-        if (value === this.state.value) return Promise.resolve()
-        const inputKey = !value ? randomString(20) : this.state.inputKey;
-        const setStatePromise = await this.setState({ ...this.state, value, inputKey })
+    setValue(value: FileInputValueType): Promise<any> {
+        if (value === this.state.value) return Promise.resolve(value)
 
-        if (this.inputRef && value) {
-            this.inputRef.files = value
-        }
-        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
-        if (typeof this.props.onChangeValue === "function") {
-            await this.props.onChangeValue(value as FileInputValueType)
-        }
-        return setStatePromise
+        return new Promise((resolve) => {
+            const inputKey = !value ? randomString(20) : this.state.inputKey;
+            this.setState({ ...this.state, value, inputKey }, () => {
+                if (this.inputRef && value) {
+                    this.inputRef.files = value
+                }
+                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
+                if (typeof this.props.onChangeValue === "function") {
+                    this.props.onChangeValue(value as FileInputValueType)
+                }
+                resolve(value)
+            })
+        })
     }
 
     getValue(): FileInputValueType {
         return this.state.value || null;
     }
 
-    async clear(): Promise<any> {
-        return await this.setValue(this.props.defaultValue || null)
+    clear(): Promise<FileInputValueType> {
+        return this.setValue(this.props.defaultValue || null)
     }
 
     validation(): boolean {

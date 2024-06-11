@@ -1,10 +1,10 @@
 import { Box, InputAdornment, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
+import { styled } from '@mui/material/styles';
 import React, { Component } from "react";
 import { mask } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
-import { countries, Country } from "./countries";
+import { Country, countries } from "./countries";
 import { MobileInputProps, MobileInputValueType } from './mobile.types';
 
 interface IState {
@@ -43,29 +43,35 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
         }
     }
 
-    async setValue(value: MobileInputValueType, internalSet: boolean = false): Promise<any> {
-        if (value === this.state.value) return Promise.resolve()
+    setValue(value: MobileInputValueType, internalSet: boolean = false): Promise<MobileInputValueType> {
+        if (value === this.state.value) return Promise.resolve(value)
 
         if (value && !internalSet) {
             const splits = value.split('-')
             if (splits.length > 1) {
                 const dialCode = splits[0].replace(/[^0-9]/g, '');
                 const country = countries.find(c => c.dialCode === dialCode)
+
                 if (country) {
-                    await this.setState({ ...this.state, country })
+                    this.setState({ ...this.state, country })
                 }
-                return this.normalizeValue(splits[1])
+                this.normalizeValue(splits[1])
+                return Promise.resolve(splits[1])
             } else {
-                return this.normalizeValue(value)
+                this.normalizeValue(value)
+                return Promise.resolve(value)
             }
         }
 
-        const setStatePromise = await this.setState({ ...this.state, value })
-        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
-        if (typeof this.props.onChangeValue === "function") {
-            await this.props.onChangeValue(value as MobileInputValueType)
-        }
-        return setStatePromise
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, value }, () => {
+                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
+                if (typeof this.props.onChangeValue === "function") {
+                    this.props.onChangeValue(value as MobileInputValueType)
+                }
+                resolve(value)
+            })
+        })
     }
 
     getValue(): MobileInputValueType {
@@ -74,8 +80,8 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
         return '+' + this.state.country.dialCode + '-' + value;
     }
 
-    async clear(): Promise<any> {
-        return await this.setValue(this.props.defaultValue || null, true)
+    clear(): Promise<MobileInputValueType> {
+        return this.setValue(this.props.defaultValue || null, true)
     }
 
     validation(): boolean {

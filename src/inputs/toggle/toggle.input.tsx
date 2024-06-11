@@ -30,22 +30,26 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
         }
     }
 
-    async setValue(value: ToggleInputValueType): Promise<any> {
-        if (value === this.state.value) return Promise.resolve()
-        const setStatePromise = await this.setState({ ...this.state, value })
-        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
-        if (typeof this.props.onChangeValue === "function") {
-            await this.props.onChangeValue(value as ToggleInputValueType)
-        }
-        return setStatePromise
+    setValue(value: ToggleInputValueType): Promise<ToggleInputValueType> {
+        if (value === this.state.value) return Promise.resolve(value)
+
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, value }, () => {
+                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
+                if (typeof this.props.onChangeValue === "function") {
+                    this.props.onChangeValue(value as ToggleInputValueType)
+                }
+                resolve(value)
+            })
+        })
     }
 
     getValue(): ToggleInputValueType {
         return checkValue(this.state.value) ? this.state.value : null;
     }
 
-    async clear(): Promise<any> {
-        return await this.setValue(this.props.defaultValue || null)
+    clear(): Promise<ToggleInputValueType> {
+        return this.setValue(this.props.defaultValue || null)
     }
 
     validation(): boolean {

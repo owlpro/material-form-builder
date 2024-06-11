@@ -33,17 +33,21 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    async setValue(values: ItemsInputValueType): Promise<any> {
+    setValue(values: ItemsInputValueType): Promise<ItemsInputValueType> {
         this.formBuilderRef = {}
+        if (!values) return Promise.resolve(values)
 
-        await this.setState({ ...this.state, items: [] })
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, items: [] }, async () => {
 
-        if (!values) return Promise.resolve()
+                const output = await Promise.all(values.map(async (object) => {
+                    const key = await this.addItem();
+                    return this.setItemValue(key, object)
+                }))
 
-        return await Promise.all(values.map(async (object) => {
-            const key = await this.addItem();
-            return this.setItemValue(key, object)
-        }))
+                resolve(output)
+            })
+        })
     }
 
     private setItemValue = async (key: string, object: any): Promise<any> => {
@@ -72,8 +76,8 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         return items.map(item => item.data)
     }
 
-    async clear(): Promise<any> {
-        return await this.removeAll()
+    clear(): Promise<ItemsInputValueType> {
+        return this.removeAll()
     }
 
     validation(): boolean {
@@ -81,14 +85,17 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         return !data.some(datum => !datum?.validation.status);
     }
 
-    addItem = async () => {
+    addItem = (): Promise<string> => {
         const random = randomString(8)
-        await this.setState((oldState) => {
-            let state = { ...oldState }
-            state.items = [...state.items, random];
-            return state;
+        return new Promise((resolve) => {
+            this.setState((oldState) => {
+                let state = { ...oldState }
+                state.items = [...state.items, random];
+                return state;
+            })
+
+            resolve(random)
         })
-        return random;
     }
 
     copyItem = (key: string) => async () => {

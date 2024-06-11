@@ -31,22 +31,26 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
         }
     }
 
-    async setValue(value: DateInputValueType): Promise<any> {
-        if (value === this.state.value) return Promise.resolve()
-        const setStatePromise = await this.setState({ ...this.state, value })
-        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
-        if (typeof this.props.onChangeValue === "function") {
-            await this.props.onChangeValue(value as DateInputValueType)
-        }
-        return setStatePromise
+    setValue(value: DateInputValueType): Promise<DateInputValueType> {
+        if (value === this.state.value) return Promise.resolve(value)
+
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, value }, () => {
+                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
+                if (typeof this.props.onChangeValue === "function") {
+                    this.props.onChangeValue(value as DateInputValueType)
+                }
+                resolve(value)
+            })
+        })
     }
 
     getValue(): DateInputValueType {
         return this.state.value || null;
     }
 
-    async clear(): Promise<any> {
-        return await this.setValue(this.props.defaultValue || null)
+    clear(): Promise<DateInputValueType> {
+        return this.setValue(this.props.defaultValue || null)
     }
 
     validation(): boolean {
@@ -82,7 +86,7 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
     }
 
     render() {
-        const { onChangeValue,defaultValue, dateAdapter, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { onChangeValue, defaultValue, dateAdapter, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
         return (
             <LocalizationProvider dateAdapter={dateAdapter || AdapterDayjs}>
                 <DatePicker

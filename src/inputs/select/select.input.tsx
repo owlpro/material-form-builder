@@ -1,6 +1,6 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { Box, CircularProgress, FormControl, Grow, InputAdornment, InputLabel, ListSubheader, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
-import React, { Component, Fragment } from "react";
+import { Box, CircularProgress, FormControl, Grow, InputLabel, ListSubheader, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import React, { Component } from "react";
 import { InputImplement } from '../../types/input.implement';
 import { SelectInputProps, SelectInputValueType } from './select.types';
 interface IState {
@@ -44,23 +44,26 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
         }
     }
 
-    async setValue(value: SelectInputValueType): Promise<any> {
-        if (value === this.state.value) return Promise.resolve()
+    setValue(value: SelectInputValueType): Promise<SelectInputValueType> {
+        if (value === this.state.value) return Promise.resolve(value)
         const valueToSet: SelectInputValueType = value;
-        const setStatePromise = await this.setState({ ...this.state, value: valueToSet })
-        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
-        if (typeof this.props.onChangeValue === "function") {
-            this.props.onChangeValue(value as SelectInputValueType)
-        }
-        return setStatePromise
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, value: valueToSet }, () => {
+                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
+                if (typeof this.props.onChangeValue === "function") {
+                    this.props.onChangeValue(valueToSet as SelectInputValueType)
+                }
+                resolve(valueToSet)
+            })
+        })
     }
 
     getValue(): SelectInputValueType {
         return this.state.value || null;
     }
 
-    async clear(): Promise<any> {
-        return await this.setValue(this.props.defaultValue || null)
+    clear(): Promise<SelectInputValueType> {
+        return this.setValue(this.props.defaultValue || null)
     }
 
     validation(): boolean {
@@ -111,11 +114,14 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
         const inputWidth = this.props.fullWidth ? '100%' : variantWidth;
 
         return (
-            <FormControl sx={{ width: inputWidth }} variant={variant || "standard"} error={this.state.error}>
-                <InputLabel required={required} id={`${this.props.selector + "-select-label"}`}>{this.props.label}</InputLabel>
+            <FormControl sx={{ width: inputWidth }} variant={variant || "standard"} error={this.state.error} id={this.props.selector}>
+                <InputLabel required={required} id={`${this.props.selector + "-select-label"}`} htmlFor={`${this.props.selector + "-select-input"}`}>{this.props.label}</InputLabel>
                 <Select
                     {...restProps}
                     labelId={`${this.props.selector + "-select-label"}`}
+                    inputProps={{
+                        id: `${this.props.selector + "-select-input"}`
+                    }}
                     id={`${this.props.selector + "-select-identity"}`}
                     onOpen={this.onOpen}
                     value={this.state.value || (this.props.multiple ? [] : "")}

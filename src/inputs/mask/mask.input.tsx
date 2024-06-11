@@ -31,23 +31,26 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
         }
     }
 
-    async setValue(value: MaskInputValueType): Promise<any> {
-        if (value === this.state.value) return Promise.resolve()
+    setValue(value: MaskInputValueType): Promise<MaskInputValueType> {
+        if (value === this.state.value) return Promise.resolve(value)
 
-        const setStatePromise = await this.setState({ ...this.state, value })
-        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
-        if (typeof this.props.onChangeValue === "function") {
-            await this.props.onChangeValue(value as MaskInputValueType)
-        }
-        return setStatePromise
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, value }, () => {
+                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
+                if (typeof this.props.onChangeValue === "function") {
+                    this.props.onChangeValue(value as MaskInputValueType)
+                }
+                resolve(value)
+            })
+        })
     }
 
     getValue(): MaskInputValueType {
         return this.state.value || null;
     }
 
-    async clear(): Promise<any> {
-        return await this.setValue(this.props.defaultValue || null)
+    clear(): Promise<MaskInputValueType> {
+        return this.setValue(this.props.defaultValue || null)
     }
 
     validation(): boolean {
@@ -71,7 +74,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
                 value = formattedValue;
             }
         }
-        
+
         this.normalizeValue(value)
     };
 

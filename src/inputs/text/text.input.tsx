@@ -30,23 +30,27 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
         }
     }
 
-    async setValue(value: TextInputValueType): Promise<any> {
-        if (value === this.state.value) return Promise.resolve()
+    setValue(value: TextInputValueType): Promise<TextInputValueType> {
+        if (value === this.state.value) return Promise.resolve(value)
 
-        const setStatePromise = await this.setState({ ...this.state, value })
-        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
-        if (typeof this.props.onChangeValue === "function") {
-            await this.props.onChangeValue(value as TextInputValueType)
-        }
-        return setStatePromise;
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, value }, () => {
+                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
+                if (typeof this.props.onChangeValue === "function") {
+                    this.props.onChangeValue(value as TextInputValueType)
+                }
+
+                resolve(value)
+            })
+        })
     }
 
     getValue(): TextInputValueType {
         return this.state.value || null;
     }
 
-    async clear(): Promise<any> {
-        return await this.setValue(this.props.defaultValue || null)
+    clear(): Promise<TextInputValueType> {
+        return this.setValue(this.props.defaultValue || null)
     }
 
     validation(): boolean {

@@ -16,10 +16,11 @@ export class CustomInput extends Component<CustomInputProps, IState> implements 
         error: false
     }
 
-    async setValue(value: CustomInputValueType): Promise<any> {
+    setValue(value: CustomInputValueType): Promise<CustomInputValueType> {
         if (typeof this.elementRef?.setValue === "function") {
-            return await this.elementRef?.setValue(value)
+            return this.elementRef?.setValue(value)
         }
+        return Promise.resolve(null)
     }
 
     getValue(): CustomInputValueType {
@@ -29,10 +30,11 @@ export class CustomInput extends Component<CustomInputProps, IState> implements 
         return null;
     }
 
-    async clear(): Promise<any> {
+    clear(): Promise<CustomInputValueType> {
         if (typeof this.elementRef?.clear === "function") {
-            return await this.elementRef?.clear();
+            return this.elementRef?.clear();
         }
+        return Promise.resolve(null)
     }
 
     validation(): boolean {

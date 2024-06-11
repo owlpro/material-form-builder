@@ -1,6 +1,6 @@
 {
   "name": "material-form-builder",
-  "version": "0.16.11",
+  "version": "0.17.1",
   "description": "FormBuilder For React.js",
   "main": "dist/index.js",
   "repository": {
@@ -55,12 +55,10 @@
   },
   "homepage": "https://github.com/owlpro/material-form-builder#readme",
   "keywords": [
-    "form",
     "form-builder",
     "form-maker",
     "form-generator",
     "generate-form",
-    "build-form",
     "react-form-builder",
     "typescript-form-builder",
     "material-form-builder",

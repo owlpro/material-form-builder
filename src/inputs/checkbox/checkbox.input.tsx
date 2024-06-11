@@ -30,23 +30,27 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
         }
     }
 
-    async setValue(value: CheckboxInputValueType): Promise<any> {
-        if (value === this.state.value) return Promise.resolve()
+    setValue(value: CheckboxInputValueType): Promise<CheckboxInputValueType> {
+        if (value === this.state.value) return Promise.resolve(value)
 
-        const setStatePromise = await this.setState({ ...this.state, value })
-        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
-        if (typeof this.props.onChangeValue === "function") {
-            await this.props.onChangeValue(value as CheckboxInputValueType)
-        }
-        return setStatePromise
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, value }, () => {
+                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
+                if (typeof this.props.onChangeValue === "function") {
+                    this.props.onChangeValue(value as CheckboxInputValueType)
+                }
+
+                resolve(value)
+            })
+        })
     }
 
     getValue(): CheckboxInputValueType {
         return this.state.value || false;
     }
 
-    async clear(): Promise<any> {
-        return await this.setValue(this.props.checked || this.props.defaultChecked || false)
+    clear(): Promise<CheckboxInputValueType> {
+        return this.setValue(this.props.checked || this.props.defaultChecked || false)
     }
 
     validation(): boolean {

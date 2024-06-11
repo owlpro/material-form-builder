@@ -1,11 +1,11 @@
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ClearIcon from '@mui/icons-material/Clear';
-import { Autocomplete, AutocompleteRenderInputParams, Box, CircularProgress, Grow, IconButton, InputAdornment, Typography } from '@mui/material';
+import { Autocomplete, AutocompleteRenderInputParams, Box, CircularProgress, Grow, IconButton, InputAdornment } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { Component } from "react";
 import { isNull } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { AutocompleteExportType, AutocompleteInputProps, AutocompleteOptionType, AutocompleteValueType } from './autocomplete.types';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const LoadingComponent = (props: any) => (
     <Grow in={true} timeout={550}>
@@ -73,14 +73,17 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         }
     }
 
-    async setValue(value: AutocompleteExportType): Promise<any> {
+    setValue(value: AutocompleteExportType): Promise<AutocompleteExportType> {
         const valueToSet = this.getValuesFrom(value)
-        const setStatePromise = await this.setState({ ...this.state, value: valueToSet })
-        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
-        if (typeof this.props.onChangeValue === "function") {
-            await this.props.onChangeValue(value as AutocompleteExportType)
-        }
-        return setStatePromise
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, value: valueToSet }, () => {
+                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
+                if (typeof this.props.onChangeValue === "function") {
+                    this.props.onChangeValue(value as AutocompleteExportType)
+                }
+                resolve(value)
+            })
+        })
     }
 
     getValue(): AutocompleteExportType {
@@ -91,8 +94,8 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         ) || (this.props.multiple ? [] : null)
     }
 
-    async clear(withoutDefaults = false): Promise<any> {
-        return await this.setValue((!withoutDefaults ? this.props.defaultValue : null) || null)
+    clear(withoutDefaults = false): Promise<AutocompleteExportType> {
+        return this.setValue((!withoutDefaults ? this.props.defaultValue : null) || null)
     }
 
     validation(): boolean {
@@ -155,7 +158,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
                 {...restProps}
                 sx={{ width: inputWidth, display: 'inline-flex', ...this.props.sx }}
                 options={this.props.options}
-                getOptionLabel={(option) => typeof option === "object" ? option.label : (option.toString())}
+                getOptionLabel={(option) => typeof option === "object" ? option.label : (option.toString())} // TODO get from top
                 multiple={this.props.multiple}
                 freeSolo={this.props.freeSolo}
                 onChange={this.onChange}

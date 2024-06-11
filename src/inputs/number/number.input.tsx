@@ -28,22 +28,25 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
         }
     }
 
-    async setValue(value: NumberInputValueType): Promise<any> {
-        if (value === this.state.value) return Promise.resolve()
-        const setStatePromise = await this.setState({ ...this.state, value })
-        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
-        if (typeof this.props.onChangeValue === "function") {
-            await this.props.onChangeValue(value as NumberInputValueType)
-        }
-        return setStatePromise
+    setValue(value: NumberInputValueType): Promise<NumberInputValueType> {
+        if (value === this.state.value) return Promise.resolve(value)
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, value }, () => {
+                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
+                if (typeof this.props.onChangeValue === "function") {
+                    this.props.onChangeValue(value as NumberInputValueType)
+                }
+                resolve(value)
+            })
+        })
     }
 
     getValue(): NumberInputValueType {
         return checkValue(this.state.value) ? this.state.value : null;
     }
 
-    async clear(): Promise<any> {
-        return await this.setValue(checkValue(this.props.defaultValue) ? this.props.defaultValue : null)
+    clear(): Promise<NumberInputValueType> {
+        return this.setValue(checkValue(this.props.defaultValue) ? this.props.defaultValue : null)
     }
 
     validation(): boolean {

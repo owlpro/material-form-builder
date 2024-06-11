@@ -32,23 +32,26 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
         }
     }
 
-    async setValue(value: PasswordInputValueType): Promise<any> {
-        if (value === this.state.value) return Promise.resolve()
+    setValue(value: PasswordInputValueType): Promise<PasswordInputValueType> {
+        if (value === this.state.value) return Promise.resolve(value)
 
-        const setStatePromise = await this.setState({ ...this.state, value })
-        if (typeof this.props._call_parent_for_update === "function") await this.props._call_parent_for_update()
-        if (typeof this.props.onChangeValue === "function") {
-            await this.props.onChangeValue(value as PasswordInputValueType)
-        }
-        return setStatePromise
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, value }, () => {
+                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
+                if (typeof this.props.onChangeValue === "function") {
+                    this.props.onChangeValue(value as PasswordInputValueType)
+                }
+                resolve(value)
+            })
+        })
     }
 
     getValue(): PasswordInputValueType {
         return this.state.value || null;
     }
 
-    async clear(): Promise<any> {
-        return await this.setValue(this.props.defaultValue || null)
+    clear(): Promise<PasswordInputValueType> {
+        return this.setValue(this.props.defaultValue || null)
     }
 
     validation(): boolean {

@@ -114,15 +114,15 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
     }
 
     private async setObjectValues(object: ObjectLiteral, path: string[] = []): Promise<any> {
-        for (const key in object) {
+        return Promise.all(Object.keys(object).map((key) => {
             const value = object[key]
             if (typeof value === "object" && !Array.isArray(value)) {
                 path.push(key)
-                return await this.setObjectValues(value, path)
+                return this.setObjectValues(value, path)
             } else {
-                return await this.setNormalValue([...path, key].join('.'), value)
+                return this.setNormalValue([...path, key].join('.'), value)
             }
-        }
+        }))
     }
 
     private async setNormalValue(selector: string, value: InputGetValueTypes) {
@@ -139,7 +139,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
                     const mutatedValue = inputProps.setMutator(valueItem);
                     valueItem = mutatedValue !== undefined ? mutatedValue : valueItem;
                 }
-                return await input.setValue(valueItem)
+                return input.setValue(valueItem)
             }))
         } else {
             const input = this.inputRefs[selector]
@@ -167,7 +167,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         this.defaultValues = value;
         const setValues = Object.keys(value).map(async selector => {
             const valueItem = value[selector];
-            return await this.setValue(selector, valueItem)
+            return this.setValue(selector, valueItem)
         })
         return await Promise.all(setValues)
     }
@@ -214,17 +214,18 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
 
         const { wrapper, getMutator, setMutator, ...props } = input
         const actions: InputActions = {
-            setValue: (data: any) => { if (this.state.isMounted) return this.inputRefs[input.selector].setValue(data) },
-            getValue: () => { if (this.state.isMounted) return this.inputRefs[input.selector].getValue() },
-            clear: () => { if (this.state.isMounted) return this.inputRefs[input.selector].clear() },
-            click: () => { if (this.state.isMounted) return this.inputRefs[input.selector].click() },
-            focus: () => { if (this.state.isMounted) return this.inputRefs[input.selector].focus() },
-            blur: () => { if (this.state.isMounted) return this.inputRefs[input.selector].blur() }
+            setValue: (data: any) => this.inputRefs[input.selector].setValue(data as any),
+            getValue: () => this.inputRefs[input.selector].getValue(),
+            clear: () => this.inputRefs[input.selector].clear(),
+            click: () => this.inputRefs[input.selector].click(),
+            focus: () => this.inputRefs[input.selector].focus(),
+            blur: () => this.inputRefs[input.selector].blur()
         };
+
         const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => this.inputRefs[input.selector] = el, ...props, actions, _call_parent_for_update: this.onUpdateInputs });
         const output = (
             <Fragment key={index}>
-                {wrapper ? wrapper(element, actions) : element}
+                {wrapper ? wrapper(element, actions as InputActions) : element}
             </Fragment>
         )
         return output;
