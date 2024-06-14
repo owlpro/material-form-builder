@@ -1,11 +1,11 @@
-export interface InputActions {
-    setValue: (data: any) => void
-    getValue: () => any
-    clear: () => void
-    click: () => void
-    focus: () => void
-    blur: () => void
-    copy?: () => void
+export interface InputActions<ValueType = any> {
+    setValue: (data: ValueType) => Promise<ValueType>
+    getValue: () => Promise<ValueType>
+    clear: () => Promise<ValueType>
+    click: () => Promise<any>
+    focus: () => Promise<any>
+    blur: () => Promise<any>
+    copy?: () => Promise<any>
 }
 
 export interface BaseInput<ValueType = any> {
@@ -15,11 +15,11 @@ export interface BaseInput<ValueType = any> {
      * @default true
      */
     visible?: ((e: any) => boolean | undefined) | boolean
-    wrapper?: (children: JSX.Element, actions: InputActions) => JSX.Element
+    wrapper?: (children: JSX.Element, actions: InputActions<ValueType>) => JSX.Element
     onChangeValue?: (value: ValueType) => void
-    getMutator?: (value: any) => any
-    setMutator?: (value: any) => any
+    getMutator?: (value: ValueType) => ValueType
+    setMutator?: (value: ValueType) => ValueType
     formatter?: (value: ValueType) => ValueType
-    _call_parent_for_update?: () => any,
+    _call_parent_for_update?: () => Promise<boolean>,
     ref?: any
 }

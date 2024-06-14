@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import React, { Component } from "react";
 import { isNull } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
-import { AutocompleteExportType, AutocompleteInputProps, AutocompleteOptionType, AutocompleteValueType } from './autocomplete.types';
+import { AutocompleteInputValueType, AutocompleteInputProps, AutocompleteOptionType, AutocompleteValueType } from './autocomplete.types';
 
 const LoadingComponent = (props: any) => (
     <Grow in={true} timeout={550}>
@@ -19,7 +19,7 @@ interface IState {
     error: boolean
 }
 
-export class AutocompleteInput extends Component<AutocompleteInputProps, IState> implements Omit<InputImplement<AutocompleteExportType>, 'onChange'> {
+export class AutocompleteInput extends Component<AutocompleteInputProps, IState> implements Omit<InputImplement<AutocompleteInputValueType>, 'onChange'> {
     state: IState = {
         value: this.getValuesFrom(this.props.defaultValue || null),
         error: false
@@ -43,7 +43,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         }
     }
 
-    private getValuesFrom(value: AutocompleteExportType) {
+    private getValuesFrom(value: AutocompleteInputValueType) {
         if (!value) return null;
         if (this.props.multiple && !Array.isArray(value)) return null;
         if (!this.props.multiple && Array.isArray(value)) return null;
@@ -73,20 +73,20 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         }
     }
 
-    setValue(value: AutocompleteExportType): Promise<AutocompleteExportType> {
+    setValue(value: AutocompleteInputValueType): Promise<AutocompleteInputValueType> {
         const valueToSet = this.getValuesFrom(value)
         return new Promise((resolve) => {
             this.setState({ ...this.state, value: valueToSet }, () => {
                 if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
                 if (typeof this.props.onChangeValue === "function") {
-                    this.props.onChangeValue(value as AutocompleteExportType)
+                    this.props.onChangeValue(value as AutocompleteInputValueType)
                 }
                 resolve(value)
             })
         })
     }
 
-    getValue(): AutocompleteExportType {
+    getValue(): AutocompleteInputValueType {
         return (
             Array.isArray(this.state.value)
                 ? this.state.value.map(i => typeof i === "string" ? i : i.value)
@@ -94,7 +94,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         ) || (this.props.multiple ? [] : null)
     }
 
-    clear(withoutDefaults = false): Promise<AutocompleteExportType> {
+    clear(withoutDefaults = false): Promise<AutocompleteInputValueType> {
         return this.setValue((!withoutDefaults ? this.props.defaultValue : null) || null)
     }
 

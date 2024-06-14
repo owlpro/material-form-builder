@@ -33,12 +33,14 @@ interface IProps {
 }
 
 interface IState {
-    isMounted: boolean
+    isMounted: boolean,
+    time: number | null
 }
 
 export class FormBuilder extends Component<IProps, IState> implements FormBuilderImplements {
     state: IState = {
-        isMounted: false
+        isMounted: false,
+        time: null
     }
 
     private inputRefs: { [key: string]: Input } = {}
@@ -66,7 +68,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
 
     componentDidMount() {
         this.setState({ ...this.state, isMounted: true }, () => {
-            this.didMountEvent.map((func: Function) => func())
+            Promise.all(this.didMountEvent.map((func: Function) => func()))
         })
     }
 
@@ -100,6 +102,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
                 }
                 let value = input.getValue();
                 if (inputProps.getMutator && typeof inputProps.getMutator === "function") {
+                    // @ts-ignore
                     let mutatedValue = inputProps.getMutator(value)
                     value = mutatedValue !== undefined ? mutatedValue : value;
                 }
@@ -139,6 +142,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
 
                 const inputProps = this.props.inputs.find(i => i.selector === keyValueSelector)
                 if (inputProps?.setMutator && typeof inputProps.setMutator === "function") {
+                    //@ts-ignore
                     const mutatedValue = inputProps.setMutator(valueItem);
                     valueItem = mutatedValue !== undefined ? mutatedValue : valueItem;
                 }
@@ -149,6 +153,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
             if (input && value) {
                 const inputProps = this.props.inputs.find(i => i.selector === selector)
                 if (inputProps?.setMutator && typeof inputProps.setMutator === "function") {
+                    //@ts-ignore
                     const mutatedValue = inputProps.setMutator(value);
                     value = mutatedValue !== undefined ? mutatedValue : value;
                 }
@@ -168,13 +173,13 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
 
     public setValues = async (value: ObjectLiteral): Promise<any> => {
         if (!this.state.isMounted) {
-            this.didMountEvent.push(() => this.staticSetValues(value))
+            this.didMountEvent.push(() => this.syncSetValues(value))
         } else {
-            this.staticSetValues(value)
+            this.syncSetValues(value)
         }
     }
 
-    private staticSetValues = async (value: ObjectLiteral): Promise<any> => {
+    private syncSetValues = async (value: ObjectLiteral): Promise<any> => {
         this.defaultValues = value;
         const setValues = Object.keys(value).map(async selector => {
             const valueItem = value[selector];
@@ -216,33 +221,54 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         return output;
     }
 
-    private onUpdateInputs = () => {
-        return this.forceUpdate()
+    private onUpdateInputs = (): Promise<boolean> => {
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, time: new Date().getTime() }, () => {
+                resolve(true)
+            })
+        })
     }
 
-    private executeAction = (selector: string, action: string, value?: any) => {
-
-        if (!this.state.isMounted) {
-            // @ts-ignore
-            this.didMountEvent.push(() => (this.inputRefs[`${selector}`][`${action}`]()))
-        } else {
-            // @ts-ignore
-            this.inputRefs[`${selector}`][`${action}`]()
-        }
+    private executeAction = async (selector: string, action: string, value?: any): Promise<any> => {
+        return new Promise(async (resolve) => {
+            let output;
+            if (this.state.isMounted) {
+                if (value !== undefined) {
+                    // @ts-ignore
+                    output = await this.inputRefs[`${selector}`][`${action}`](value)
+                } else {
+                    // @ts-ignore
+                    output = await this.inputRefs[`${selector}`][`${action}`]()
+                }
+                resolve(output)
+            } else {
+                if (value !== undefined) {
+                    this.didMountEvent.push(async () => {
+                        // @ts-ignore
+                        let output = await this.inputRefs[`${selector}`][`${action}`](value)
+                        resolve(output)
+                    })
+                } else {
+                    this.didMountEvent.push(async () => {
+                        // @ts-ignore
+                        let output = await this.inputRefs[`${selector}`][`${action}`]()
+                        resolve(output)
+                    })
+                }
+            }
+        })
     }
 
     private renderInput = (input: InputProps, index: number): JSX.Element | null => {
         if (!this.checkVisibility(input)) return null;
-
         const { wrapper, getMutator, setMutator, ref, ...props } = input
-        const actions: InputActions = {
-            setValue: (data: any) => this.inputRefs[input.selector].setValue(data as any),
-            getValue: () => this.inputRefs[input.selector].getValue(),
-            clear: () => this.inputRefs[input.selector].clear(),
-            click: () => this.inputRefs[input.selector].click(),
-            focus: () => this.executeAction(input.selector, 'focus'),
-            blur: () => this.executeAction(input.selector, 'blur')
-            // this.inputRefs[input.selector].blur()
+        const actions: InputActions<InputGetValueTypes> = {
+            setValue: (value: any): Promise<any> => this.executeAction(input.selector, 'setValue', value),
+            getValue: (): Promise<any> => this.executeAction(input.selector, 'getValue'),
+            clear: (): Promise<any> => this.executeAction(input.selector, 'clear'),
+            click: (): Promise<any> => this.executeAction(input.selector, 'click'),
+            focus: (): Promise<any> => this.executeAction(input.selector, 'focus'),
+            blur: (): Promise<any> => this.executeAction(input.selector, 'blur')
         };
 
         const refSetter = (el: Input) => {

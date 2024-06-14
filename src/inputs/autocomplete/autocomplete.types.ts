@@ -8,17 +8,17 @@ export type AutocompleteOptionType = {
 }
 export type AutocompleteFragType = string | number
 export type AutocompleteValueType = AutocompleteOptionType[] | AutocompleteOptionType | undefined
-export type AutocompleteExportType = AutocompleteFragType | AutocompleteFragType[] | null
+export type AutocompleteInputValueType = AutocompleteFragType | AutocompleteFragType[] | null
 
 export interface AutocompleteInputProps
-    extends BaseInput<AutocompleteExportType>,
+    extends BaseInput<AutocompleteInputValueType>,
         Omit<AutocompleteProps<any, boolean, true, boolean, 'div'>, 'renderInput' | 'defaultValue' | 'ref'> {
     type: 'autocomplete'
     variant?: Variant
     label?: string
     renderInput?: (params: TextFieldProps) => React.ReactNode
     InputProps?: TextFieldProps
-    defaultValue?: AutocompleteExportType
+    defaultValue?: AutocompleteInputValueType
     loading?: boolean
     ref?: Function
 }
