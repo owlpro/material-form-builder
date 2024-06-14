@@ -17,9 +17,9 @@ export interface BaseInput<ValueType = any> {
     visible?: ((e: any) => boolean | undefined) | boolean
     wrapper?: (children: JSX.Element, actions: InputActions<ValueType>) => JSX.Element
     onChangeValue?: (value: ValueType) => void
-    getMutator?: (value: ValueType) => any
-    setMutator?: (value: ValueType) => any
-    formatter?: (value: ValueType) => any
+    getMutator?: (value: any) => any
+    setMutator?: (value: any) => any
+    formatter?: (value: any) => any
     _call_parent_for_update?: () => Promise<boolean>,
     ref?: any
 }
