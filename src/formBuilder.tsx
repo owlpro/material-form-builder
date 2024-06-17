@@ -3,6 +3,7 @@ import { selectFromObject, setToObject } from './helpers/object.helper';
 import { OutputValues } from './types/builder.outputValues';
 import { Input, InputGetValueTypes, InputProps, InputTypes } from './types/input';
 
+import { sleep } from './helpers/general.helper';
 import { AutocompleteInput } from './inputs/autocomplete/autocomplete.input';
 import { CheckboxInput } from './inputs/checkbox/checkbox.input';
 import { CustomInput } from './inputs/custom/custom.input';
@@ -120,15 +121,16 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
     }
 
     private async setObjectValues(object: ObjectLiteral, path: string[] = []): Promise<any> {
-        return Promise.all(Object.keys(object).map((key) => {
+        const objectKeys = Object.keys(object);
+        for (let i = 0; i < objectKeys.length; i++) {
+            const key = objectKeys[i]
             const value = object[key]
             if (typeof value === "object" && !Array.isArray(value)) {
-                path.push(key)
-                return this.setObjectValues(value, path)
+                await this.setObjectValues(value, [...path, key])
             } else {
-                return this.setNormalValue([...path, key].join('.'), value)
+                await this.setNormalValue([...path, key].join('.'), value)
             }
-        }))
+        }
     }
 
     private async setNormalValue(selector: string, value: InputGetValueTypes) {
@@ -142,7 +144,6 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
 
                 const inputProps = this.props.inputs.find(i => i.selector === keyValueSelector)
                 if (inputProps?.setMutator && typeof inputProps.setMutator === "function") {
-                    //@ts-ignore
                     const mutatedValue = inputProps.setMutator(valueItem);
                     valueItem = mutatedValue !== undefined ? mutatedValue : valueItem;
                 }
@@ -153,7 +154,6 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
             if (input && value) {
                 const inputProps = this.props.inputs.find(i => i.selector === selector)
                 if (inputProps?.setMutator && typeof inputProps.setMutator === "function") {
-                    //@ts-ignore
                     const mutatedValue = inputProps.setMutator(value);
                     value = mutatedValue !== undefined ? mutatedValue : value;
                 }
@@ -183,7 +183,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         this.defaultValues = value;
         const setValues = Object.keys(value).map(async selector => {
             const valueItem = value[selector];
-            return this.setValue(selector, valueItem)
+            return await this.setValue(selector, valueItem)
         })
         return await Promise.all(setValues)
     }

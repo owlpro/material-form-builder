@@ -27,3 +27,7 @@ export const checkValue = (value: any): boolean => {
     if(value === undefined) return false;
     return true;
 }
+
+export const sleep = (ms: number) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
