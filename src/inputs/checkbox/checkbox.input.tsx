@@ -85,7 +85,7 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
     }
 
     render() {
-        const { defaultChecked, defaultValue, onChangeValue, visible, _call_parent_for_update, ref, ...restProps } = this.props;
+        const { defaultChecked, defaultValue, onChangeValue, visible, _call_parent_for_update, ...restProps } = this.props;
         const label = this.props.label + (this.props.required ? ' *' : '')
         return (
             <FormControlLabel onClick={this.onClick} control={

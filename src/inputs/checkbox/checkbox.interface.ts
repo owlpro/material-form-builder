@@ -5,5 +5,4 @@ export interface CheckboxInputProps extends BaseInput<CheckboxInputValueType>, O
     type: 'checkbox',
     label?: string,
     defaultChecked?: CheckboxInputValueType,
-    ref?: Function
 }

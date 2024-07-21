@@ -86,7 +86,7 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
     }
 
     render() {
-        const { onChangeValue, defaultValue, dateAdapter, variant, required, visible, _call_parent_for_update, ref, ...restProps } = this.props;
+        const { onChangeValue, defaultValue, dateAdapter, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
         return (
             <LocalizationProvider dateAdapter={dateAdapter || AdapterDayjs}>
                 <DatePicker

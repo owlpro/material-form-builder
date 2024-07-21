@@ -12,7 +12,6 @@ export interface TimeInputProps
     dateAdapter?: new (...args: any) => MuiPickersAdapter<unknown>
     variant?: Variant
     defaultValue?: TimeInputValueType
-    fullWidth?: boolean,
-    inputProps?: TextFieldProps,
-    ref?: Function
+    fullWidth?: boolean
+    inputProps?: TextFieldProps
 }

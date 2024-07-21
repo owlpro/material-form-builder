@@ -20,5 +20,4 @@ export interface AutocompleteInputProps
     InputProps?: TextFieldProps
     defaultValue?: AutocompleteInputValueType
     loading?: boolean
-    ref?: Function
 }

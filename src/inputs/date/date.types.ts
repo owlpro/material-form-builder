@@ -11,8 +11,7 @@ export interface DateInputProps
     type: 'date'
     dateAdapter?: new (...args: any) => MuiPickersAdapter<unknown>
     variant?: Variant
-    defaultValue?: DateInputValueType,
-    fullWidth?: boolean,
-    inputProps?: TextFieldProps,
-    ref?: Function
+    defaultValue?: DateInputValueType
+    fullWidth?: boolean
+    inputProps?: TextFieldProps
 }

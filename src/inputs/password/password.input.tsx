@@ -100,7 +100,7 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
     }
 
     render() {
-        const { defaultValue, onChangeValue, visible, _call_parent_for_update, ref, ...restProps } = this.props;
+        const { defaultValue, onChangeValue, visible, _call_parent_for_update, ...restProps } = this.props;
         let variantWidth = '207px';
         if (this.props.variant === "outlined") variantWidth = "235px";
         if (this.props.variant === "filled") variantWidth = "231px";

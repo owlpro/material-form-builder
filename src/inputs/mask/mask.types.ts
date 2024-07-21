@@ -9,6 +9,5 @@ export interface MaskInputProps extends BaseInput<MaskInputValueType>, Omit<Text
      * @default _
      */
     char?: string
-    defaultValue?: MaskInputValueType,
-    ref?: Function
+    defaultValue?: MaskInputValueType
 }

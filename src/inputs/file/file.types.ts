@@ -13,6 +13,5 @@ export interface FileInputProps extends BaseInput<FileInputValueType>, Omit<Inpu
     InputLabelProps?: InputLabelProps
     FormHelperTextProps?: FormHelperTextProps
     multiple?: boolean
-    InputProps?: InputBaseComponentProps,
-    ref?: Function
+    InputProps?: InputBaseComponentProps
 }
