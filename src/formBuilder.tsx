@@ -151,15 +151,14 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
             }))
         } else {
             const input = this.inputRefs[selector]
-            if (input && value) {
-                const inputProps = this.props.inputs.find(i => i.selector === selector)
-                if (inputProps?.setMutator && typeof inputProps.setMutator === "function") {
-                    const mutatedValue = inputProps.setMutator(value);
-                    value = mutatedValue !== undefined ? mutatedValue : value;
-                }
-
-                return await input?.setValue(value)
+            if (!input) return null;
+            const inputProps = this.props.inputs.find(i => i.selector === selector)
+            if (inputProps?.setMutator && typeof inputProps.setMutator === "function") {
+                const mutatedValue = inputProps.setMutator(value);
+                value = mutatedValue !== undefined ? mutatedValue : value;
             }
+
+            return await input?.setValue(value)
         }
     }
 

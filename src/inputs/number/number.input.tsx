@@ -11,7 +11,7 @@ interface IState {
 
 export class NumberInput extends Component<NumberInputProps, IState> implements InputImplement<NumberInputValueType> {
     state: IState = {
-        value: this.props.defaultValue || null,
+        value: this.props.defaultValue !== undefined ? this.props.defaultValue : null,
         error: false
     }
 
