@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import React, { Component } from "react";
 import { isNull } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
-import { AutocompleteInputValueType, AutocompleteInputProps, AutocompleteOptionType, AutocompleteValueType } from './autocomplete.types';
+import { AutocompleteInputProps, AutocompleteInputValueType, AutocompleteOptionType, AutocompleteValueType } from './autocomplete.types';
 
 const LoadingComponent = (props: any) => (
     <Grow in={true} timeout={550}>
@@ -158,6 +158,14 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
                 {...restProps}
                 sx={{ width: inputWidth, display: 'inline-flex', ...this.props.sx }}
                 options={this.props.options}
+                renderOption={(props: any, option) => {
+                    const { key, ...rest } = props;
+                    return (
+                        <li key={key} {...rest}>
+                            {typeof option === "object" ? option.label : (option.toString())}
+                        </li>
+                    );
+                }}
                 getOptionLabel={(option) => typeof option === "object" ? option.label : (option.toString())} // TODO get from top
                 multiple={this.props.multiple}
                 freeSolo={this.props.freeSolo}
