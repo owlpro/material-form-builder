@@ -33,6 +33,7 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
             case this.props.label !== nextProps.label:
+            case this.props.disabled !== nextProps.disabled:
                 return true;
             default: return false;
         }

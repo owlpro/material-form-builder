@@ -25,6 +25,7 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
             case this.state.error !== nextState.error:
             case this.props.label !== nextProps.label:
             case this.props.options.map(i => i.value).join('@') !== nextProps.options.map(i => i.value).join('@'):
+            case this.props.label !== nextProps.label:
                 return true;
             default: return false;
         }

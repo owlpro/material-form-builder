@@ -38,6 +38,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
             case this.props.loading !== nextProps.loading:
             case this.props.loadingText !== nextProps.loadingText:
             case this.props.label !== nextProps.label:
+            case this.props.disabled !== nextProps.disabled:
                 return true;
             default: return false;
         }

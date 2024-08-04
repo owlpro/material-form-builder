@@ -26,6 +26,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
             case this.props.label !== nextProps.label:
             case this.props.pattern !== nextProps.pattern:
             case this.props.char !== nextProps.char:
+            case this.props.disabled !== nextProps.disabled:
                 return true;
             default: return false;
         }

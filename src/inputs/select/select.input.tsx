@@ -33,6 +33,7 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
             case this.props.options.map(i => i.value).join('@') !== nextProps.options.map(i => i.value).join('@'):
             case this.props.loading !== nextProps.loading:
             case this.props.label !== nextProps.label:
+            case this.props.disabled !== nextProps.disabled:
                 return true;
             default: return false;
         }
