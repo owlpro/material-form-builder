@@ -2,7 +2,7 @@ import { ObjectLiteral } from '../../types/helper.types'
 import { InputProps } from '../../types/input'
 import { BaseInput } from '../../types/input.base'
 
-export type ItemsInputValueType = ObjectLiteral[] | null
+export type ItemsInputValueType = any
 export interface ItemsInputProps extends Omit<BaseInput<ItemsInputValueType>, 'onChangeValue'> {
     type: 'items'
     inputs: InputProps[]
@@ -10,4 +10,6 @@ export interface ItemsInputProps extends Omit<BaseInput<ItemsInputValueType>, 'o
     renderHeader?: (addItem: Function, removeAll: Function) => JSX.Element
     removeIcon?: JSX.Element | React.ReactNode | boolean
     copyIcon?: JSX.Element | React.ReactNode | boolean
+    minItems?: number
+    maxItems?: number
 }

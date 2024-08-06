@@ -191,7 +191,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         const clearValues = Object.keys(this.inputRefs).map(async selector => {
             const input = this.inputRefs[selector]
             if (input) {
-                await input.clear();
+                return input.clear();
             }
         })
         return await Promise.all(clearValues)

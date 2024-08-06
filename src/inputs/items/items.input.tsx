@@ -29,18 +29,29 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         }
     }
 
+    UNSAFE_componentWillMount(): void {
+        if (this.props.minItems && this.props.minItems > 0) {
+            const items: IState['items'] = [];
+
+            [...Array(this.props.minItems).keys()].forEach(() => {
+                const random = this.getRandomKey()
+                items.push(random)
+            })
+
+            this.setState({ ...this.state, items })
+        }
+    }
+
     private sleep = (ms: number) => {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     setValue(values: ItemsInputValueType): Promise<ItemsInputValueType> {
-        this.formBuilderRef = {}
-        if (!values) return Promise.resolve(values)
+        if (!values) values = []
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, items: [] }, async () => {
-
-                const output = await Promise.all(values.map(async (object) => {
+                const output = await Promise.all(values.map(async (object: any) => {
                     const key = await this.addItem();
                     return this.setItemValue(key, object)
                 }))
@@ -85,16 +96,25 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         return !data.some(datum => !datum?.validation.status);
     }
 
-    addItem = (): Promise<string> => {
+    getRandomKey = (): string => {
         const random = randomString(8)
+        if (this.state.items.indexOf(random) > -1) return this.getRandomKey()
+        return random;
+    }
+
+    addItem = (): Promise<string> => {
+        if (typeof (this.props.maxItems) === "number" && this.state.items.length >= this.props.maxItems) return Promise.resolve('')
+
+        const random = this.getRandomKey()
+
         return new Promise((resolve) => {
             this.setState((oldState) => {
                 let state = { ...oldState }
                 state.items = [...state.items, random];
                 return state;
+            }, () => {
+                resolve(random)
             })
-
-            resolve(random)
         })
     }
 
@@ -105,24 +125,32 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
             const copyData = builder.getValues(false).data;
             this.formBuilderRef[newKey]?.setValues(copyData)
         }
-
     }
 
     removeItem = (key: string) => async () => {
+        if (typeof (this.props.minItems) === "number" && this.state.items.length <= this.props.minItems) return Promise.resolve('')
         const formBuilderRef = this.formBuilderRef[key];
         if (formBuilderRef) {
-            formBuilderRef.clear()
-            await this.setState((oldState) => {
+            await formBuilderRef.clear()
+            this.setState((oldState) => {
                 let state = { ...oldState }
                 state.items = state.items.filter(item => item !== key);
                 return state;
+            }, () => {
+                delete this.formBuilderRef[key];
             })
-            delete this.formBuilderRef[key];
         }
     }
 
     removeAll = () => {
-        return this.setValue(null);
+        const items: IState['items'] = [];
+
+        [...Array(this.props.minItems).keys()].forEach(() => {
+            const random = this.getRandomKey()
+            items.push(random)
+        })
+
+        return this.setValue(items);
     }
 
     public click = () => { }
