@@ -3,13 +3,13 @@ import { selectFromObject, setToObject } from './helpers/object.helper';
 import { OutputValues } from './types/builder.outputValues';
 import { Input, InputGetValueTypes, InputProps, InputTypes } from './types/input';
 
-import { sleep } from './helpers/general.helper';
 import { AutocompleteInput } from './inputs/autocomplete/autocomplete.input';
 import { CheckboxInput } from './inputs/checkbox/checkbox.input';
 import { CustomInput } from './inputs/custom/custom.input';
 import { DateInput } from './inputs/date/date.input';
 import { DatetimeInput } from './inputs/datetime/datetime.input';
 import { FileInput } from './inputs/file/file.input';
+import { GroupInput } from './inputs/group/group.input';
 import { ItemsInput } from './inputs/items/items.input';
 import { MaskInput } from './inputs/mask/mask.input';
 import { MobileInput } from './inputs/mobile/mobile.input';
@@ -62,6 +62,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         file: FileInput,
         autocomplete: AutocompleteInput,
         toggle: ToggleInput,
+        group: GroupInput
     }
 
     private defaultValues: ObjectLiteral | null = null;
@@ -97,7 +98,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
             if (input) {
                 if (validation) {
                     const isValid = input.validation();
-                    if ((inputProps.required || inputProps.type === "items" || inputProps.type === "custom") && !isValid) {
+                    if ((inputProps.required || inputProps.type === "items" || inputProps.type === "group" || inputProps.type === "custom") && !isValid) {
                         invalidInputs.push(inputProps)
                     }
                 }
@@ -125,10 +126,15 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         for (let i = 0; i < objectKeys.length; i++) {
             const key = objectKeys[i]
             const value = object[key]
-            if (typeof value === "object" && !Array.isArray(value)) {
+            const joinedSelector = [...path, key].join('.');
+            const directInput = this.props.inputs.find(i => i.selector === joinedSelector)
+            if (directInput && (directInput.type === "group" || (directInput.type === "custom" && directInput.allowObject))) {
+                await this.setNormalValue(joinedSelector, value)
+            } else if (typeof value === "object" && !Array.isArray(value)) {
                 await this.setObjectValues(value, [...path, key])
             } else {
-                await this.setNormalValue([...path, key].join('.'), value)
+                const selector = [...path, key].join('.');
+                await this.setNormalValue(selector, value)
             }
         }
     }
@@ -139,7 +145,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         if (Array.isArray(value) && keyValueSelectors.length) {
             return await Promise.all(keyValueSelectors.map(async keyValueSelector => {
                 let valueItem = selectFromObject(keyValueSelector.replace(selector, ''), value)
-                const input = this.inputRefs[keyValueSelector]
+                const input: any = this.inputRefs[keyValueSelector]
                 if (!input || valueItem === undefined) return false;
 
                 const inputProps = this.props.inputs.find(i => i.selector === keyValueSelector)
@@ -163,6 +169,11 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
     }
 
     private async setValue(selector: string, value: InputGetValueTypes) {
+        // const directInput = this.props.inputs.find(i => i.selector === selector)
+        // if (directInput && (directInput.type === "group" || (directInput.type === "custom" && directInput.allowObject))) {
+        //     return await this.setNormalValue(selector, value)
+        // }
+
         if (typeof value === "object" && !Array.isArray(value) && !(value instanceof Date)) {
             return await this.setObjectValues(value, [selector])
         } else {
