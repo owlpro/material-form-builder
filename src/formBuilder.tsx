@@ -174,7 +174,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         //     return await this.setNormalValue(selector, value)
         // }
 
-        if (typeof value === "object" && !Array.isArray(value) && !(value instanceof Date)) {
+        if (value !== null && typeof value === "object" && !Array.isArray(value) && !(value instanceof Date)) {
             return await this.setObjectValues(value, [selector])
         } else {
             return await this.setNormalValue(selector, value)
