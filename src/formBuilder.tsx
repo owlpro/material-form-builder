@@ -169,10 +169,10 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
     }
 
     private async setValue(selector: string, value: InputGetValueTypes) {
-        // const directInput = this.props.inputs.find(i => i.selector === selector)
-        // if (directInput && (directInput.type === "group" || (directInput.type === "custom" && directInput.allowObject))) {
-        //     return await this.setNormalValue(selector, value)
-        // }
+        const directInput = this.props.inputs.find(i => i.selector === selector)
+        if (directInput && (directInput.type === "group" || (directInput.type === "custom" && directInput.allowObject))) {
+            return await this.setNormalValue(selector, value)
+        }
 
         if (value !== null && typeof value === "object" && !Array.isArray(value) && !(value instanceof Date)) {
             return await this.setObjectValues(value, [selector])
