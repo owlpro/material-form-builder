@@ -130,7 +130,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
             const directInput = this.props.inputs.find(i => i.selector === joinedSelector)
             if (directInput && (directInput.type === "group" || (directInput.type === "custom" && directInput.allowObject))) {
                 await this.setNormalValue(joinedSelector, value)
-            } else if (typeof value === "object" && !Array.isArray(value)) {
+            } else if (value !== null && typeof value === "object" && !Array.isArray(value)) {
                 await this.setObjectValues(value, [...path, key])
             } else {
                 const selector = [...path, key].join('.');
