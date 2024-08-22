@@ -22,7 +22,6 @@ import { TimeInput } from './inputs/time/time.input';
 import { ToggleInput } from './inputs/toggle/toggle.input';
 import { ObjectLiteral } from './types/helper.types';
 import { InputActions } from './types/input.base';
-import { sleep } from './helpers/general.helper';
 
 interface FormBuilderImplements {
     getValues: (validation: boolean) => OutputValues;
@@ -32,7 +31,8 @@ interface FormBuilderImplements {
 
 interface IProps {
     inputs: InputProps[],
-    onChange?: Function
+    onChange?: Function,
+    onMount?: Function
 }
 
 interface IState {
@@ -73,8 +73,9 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
     private didMountEvent: Function[] = [];
 
     componentDidMount() {
-        this.setState({ ...this.state, isMounted: true }, () => {
-            Promise.all(this.didMountEvent.map((func: Function) => func()))
+        this.setState({ ...this.state, isMounted: true }, async () => {
+            await Promise.all(this.didMountEvent.map((func: Function) => func()))
+            this.props.onMount?.(this.getValues(false))
         })
     }
 
