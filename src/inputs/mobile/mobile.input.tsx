@@ -1,7 +1,7 @@
 import { Box, InputAdornment, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
-import React, { Component } from "react";
+import React, { Component, FocusEvent } from "react";
 import { mask } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { Country, countries } from "./countries";
@@ -9,6 +9,7 @@ import { MobileInputProps, MobileInputValueType } from './mobile.types';
 
 interface IState {
     value: MobileInputValueType,
+    value_when_focus: MobileInputValueType,
     error: boolean,
     country: Country
 }
@@ -23,6 +24,7 @@ const StylesImage = styled('img')({
 export class MobileInput extends Component<MobileInputProps, IState> implements InputImplement<MobileInputValueType> {
     state: IState = {
         value: this.props.defaultValue || null,
+        value_when_focus: this.props.defaultValue || null,
         error: false,
         country: countries[0],
     }
@@ -66,10 +68,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
-                if (typeof this.props.onChangeValue === "function") {
-                    this.props.onChangeValue(value as MobileInputValueType)
-                }
+                this.props.onChangeValue?.(value as MobileInputValueType)
                 resolve(value)
             })
         })
@@ -103,10 +102,25 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
         this.normalizeValue(event.target.value)
     };
 
-    private onClick = (event: React.MouseEvent<HTMLElement>) => {
+    private onClick = (event: React.MouseEvent<HTMLDivElement>) => {
         clearTimeout(this.validationTimeout)
         this.setState({ ...this.state, error: false })
         this.normalizeValue(this.state.value)
+        this.props.onClick?.(event)
+    }
+
+    private onBlur = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
+        const value: MobileInputValueType = e.target.value || null
+        if (value !== this.state.value_when_focus) {
+            this.props._call_parent_for_update?.()
+        }
+        this.props.onBlur?.(e)
+    }
+
+    private onFocus = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
+        const value_when_focus: MobileInputValueType = e.target.value || null
+        if (this.state.value_when_focus !== value_when_focus) this.setState({ ...this.state, value_when_focus })
+        this.props.onFocus?.(e)
     }
 
     private normalizeValue = async (value: MobileInputValueType) => {
@@ -205,6 +219,8 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
                     error={this.state.error}
                     onChange={this.onChange}
                     onClick={this.onClick}
+                    onBlur={this.onBlur}
+                    onFocus={this.onFocus}
                     value={this.state.value || ''}
                     inputRef={el => this.inputRef = el}
                     InputProps={{

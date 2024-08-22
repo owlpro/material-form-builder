@@ -7,7 +7,7 @@ import { BaseInput } from '../../types/input.base'
 export type DateInputValueType = Date | null
 export interface DateInputProps
     extends BaseInput<DateInputValueType>,
-        Omit<DatePickerProps<DateInputValueType, DateInputValueType>, 'onChange' | 'value' | 'renderInput' | 'ref'> {
+        Omit<DatePickerProps<DateInputValueType, DateInputValueType>, 'value' | 'renderInput' | 'ref'> {
     type: 'date'
     dateAdapter?: new (...args: any) => MuiPickersAdapter<unknown>
     variant?: Variant

@@ -1,6 +1,6 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Box, CircularProgress, FormControl, Grow, InputLabel, ListSubheader, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import React, { Component } from "react";
+import React, { Component, MouseEvent, SyntheticEvent } from "react";
 import { InputImplement } from '../../types/input.implement';
 import { SelectInputProps, SelectInputValueType } from './select.types';
 interface IState {
@@ -50,10 +50,8 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
         const valueToSet: SelectInputValueType = value;
         return new Promise((resolve) => {
             this.setState({ ...this.state, value: valueToSet }, () => {
-                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
-                if (typeof this.props.onChangeValue === "function") {
-                    this.props.onChangeValue(valueToSet as SelectInputValueType)
-                }
+                this.props._call_parent_for_update?.()
+                this.props.onChangeValue?.(valueToSet as SelectInputValueType)
                 resolve(valueToSet)
             })
         })
@@ -79,19 +77,16 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
         return true;
     }
 
-    onChange = (event: SelectChangeEvent<any>) => {
+    onChange = (event: SelectChangeEvent<any>, child: React.ReactNode) => {
         const value = event.target.value;
         this.setValue(value || null)
+        this.props.onChange?.(event, child)
     };
 
-    private onClick = (event: React.MouseEvent<HTMLElement>) => {
+    private onOpen = (event: SyntheticEvent<Element, Event>) => {
         clearTimeout(this.validationTimeout)
         this.setState({ ...this.state, error: false })
-    }
-
-    private onOpen = () => {
-        clearTimeout(this.validationTimeout)
-        this.setState({ ...this.state, error: false })
+        this.props.onOpen?.(event)
     }
 
     public click = () => {

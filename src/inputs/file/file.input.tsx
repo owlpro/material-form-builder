@@ -48,10 +48,8 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
                 if (this.inputRef && value) {
                     this.inputRef.files = value
                 }
-                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
-                if (typeof this.props.onChangeValue === "function") {
-                    this.props.onChangeValue(value as FileInputValueType)
-                }
+                this.props._call_parent_for_update?.()
+                this.props.onChangeValue?.(value as FileInputValueType)
                 resolve(value)
             })
         })
@@ -80,12 +78,13 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         let value: FileInputValueType = event.target.files;
         this.setValue(value || null)
-
+        this.props.onChange?.(event)
     };
 
-    private onClick = (event: React.MouseEvent<HTMLElement>) => {
+    private onClick = (event: React.MouseEvent<HTMLDivElement>) => {
         clearTimeout(this.validationTimeout)
         this.setState({ ...this.state, error: false })
+        this.props.onClick?.(event)
     }
 
     public click = () => {

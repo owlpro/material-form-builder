@@ -1,21 +1,24 @@
 import TextField from '@mui/material/TextField';
-import React, { Component } from "react";
+import React, { Component, FocusEvent } from "react";
 import { checkValue } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { NumberInputProps, NumberInputValueType } from './number.interface';
 
 interface IState {
     value: NumberInputValueType,
+    value_when_focus: NumberInputValueType,
     error: boolean
 }
 
 export class NumberInput extends Component<NumberInputProps, IState> implements InputImplement<NumberInputValueType> {
     state: IState = {
         value: this.props.defaultValue !== undefined ? this.props.defaultValue : null,
+        value_when_focus: this.props.defaultValue !== undefined ? this.props.defaultValue : null,
         error: false
     }
 
     validationTimeout: NodeJS.Timeout | undefined;
+    inputRef: HTMLInputElement | null | undefined;
 
     shouldComponentUpdate(nextProps: NumberInputProps, nextState: IState) {
 
@@ -33,10 +36,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
         if (value === this.state.value) return Promise.resolve(value)
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
-                if (typeof this.props.onChangeValue === "function") {
-                    this.props.onChangeValue(value as NumberInputValueType)
-                }
+                this.props.onChangeValue?.(value as NumberInputValueType)
                 resolve(value)
             })
         })
@@ -47,7 +47,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
     }
 
     clear(): Promise<NumberInputValueType> {
-        return this.setValue(checkValue(this.props.defaultValue) ? this.props.defaultValue : null)
+        return this.setValue(this.props.defaultValue ?? null)
     }
 
     validation(): boolean {
@@ -72,14 +72,29 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
         }
 
         this.setValue(value)
+        this.props.onChange?.(event)
     };
 
-    private onClick = (event: React.MouseEvent<HTMLElement>) => {
+    private onClick = (event: React.MouseEvent<HTMLDivElement>) => {
         clearTimeout(this.validationTimeout)
         this.setState({ ...this.state, error: false })
+        this.props.onClick?.(event)
     }
 
-    inputRef: HTMLInputElement | null | undefined;
+    private onBlur = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
+        const value: NumberInputValueType = Number(e.target.value) || null
+        if (value !== this.state.value_when_focus) {
+            this.props._call_parent_for_update?.()
+        }
+        this.props.onBlur?.(e)
+    }
+
+    private onFocus = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
+        const value_when_focus: NumberInputValueType = Number(e.target.value) || null
+        if (this.state.value_when_focus !== value_when_focus) this.setState({ ...this.state, value_when_focus })
+        this.props.onFocus?.(e)
+    }
+
 
     public click = () => {
         this.inputRef?.click()
@@ -99,6 +114,8 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
             error={this.state.error}
             onChange={this.onChange}
             onClick={this.onClick}
+            onBlur={this.onBlur}
+            onFocus={this.onFocus}
             value={checkValue(this.state.value) ? this.state.value : ""}
             inputRef={el => this.inputRef = el}
         />

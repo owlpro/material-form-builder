@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import React, { Component } from "react";
+import React, { Component, MouseEvent } from "react";
 import { InputImplement } from '../../types/input.implement';
 import { TimeInputProps, TimeInputValueType } from './time.types';
 
@@ -19,7 +19,6 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
     validationTimeout: NodeJS.Timeout | undefined;
 
     shouldComponentUpdate(nextProps: TimeInputProps, nextState: IState) {
-
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
@@ -35,10 +34,8 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
-                if (typeof this.props.onChangeValue === "function") {
-                    this.props.onChangeValue(value as TimeInputValueType)
-                }
+                this.props._call_parent_for_update?.()
+                this.props.onChangeValue?.(value as TimeInputValueType)
                 resolve(value)
             })
         })
@@ -64,14 +61,17 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
         return true;
     }
 
-    onChange = (event: any) => {
-        let value = event && event.toDate ? event.toDate() : event;
-        this.setValue(value || null)
+    onChange = (inputValue: any, keyboardInputValue?: string) => {
+        let value = inputValue && inputValue.toDate ? inputValue.toDate() : inputValue;
+        this.setValue(value || null).then(() => {
+            this.props.onChange?.(inputValue, keyboardInputValue)
+        })
     };
 
-    private onClick = () => {
+    private onClick = (event: MouseEvent<HTMLDivElement>) => {
         clearTimeout(this.validationTimeout)
         this.setState({ ...this.state, error: false })
+        this.props.InputProps?.onClick?.(event)
     }
 
     inputRef: HTMLInputElement | null | undefined;
@@ -102,6 +102,7 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
                     renderInput={(params: any) => (
                         <TextField
                             {...params}
+                            {...this.props.InputProps}
                             inputProps={{
                                 ...params.inputProps,
                                 ...this.props.inputProps

@@ -37,10 +37,8 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
-                if (typeof this.props.onChangeValue === "function") {
-                    this.props.onChangeValue(value as DateInputValueType)
-                }
+                this.props._call_parent_for_update?.()
+                this.props.onChangeValue?.(value as DateInputValueType)
                 resolve(value)
             })
         })
@@ -66,14 +64,16 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
         return true;
     }
 
-    onChange = (event: any) => {
+    onChange = (event: any, keyboardInputValue?: string) => {
         let value = event && event.toDate ? event.toDate() : event;
         this.setValue(value || null)
+        this.props.onChange?.(event, keyboardInputValue)
     };
 
-    private onClick = (event: React.MouseEvent<HTMLElement>) => {
+    private onClick = (event: React.MouseEvent<HTMLDivElement>) => {
         clearTimeout(this.validationTimeout)
         this.setState({ ...this.state, error: false })
+        this.props.InputProps?.onClick?.(event)
     }
 
     public click = () => {

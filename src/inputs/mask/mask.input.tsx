@@ -1,17 +1,19 @@
 import TextField from '@mui/material/TextField';
-import React, { Component } from "react";
+import React, { Component, FocusEvent, MouseEvent } from "react";
 import { mask } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { MaskInputProps, MaskInputValueType } from './mask.types';
 
 interface IState {
     value: MaskInputValueType,
+    value_when_focus: MaskInputValueType,
     error: boolean
 }
 
 export class MaskInput extends Component<MaskInputProps, IState> implements InputImplement<MaskInputValueType> {
     state: IState = {
         value: this.props.defaultValue || null,
+        value_when_focus: this.props.defaultValue || null,
         error: false
     }
 
@@ -37,10 +39,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
-                if (typeof this.props.onChangeValue === "function") {
-                    this.props.onChangeValue(value as MaskInputValueType)
-                }
+                this.props.onChangeValue?.(value as MaskInputValueType)
                 resolve(value)
             })
         })
@@ -77,6 +76,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
         }
 
         this.normalizeValue(value)
+        this.props.onChange?.(event)
     };
 
     private normalizeValue = async (value: MaskInputValueType) => {
@@ -92,9 +92,29 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
         }
     }
 
-    private onClick = () => {
+    private onClick = (event: MouseEvent<HTMLDivElement>) => {
         clearTimeout(this.validationTimeout)
-        this.setState({ ...this.state, error: false })
+
+        if (this.state.error) {
+            this.setState({ ...this.state, error: false })
+        }
+
+        this.props.onClick?.(event)
+    }
+
+    private onBlur = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
+        const value: MaskInputValueType = e.target.value || null
+        if (value !== this.state.value_when_focus) {
+            this.props._call_parent_for_update?.()
+        }
+
+        this.props.onBlur?.(e)
+    }
+
+    private onFocus = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
+        const value_when_focus: MaskInputValueType = e.target.value || null
+        if (this.state.value_when_focus !== value_when_focus) this.setState({ ...this.state, value_when_focus })
+        this.props.onFocus?.(e)
     }
 
     public click = () => {
@@ -115,6 +135,8 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
             error={this.state.error}
             onChange={this.onChange}
             onClick={this.onClick}
+            onBlur={this.onBlur}
+            onFocus={this.onFocus}
             value={this.state.value || ''}
             inputRef={el => this.inputRef = el}
         />

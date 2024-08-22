@@ -36,10 +36,8 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
-                if (typeof this.props.onChangeValue === "function") {
-                    this.props.onChangeValue(value as CheckboxInputValueType)
-                }
+                this.props._call_parent_for_update?.()
+                this.props.onChangeValue?.(value as CheckboxInputValueType)
 
                 resolve(value)
             })
@@ -66,13 +64,15 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
         return true;
     }
 
-    onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setValue(event.target.checked || false)
+    onChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+        this.setValue(checked || false)
+        this.props.onChange?.(event, checked)
     };
 
-    private onClick = (event: React.MouseEvent<HTMLElement>) => {
+    private onClick = (event: React.MouseEvent<HTMLLabelElement>) => {
         clearTimeout(this.validationTimeout)
         this.setState({ ...this.state, error: false })
+        this.props.onClick?.(event as any)
     }
 
     public click = () => {

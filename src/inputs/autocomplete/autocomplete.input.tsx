@@ -1,6 +1,6 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ClearIcon from '@mui/icons-material/Clear';
-import { Autocomplete, AutocompleteRenderInputParams, Box, CircularProgress, Grow, IconButton, InputAdornment } from '@mui/material';
+import { Autocomplete, AutocompleteChangeDetails, AutocompleteChangeReason, AutocompleteRenderInputParams, Box, CircularProgress, Grow, IconButton, InputAdornment } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { Component } from "react";
 import { isNull } from '../../helpers/general.helper';
@@ -78,10 +78,8 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         const valueToSet = this.getValuesFrom(value)
         return new Promise((resolve) => {
             this.setState({ ...this.state, value: valueToSet }, () => {
-                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
-                if (typeof this.props.onChangeValue === "function") {
-                    this.props.onChangeValue(value as AutocompleteInputValueType)
-                }
+                this.props._call_parent_for_update?.()
+                this.props.onChangeValue?.(value as AutocompleteInputValueType)
                 resolve(value)
             })
         })
@@ -111,17 +109,20 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         return true;
     }
 
-    onChange = (_: React.SyntheticEvent, option: any) => {
+    onChange = (_: React.SyntheticEvent, option: any, reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<any> | undefined) => {
         if (Array.isArray(option)) {
             this.setValue(option.map(i => typeof i === "string" ? i : i.value))
         } else {
             this.setValue(typeof option === "string" ? option : option.value)
         }
+
+        this.props.onChange?.(_, option, reason, details)
     };
 
-    private onClick = (event: React.MouseEvent<HTMLElement>) => {
+    private onClick = (event: React.MouseEvent<HTMLDivElement>) => {
         clearTimeout(this.validationTimeout)
         this.setState({ ...this.state, error: false })
+        this.props.onClick?.(event)
     }
 
     public click = () => {
@@ -146,6 +147,8 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         if (!this.props.multiple && this.props.freeSolo) {
             this.setValue(event.target.value)
         }
+
+        this.props.InputProps?.onBlur?.(event)
     }
 
     render() {

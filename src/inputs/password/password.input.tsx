@@ -1,12 +1,13 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { IconButton, InputAdornment } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import React, { Component } from "react";
+import React, { Component, FocusEvent, MouseEvent } from "react";
 import { InputImplement } from '../../types/input.implement';
 import { PasswordInputProps, PasswordInputValueType } from './password.types';
 
 interface IState {
     value: PasswordInputValueType,
+    value_when_focus: PasswordInputValueType,
     error: boolean,
     showPassword: boolean,
 }
@@ -14,11 +15,13 @@ interface IState {
 export class PasswordInput extends Component<PasswordInputProps, IState> implements InputImplement<PasswordInputValueType> {
     state: IState = {
         value: this.props.defaultValue || null,
+        value_when_focus: this.props.defaultValue || null,
         error: false,
         showPassword: false
     }
 
     validationTimeout: NodeJS.Timeout | undefined;
+    inputRef: HTMLInputElement | null | undefined;
 
     shouldComponentUpdate(nextProps: PasswordInputProps, nextState: IState) {
 
@@ -38,10 +41,7 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
-                if (typeof this.props.onChangeValue === "function") {
-                    this.props.onChangeValue(value as PasswordInputValueType)
-                }
+                this.props.onChangeValue?.(value as PasswordInputValueType)
                 resolve(value)
             })
         })
@@ -76,19 +76,37 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
             }
         }
 
-        this.setValue(value || null)
+        this.setValue(value || null).then(() => {
+            this.props.onChange?.(event)
+        })
     };
 
-    private onFocus = () => {
+    private onClick = (event: MouseEvent<HTMLDivElement>) => {
         clearTimeout(this.validationTimeout)
-        this.setState({ ...this.state, error: false })
+        if (this.state.error) this.setState({ ...this.state, error: false })
+
+        this.props.onClick?.(event)
+    }
+
+    private onBlur = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
+        const value: PasswordInputValueType = e.target.value || null
+        if (value !== this.state.value_when_focus) {
+            this.props._call_parent_for_update?.()
+        }
+
+        this.props.onBlur?.(e)
+    }
+
+    private onFocus = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
+        const value_when_focus: PasswordInputValueType = e.target.value || null
+        if (this.state.value_when_focus !== value_when_focus) this.setState({ ...this.state, value_when_focus })
+        this.props.onFocus?.(e)
     }
 
     private handleClickShowPassword = () => {
         this.setState({ ...this.state, showPassword: !this.state.showPassword })
     }
 
-    inputRef: HTMLInputElement | null | undefined;
 
     public click = () => {
         this.inputRef?.click()
@@ -114,6 +132,8 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
                 variant={this.props.variant || "standard"}
                 error={this.state.error}
                 onChange={this.onChange}
+                onClick={this.onClick}
+                onBlur={this.onBlur}
                 onFocus={this.onFocus}
                 value={this.state.value || ''}
                 inputRef={el => this.inputRef = el}

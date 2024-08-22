@@ -1,8 +1,8 @@
-import { CSSProperties } from 'react'
+import { CSSProperties, DetailedHTMLProps, HTMLProps, InputHTMLAttributes } from 'react'
 import { BaseInput } from '../../types/input.base'
 
 export type OtpInputValueType = string | null
-export interface OtpInputProps extends BaseInput<OtpInputValueType> {
+export interface OtpInputProps extends BaseInput<OtpInputValueType>, Omit<HTMLProps<HTMLInputElement>, 'defaultValue' | 'ref'>{
     type: 'otp'
 
     defaultValue?: OtpInputValueType

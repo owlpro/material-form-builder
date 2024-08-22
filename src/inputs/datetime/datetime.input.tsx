@@ -17,6 +17,7 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
     }
 
     validationTimeout: NodeJS.Timeout | undefined;
+    inputRef: HTMLInputElement | null | undefined;
 
     shouldComponentUpdate(nextProps: DatetimeInputProps, nextState: IState) {
 
@@ -35,10 +36,8 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
-                if (typeof this.props.onChangeValue === "function") {
-                    this.props.onChangeValue(value as DatetimeInputValueType)
-                }
+                this.props._call_parent_for_update?.()
+                this.props.onChangeValue?.(value as DatetimeInputValueType)
                 resolve(value)
             })
         })
@@ -64,17 +63,18 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
         return true;
     }
 
-    onChange = (event: any) => {
+    onChange = (event: any, keyboardInputValue?: string) => {
         let value = event && event.toDate ? event.toDate() : event;
         this.setValue(value || null)
+        this.props.onChange?.(event, keyboardInputValue)
     };
 
-    private onClick = (event: React.MouseEvent<HTMLElement>) => {
+    private onClick = (event: React.MouseEvent<HTMLDivElement>) => {
         clearTimeout(this.validationTimeout)
         this.setState({ ...this.state, error: false })
+        this.props.InputProps?.onClick?.(event)
     }
 
-    inputRef: HTMLInputElement | null | undefined;
     public click = () => {
         this.inputRef?.click()
     }

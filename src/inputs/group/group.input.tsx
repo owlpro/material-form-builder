@@ -2,6 +2,7 @@ import React, { Component, createRef, RefObject } from "react";
 import { FormBuilder } from "../../formBuilder";
 import { InputImplement } from '../../types/input.implement';
 import { GroupInputProps, GroupInputValueType } from './group.interface';
+import { OutputValues } from "../../types/builder.outputValues";
 
 interface IState {
     error: boolean,
@@ -48,6 +49,11 @@ export class GroupInput extends Component<GroupInputProps, IState> implements In
         return typeof (validation?.status) == "boolean" ? validation?.status : true;
     }
 
+    onChangeValue = (data: OutputValues) => {
+        this.props._call_parent_for_update?.()
+        this.props.onChangeValue?.(data)
+    }
+
     public click = () => { }
     public focus = () => { }
     public blur = () => { }
@@ -55,7 +61,7 @@ export class GroupInput extends Component<GroupInputProps, IState> implements In
 
     render() {
         return (
-            <FormBuilder inputs={this.props.inputs} ref={this.builderRef} />
+            <FormBuilder inputs={this.props.inputs} ref={this.builderRef} onChange={this.onChangeValue} />
         )
     }
 }

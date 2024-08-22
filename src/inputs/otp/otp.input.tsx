@@ -1,10 +1,11 @@
 import { Box, Slide, Typography } from '@mui/material';
-import React, { Component, Fragment } from "react";
+import React, { Component, FocusEvent, FocusEventHandler, Fragment } from "react";
 import { InputImplement } from '../../types/input.implement';
 import { OtpInputProps, OtpInputValueType } from './otp.types';
 
 interface IState {
     value: OtpInputValueType,
+    value_when_focus: OtpInputValueType,
     error: boolean,
     isInputFocused: boolean
 }
@@ -12,6 +13,7 @@ interface IState {
 export class OtpInput extends Component<OtpInputProps, IState> implements InputImplement<OtpInputValueType> {
     state: IState = {
         value: this.props.defaultValue || null,
+        value_when_focus: this.props.defaultValue || null,
         error: false,
         isInputFocused: false
     }
@@ -31,22 +33,12 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
         }
     }
 
-    componentDidMount(): void {
-        if (this.props.autoFocus) {
-            this.setState({ ...this.state, isInputFocused: true })
-            this.inputRef?.focus()
-        }
-    }
-
     async setValue(value: OtpInputValueType): Promise<OtpInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
-                if (typeof this.props.onChangeValue === "function") {
-                    this.props.onChangeValue(value as OtpInputValueType)
-                }
+                this.props.onChangeValue?.(value as OtpInputValueType)
                 resolve(value)
             })
         })
@@ -81,17 +73,37 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
             }
         }
 
-        this.setValue(value || null)
+        this.setValue(value || null).then(() => {
+            this.props.onChange?.(event)
+        })
     };
 
-    private onClick = (event: React.MouseEvent<HTMLElement>) => {
+    private onClick = (event: React.MouseEvent<HTMLInputElement>) => {
         clearTimeout(this.validationTimeout)
-        this.setState({ ...this.state, error: false, isInputFocused: true })
-        this.inputRef?.focus()
+        this.setState({ ...this.state, error: false, isInputFocused: true }, () => {
+            this.inputRef?.focus()
+            this.props.onClick?.(event)
+        })
     }
 
-    private onBlur = () => {
+    private onBlur = (e: FocusEvent<HTMLInputElement>) => {
         this.setState({ ...this.state, isInputFocused: false })
+
+        const value: OtpInputValueType = e.target.value || null
+        if (value !== this.state.value_when_focus) {
+            this.props._call_parent_for_update?.()
+        }
+
+        this.props.onBlur?.(e)
+    }
+
+    private onFocus = (e: FocusEvent<HTMLInputElement>) => {
+        this.setState({ ...this.state, isInputFocused: true }, () => {
+            const value_when_focus: OtpInputValueType = e.target.value || null
+            if (this.state.value_when_focus !== value_when_focus) this.setState({ ...this.state, value_when_focus })
+            this.props.onFocus?.(e)
+        })
+
     }
 
     public click = () => {
@@ -141,6 +153,7 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
                         style={{ position: 'absolute', zIndex: -1, opacity: 0 }}
                         onChange={this.onChange}
                         onBlur={this.onBlur}
+                        onFocus={this.onFocus}
                         value={this.state.value || ""}
                         maxLength={settings.digits}
                         inputMode='numeric'

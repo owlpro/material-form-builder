@@ -36,10 +36,8 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if (typeof this.props._call_parent_for_update === "function") this.props._call_parent_for_update()
-                if (typeof this.props.onChangeValue === "function") {
-                    this.props.onChangeValue(value as ToggleInputValueType)
-                }
+                this.props._call_parent_for_update?.()
+                this.props.onChangeValue?.(value as ToggleInputValueType)
                 resolve(value)
             })
         })
@@ -66,13 +64,10 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
     }
 
     onChange = (_: React.MouseEvent<HTMLElement>, value: ToggleInputValueType) => {
-        this.setValue(checkValue(value) ? value : (this.props.enforceValueSet ? this.state.value : null))
+        this.setValue(checkValue(value) ? value : (this.props.enforceValueSet ? this.state.value : null)).then(() => {
+            this.props.onChange?.(_, value)
+        })
     };
-
-    private onClick = (event: React.MouseEvent<HTMLElement>) => {
-        clearTimeout(this.validationTimeout)
-        this.setState({ ...this.state, error: false })
-    }
 
     public click = () => {
         this.inputRef?.click()
@@ -93,7 +88,6 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
                 value={this.state.value}
                 exclusive={this.props.exclusive === false ? false : true}
                 onChange={this.onChange}
-            // onClick={this.onClick}
             >
                 {this.props.options.map((option, key) => <ToggleButton key={`${key}-${option.value}`} value={option.value}>{option.label}</ToggleButton>)}
             </ToggleButtonGroup>

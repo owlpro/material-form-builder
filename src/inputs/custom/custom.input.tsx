@@ -45,13 +45,13 @@ export class CustomInput extends Component<CustomInputProps, IState> implements 
     }
 
     public click = () => {
-        // this.inputRef?.click()
+        this.elementRef?.click()
     }
     public focus = () => {
-        // this.inputRef?.focus()
+        this.elementRef?.focus()
     }
     public blur = () => {
-        // this.inputRef?.blur()
+        this.elementRef?.blur()
     }
 
     render() {
