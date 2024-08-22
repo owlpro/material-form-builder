@@ -1,6 +1,6 @@
 {
   "name": "material-form-builder",
-  "version": "0.20.0",
+  "version": "0.20.1",
   "description": "FormBuilder For React.js",
   "main": "dist/index.js",
   "repository": {

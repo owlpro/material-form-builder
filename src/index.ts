@@ -18,7 +18,7 @@ import { ToggleInputProps, ToggleInputValueType } from './inputs/toggle/toggle.t
 import { OutputValues } from './types/builder.outputValues'
 import { InputActions } from './types/input.base'
 
-type BuilderValue = OutputValues | undefined
+type BuilderValue<T = any> = OutputValues<T> | undefined
 type WrapperElement = JSX.Element
 type WrapperActions<T = any> = InputActions<T>
 export { FormBuilder, BuilderValue }
