@@ -1,9 +1,10 @@
 import { ToggleButtonGroupProps } from '@mui/material'
 import { BaseInput } from '../../types/input.base'
+import { ReactNode } from 'react'
 
 export type ToggleInputValueType = string | string[] | null
 export type ToggleInputOptionType = {
-    label: string
+    label: string | ReactNode
     value: any
 }
 

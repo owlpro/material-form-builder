@@ -235,7 +235,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
     private onUpdateInputs = (): Promise<boolean> => {
         return new Promise((resolve) => {
             this.setState({ ...this.state, time: new Date().getTime() }, () => {
-                this.props.onChange?.(this.getValues())
+                this.props.onChange?.(this.getValues(false))
                 resolve(true)
             })
         })
