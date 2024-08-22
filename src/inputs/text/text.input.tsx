@@ -32,11 +32,11 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
         }
     }
 
-    setValue(value: TextInputValueType): Promise<TextInputValueType> {
+    setValue(value: TextInputValueType, withoutEffect?: boolean): Promise<TextInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
-
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
+                if(!withoutEffect) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as TextInputValueType)
                 resolve(value)
             })
@@ -72,7 +72,7 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
             }
         }
 
-        this.setValue(value || null).then(() => {
+        this.setValue(value || null, true).then(() => {
             this.props.onChange?.(event)
         })
     };

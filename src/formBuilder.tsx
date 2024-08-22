@@ -22,6 +22,7 @@ import { TimeInput } from './inputs/time/time.input';
 import { ToggleInput } from './inputs/toggle/toggle.input';
 import { ObjectLiteral } from './types/helper.types';
 import { InputActions } from './types/input.base';
+import { sleep } from './helpers/general.helper';
 
 interface FormBuilderImplements {
     getValues: (validation: boolean) => OutputValues;
@@ -36,13 +37,15 @@ interface IProps {
 
 interface IState {
     isMounted: boolean,
-    time: number | null
+    time: number | null,
+    inInternalSettingProcess: boolean
 }
 
 export class FormBuilder extends Component<IProps, IState> implements FormBuilderImplements {
     state: IState = {
         isMounted: false,
-        time: null
+        time: null,
+        inInternalSettingProcess: false
     }
 
     private inputRefs: { [key: string]: Input } = {}
@@ -186,27 +189,45 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         if (!this.state.isMounted) {
             this.didMountEvent.push(() => this.syncSetValues(value))
         } else {
-            this.syncSetValues(value)
+            return this.syncSetValues(value)
         }
     }
 
     private syncSetValues = async (value: ObjectLiteral): Promise<any> => {
         this.defaultValues = value;
-        const setValues = Object.keys(value).map(async selector => {
-            const valueItem = value[selector];
-            return await this.setValue(selector, valueItem)
+
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, inInternalSettingProcess: true }, async () => {
+
+                for (const selector in value) {
+                    const valueItem = value[selector];
+                    await this.setValue(selector, valueItem)
+                }
+
+                this.setState({ ...this.state, inInternalSettingProcess: false }, () => {
+                    this.props.onChange?.(this.getValues(false))
+                    resolve(true)
+                })
+            })
         })
-        return await Promise.all(setValues)
     }
 
     public clear = async (): Promise<any> => {
-        const clearValues = Object.keys(this.inputRefs).map(async selector => {
-            const input = this.inputRefs[selector]
-            if (input) {
-                return input.clear();
-            }
+        return new Promise(async (resolve) => {
+            this.setState({ ...this.state, inInternalSettingProcess: true }, async () => {
+                for (const selector in this.inputRefs) {
+                    const input = this.inputRefs[selector]
+                    if (input) {
+                        await input.clear();
+                    }
+                }
+
+                this.setState({ ...this.state, inInternalSettingProcess: false }, () => {
+                    this.props.onChange?.(this.getValues(false))
+                    resolve(true)
+                })
+            })
         })
-        return await Promise.all(clearValues)
     }
 
     private lastVisibilityOfInputs: ObjectLiteral = {}
@@ -233,11 +254,17 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
     }
 
     private onUpdateInputs = (): Promise<boolean> => {
+        console.warn("onUpdateInputs | current inInternalSettingProcess: ", this.state.inInternalSettingProcess)
+
         return new Promise((resolve) => {
-            this.setState({ ...this.state, time: new Date().getTime() }, () => {
-                this.props.onChange?.(this.getValues(false))
+            if (!this.state.inInternalSettingProcess) {
+                this.setState({ ...this.state, time: new Date().getTime() }, () => {
+                    this.props.onChange?.(this.getValues(false))
+                    resolve(true)
+                })
+            } else {
                 resolve(true)
-            })
+            }
         })
     }
 

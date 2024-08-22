@@ -46,9 +46,8 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
         }
     }
 
-    setValue(value: MobileInputValueType, internalSet: boolean = false): Promise<MobileInputValueType> {
+    setValue(value: MobileInputValueType, internalSet: boolean = false, withoutEffect?: boolean): Promise<MobileInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
-
         if (value && !internalSet) {
             const splits = value.split('-')
             if (splits.length > 1) {
@@ -68,6 +67,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
+                if (!withoutEffect) this.props._call_parent_for_update?.();
                 this.props.onChangeValue?.(value as MobileInputValueType)
                 resolve(value)
             })
@@ -99,7 +99,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
     }
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.normalizeValue(event.target.value)
+        this.normalizeValue(event.target.value, true)
     };
 
     private onClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -123,14 +123,14 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
         this.props.onFocus?.(e)
     }
 
-    private normalizeValue = async (value: MobileInputValueType) => {
-        if (!value) return this.setValue(null, true);
+    private normalizeValue = async (value: MobileInputValueType, withoutEffect?: boolean) => {
+        if (!value) return this.setValue(null, true, withoutEffect);
 
         value = value.replace(/^0/, '')
         const pattern = this.state.country.mask;
         const pureValue = value.replace(/[^0-9]/g, '')
         const maskedValues = mask(pureValue, pattern, '_')
-        await this.setValue(pureValue ? maskedValues : null, true)
+        await this.setValue(pureValue ? maskedValues : null, true, withoutEffect)
         const valueForLength = maskedValues.match(/.*[0-9]/)
         if (this.inputRef && valueForLength) {
             this.inputRef.selectionStart = this.inputRef.selectionEnd = valueForLength[0].length

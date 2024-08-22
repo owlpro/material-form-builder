@@ -34,11 +34,12 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
         }
     }
 
-    setValue(value: MaskInputValueType): Promise<MaskInputValueType> {
+    setValue(value: MaskInputValueType, withoutEffect?: boolean): Promise<MaskInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
+                if(!withoutEffect) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as MaskInputValueType)
                 resolve(value)
             })
@@ -84,7 +85,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
         const pattern = this.props.pattern;
         const pureValue = value.replace(/[^0-9]/g, '')
         const maskedValues = mask(pureValue, pattern, this.props.char || '_')
-        await this.setValue(pureValue ? maskedValues : null)
+        await this.setValue(pureValue ? maskedValues : null, true)
         const valueForLength = maskedValues.match(/.*[0-9]/)
 
         if (this.inputRef && valueForLength) {

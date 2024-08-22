@@ -33,11 +33,12 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
         }
     }
 
-    async setValue(value: OtpInputValueType): Promise<OtpInputValueType> {
+    async setValue(value: OtpInputValueType, withoutEffect?: boolean): Promise<OtpInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
+                if(!withoutEffect) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as OtpInputValueType)
                 resolve(value)
             })
@@ -73,7 +74,7 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
             }
         }
 
-        this.setValue(value || null).then(() => {
+        this.setValue(value || null, true).then(() => {
             this.props.onChange?.(event)
         })
     };

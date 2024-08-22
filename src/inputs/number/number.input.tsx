@@ -32,10 +32,11 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
         }
     }
 
-    setValue(value: NumberInputValueType): Promise<NumberInputValueType> {
+    setValue(value: NumberInputValueType, withoutEffect?: boolean): Promise<NumberInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
+                if(!withoutEffect) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as NumberInputValueType)
                 resolve(value)
             })
@@ -71,8 +72,9 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
             }
         }
 
-        this.setValue(value)
-        this.props.onChange?.(event)
+        this.setValue(value, true).then(() => {
+            this.props.onChange?.(event)
+        })
     };
 
     private onClick = (event: React.MouseEvent<HTMLDivElement>) => {
