@@ -254,8 +254,6 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
     }
 
     private onUpdateInputs = (): Promise<boolean> => {
-        console.warn("onUpdateInputs | current inInternalSettingProcess: ", this.state.inInternalSettingProcess)
-
         return new Promise((resolve) => {
             if (!this.state.inInternalSettingProcess) {
                 this.setState({ ...this.state, time: new Date().getTime() }, () => {
