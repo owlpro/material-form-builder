@@ -36,8 +36,8 @@ export class GroupInput extends Component<GroupInputProps, IState> implements In
         return this.builderRef.current.setValues(values)
     }
 
-    getValue(): GroupInputValueType {
-        return this.builderRef.current?.getValues().data
+    getValue(validation?: boolean): GroupInputValueType {
+        return this.builderRef.current?.getValues(validation).data
     }
 
     clear(): Promise<GroupInputValueType> {
@@ -45,7 +45,7 @@ export class GroupInput extends Component<GroupInputProps, IState> implements In
     }
 
     validation(): boolean {
-        const validation = this.builderRef.current?.getValues()?.validation;
+        const validation = this.builderRef.current?.getValues(true)?.validation;
         return typeof (validation?.status) == "boolean" ? validation?.status : true;
     }
 
