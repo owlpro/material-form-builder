@@ -107,7 +107,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
                         invalidInputs.push(inputProps)
                     }
                 }
-                let value = input.getValue();
+                let value = input.getValue(validation);
                 if (inputProps.getMutator && typeof inputProps.getMutator === "function") {
                     // @ts-ignore
                     let mutatedValue = inputProps.getMutator(value)
@@ -302,7 +302,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         const { wrapper, getMutator, setMutator, ref, ...props } = input
         const actions: InputActions<InputGetValueTypes> = {
             setValue: (value: any): Promise<any> => this.executeAction(input.selector, 'setValue', value),
-            getValue: (): Promise<any> => this.executeAction(input.selector, 'getValue'),
+            getValue: (validation?: boolean): Promise<any> => this.executeAction(input.selector, 'getValue', validation),
             clear: (): Promise<any> => this.executeAction(input.selector, 'clear'),
             click: (): Promise<any> => this.executeAction(input.selector, 'click'),
             focus: (): Promise<any> => this.executeAction(input.selector, 'focus'),
