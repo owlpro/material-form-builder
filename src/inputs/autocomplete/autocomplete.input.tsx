@@ -151,8 +151,24 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         this.props.InputProps?.onBlur?.(event)
     }
 
+    private renderOption = (props: any, option: any) => {
+        const { key, ...rest } = props;
+        return (
+            <li key={key} {...rest}>
+                {typeof option === "object" ? option.label : (option.toString())}
+            </li>
+        );
+    }
+
+    private getOptionLabel = (option: any) => typeof option === "object" ? option.label : (option.toString())
+
+    private isOptionEqualToValue = (option: any, value: any) => {
+        if (!value) return false;
+        return typeof option === "string" ? option === (typeof value === "string" ? value : value.value.toString()) : option.value.toString() === (typeof value === "string" ? value : value.value.toString());
+    }
+
     render() {
-        const { defaultValue, onChangeValue, InputProps, renderInput, label, placeholder, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { defaultValue, onChangeValue, InputProps, renderInput, label, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
         let variantWidth = '207px';
         if (this.props.variant === "outlined") variantWidth = "235px";
         if (this.props.variant === "filled") variantWidth = "231px";
@@ -162,28 +178,16 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
                 {...restProps}
                 sx={{ width: inputWidth, display: 'inline-flex', ...this.props.sx }}
                 options={this.props.options}
-                renderOption={(props: any, option) => {
-                    const { key, ...rest } = props;
-                    return (
-                        <li key={key} {...rest}>
-                            {typeof option === "object" ? option.label : (option.toString())}
-                        </li>
-                    );
-                }}
-                getOptionLabel={(option) => typeof option === "object" ? option.label : (option.toString())} // TODO get from top
-                multiple={this.props.multiple}
-                freeSolo={this.props.freeSolo}
+                renderOption={this.props.renderOption ?? this.renderOption}
+                getOptionLabel={this.props.getOptionLabel ?? this.getOptionLabel}
                 onChange={this.onChange}
-                disableClearable
+                disableClearable={this.props.disableClearable || false}
                 size={this.props.size || !variant || variant === "standard" ? "small" : "medium"}
                 value={this.state.value || (this.props.multiple ? [] : (this.props.freeSolo ? "" : null))}
                 disabled={this.props.disabled || this.props.loading}
                 clearOnBlur={this.props.multiple || (this.props.multiple && this.props.freeSolo) || (!this.props.multiple && !this.props.freeSolo)}
                 popupIcon={this.props.loading ? <LoadingComponent /> : (this.props.popupIcon || <ArrowDropDownIcon />)}
-                isOptionEqualToValue={(option, value: any) => {
-                    if (!value) return false;
-                    return typeof option === "string" ? option === (typeof value === "string" ? value : value.value.toString()) : option.value.toString() === (typeof value === "string" ? value : value.value.toString());
-                }}
+                isOptionEqualToValue={this.props.isOptionEqualToValue ?? this.isOptionEqualToValue}
                 renderInput={renderInput ? (params: any) => {
                     params.inputRef = (el: any) => this.inputRef = el
                     params.error = this.state.error;
@@ -197,7 +201,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
                         {...params}
                         {...InputProps}
                         label={label}
-                        placeholder={placeholder}
+                        placeholder={InputProps?.placeholder}
                         variant={variant || "standard"}
                         required={required}
                         onClick={this.onClick}
