@@ -14,6 +14,7 @@ export interface AutocompleteInputProps
     extends BaseInput<AutocompleteInputValueType>,
         Omit<AutocompleteProps<any, boolean, true, boolean, 'div'>, 'renderInput' | 'defaultValue' | 'ref'> {
     type: 'autocomplete'
+    disableClearOnChangeOptions?: boolean
     variant?: Variant
     label?: string
     renderInput?: (params: TextFieldProps) => React.ReactNode

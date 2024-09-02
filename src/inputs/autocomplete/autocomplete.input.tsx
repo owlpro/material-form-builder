@@ -70,7 +70,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
 
     componentDidUpdate(props: AutocompleteInputProps) {
         if (this.props.options?.map((i) => this.optionGetter(i, 'value')).join('@') !== props.options?.map((i) => this.optionGetter(i, 'value')).join('@')) {
-            this.clear()
+            if (!this.props.disableClearOnChangeOptions) this.clear()
         }
     }
 
@@ -178,7 +178,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
                 {...restProps}
                 sx={{ width: inputWidth, display: 'inline-flex', ...this.props.sx }}
                 options={this.props.options}
-                renderOption={this.props.renderOption }
+                renderOption={this.props.renderOption ?? this.renderOption}
                 getOptionLabel={this.props.getOptionLabel ?? this.getOptionLabel}
                 onChange={this.onChange}
                 disableClearable={this.props.disableClearable || true}
