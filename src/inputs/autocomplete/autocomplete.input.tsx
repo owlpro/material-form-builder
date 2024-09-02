@@ -178,10 +178,10 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
                 {...restProps}
                 sx={{ width: inputWidth, display: 'inline-flex', ...this.props.sx }}
                 options={this.props.options}
-                renderOption={this.props.renderOption ?? this.renderOption}
+                renderOption={this.props.renderOption }
                 getOptionLabel={this.props.getOptionLabel ?? this.getOptionLabel}
                 onChange={this.onChange}
-                disableClearable={this.props.disableClearable || false}
+                disableClearable={this.props.disableClearable || true}
                 size={this.props.size || !variant || variant === "standard" ? "small" : "medium"}
                 value={this.state.value || (this.props.multiple ? [] : (this.props.freeSolo ? "" : null))}
                 disabled={this.props.disabled || this.props.loading}
