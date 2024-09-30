@@ -23,14 +23,6 @@ export class GroupInput extends Component<GroupInputProps, IState> implements In
         this.builderRef = createRef<FormBuilder>()
     }
 
-    shouldComponentUpdate(nextProps: GroupInputProps, nextState: IState) {
-        switch (true) {
-            case JSON.stringify(this.state.value) !== JSON.stringify(nextState.value):
-                return true;
-            default: return false;
-        }
-    }
-
     setValue(values: GroupInputValueType): Promise<GroupInputValueType> {
         if(!this.builderRef.current || !values) return Promise.reject(values)
         return this.builderRef.current.setValues(values)
