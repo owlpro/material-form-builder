@@ -12,7 +12,7 @@ import {
     IconButton,
     InputAdornment
 } from '@mui/material';
-import TextField, { TextFieldProps } from '@mui/material/TextField';
+import TextField from '@mui/material/TextField';
 import React, { Component } from "react";
 
 import { InputImplement } from '@/types';

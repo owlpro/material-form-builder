@@ -1,11 +1,12 @@
 import TextField from '@mui/material/TextField';
-import { DatePicker, DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { DateTimePicker, DateTimeValidationError, LocalizationProvider, PickerChangeHandlerContext } from '@mui/x-date-pickers';
 import React, { Component } from "react";
 
 import { InputImplement } from '@/types';
 
-import { DatetimeInputProps, DatetimeInputValueType } from './types';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Dayjs } from 'dayjs';
+import { DatetimeInputProps, DatetimeInputValueType } from './types';
 
 interface IState {
     value: DatetimeInputValueType,
@@ -65,16 +66,15 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
         return true;
     }
 
-    onChange = (event: any, keyboardInputValue?: string) => {
-        let value = event && event.toDate ? event.toDate() : event;
+    onChange = (value: Dayjs | null, context: PickerChangeHandlerContext<DateTimeValidationError>) => {
         this.setValue(value || null)
-        this.props.onChange?.(event, keyboardInputValue)
+        this.props.onChange?.(value, context)
     };
 
     private onClick = (event: React.MouseEvent<HTMLDivElement>) => {
         clearTimeout(this.validationTimeout)
         this.setState({ ...this.state, error: false })
-        // this.props.InputProps?.onClick?.(event) // TODO ??
+        this.props.InputProps?.onClick?.(event)
     }
 
     public click = () => {
@@ -90,32 +90,27 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
     render() {
         const { onChangeValue, defaultValue, dateAdapter, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
         return (
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker label="Basic date picker" />
+            <LocalizationProvider dateAdapter={dateAdapter || AdapterDayjs}>
+                <DateTimePicker
+                    {...restProps}
+                    ampm={this.props.ampm || false}
+                    value={this.state.value}
+                    onChange={this.onChange}
+                    inputRef={el => this.inputRef = el}
+                    slotProps={{
+                        textField: (params: any) => (
+                            <TextField
+                                {...params}
+                                fullWidth={this.props.fullWidth || false}
+                                variant={variant || 'standard'}
+                                required={required || false}
+                                error={this.state.error}
+                                onClick={this.onClick}
+                            />
+                        )
+                    }}
+                />
             </LocalizationProvider>
-            // <LocalizationProvider dateAdapter={dateAdapter || AdapterDayjs}>
-            //     <DateTimePicker
-            //         {...restProps}
-            //         ampm={this.props.ampm || false}
-            //         value={this.state.value}
-            //         onChange={this.onChange}
-            //         inputRef={el => this.inputRef = el}
-            //         renderInput={(params: any) => (
-            //             <TextField
-            //                 {...params}
-            //                 inputProps={{
-            //                     ...params.inputProps,
-            //                     ...this.props.inputProps
-            //                 }}
-            //                 fullWidth={this.props.fullWidth || false}
-            //                 variant={variant || 'standard'}
-            //                 required={required || false}
-            //                 error={this.state.error}
-            //                 onClick={this.onClick}
-            //             />
-            //         )}
-            //     />
-            // </LocalizationProvider>
         )
     }
 }

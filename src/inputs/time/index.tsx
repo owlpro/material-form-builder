@@ -1,8 +1,9 @@
-import TextField from '@mui/material/TextField';
-import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import React, { Component, MouseEvent } from "react";
 import { InputImplement } from '@/types';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
+import { LocalizationProvider, PickerChangeHandlerContext, TimePicker, TimeValidationError } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Dayjs } from 'dayjs';
+import React, { Component, MouseEvent } from "react";
 import { TimeInputProps, TimeInputValueType } from './types';
 
 interface IState {
@@ -61,17 +62,17 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
         return true;
     }
 
-    onChange = (inputValue: any, keyboardInputValue?: string) => {
-        let value = inputValue && inputValue.toDate ? inputValue.toDate() : inputValue;
+    onChange = (value: Dayjs | null, context: PickerChangeHandlerContext<TimeValidationError>) => {
+        // let value = inputValue && inputValue.toDate ? inputValue.toDate() : inputValue;
         this.setValue(value || null).then(() => {
-            this.props.onChange?.(inputValue, keyboardInputValue)
+            this.props.onChange?.(value, context)
         })
     };
 
     private onClick = (event: MouseEvent<HTMLDivElement>) => {
         clearTimeout(this.validationTimeout)
         this.setState({ ...this.state, error: false })
-        // this.props.InputProps?.onClick?.(event) // TODO ??
+        this.props.InputProps?.onClick?.(event)
     }
 
     inputRef: HTMLInputElement | null | undefined;
@@ -92,33 +93,28 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
     render() {
         const { defaultValue, onChangeValue, dateAdapter, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
         return (
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <TimePicker label="Basic date picker" />
+            <LocalizationProvider dateAdapter={dateAdapter || AdapterDayjs}>
+                <TimePicker
+                    {...restProps}
+                    ampm={this.props.ampm || false}
+                    value={this.state.value}
+                    onChange={this.onChange}
+                    inputRef={el => this.inputRef = el}
+                    slots={{
+                        textField: (params: TextFieldProps) => (
+                            <TextField
+                                {...params}
+                                {...this.props.InputProps}
+                                fullWidth={this.props.fullWidth || false}
+                                variant={variant || "standard"}
+                                required={required || false}
+                                error={this.state.error}
+                                onClick={this.onClick}
+                            />
+                        )
+                    }}
+                />
             </LocalizationProvider>
-            // <LocalizationProvider dateAdapter={dateAdapter || AdapterDayjs}>
-            //     <TimePicker
-            //         {...restProps}
-            //         ampm={this.props.ampm || false}
-            //         value={this.state.value}
-            //         onChange={this.onChange}
-            //         inputRef={el => this.inputRef = el}
-            //         renderInput={(params: any) => (
-            //             <TextField
-            //                 {...params}
-            //                 {...this.props.InputProps}
-            //                 inputProps={{
-            //                     ...params.inputProps,
-            //                     ...this.props.inputProps
-            //                 }}
-            //                 fullWidth={this.props.fullWidth || false}
-            //                 variant={variant || "standard"}
-            //                 required={required || false}
-            //                 error={this.state.error}
-            //                 onClick={this.onClick}
-            //             />
-            //         )}
-            //     />
-            // </LocalizationProvider>
         )
     }
 }

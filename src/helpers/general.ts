@@ -36,14 +36,14 @@ export const selectFromObject = (selector: string, data: any) => {
     const regex = new RegExp('.*[.*=.*]')
     let splitSelector = selector.split('.')
     let workingObject = data
-    splitSelector.forEach((selectorItem) => {
+    splitSelector.forEach((selectorItem): void => {
         if (!workingObject) workingObject = {}
         if (regex.test(selectorItem)) {
             const objectBeforeQuery = selectorItem.replace(/\[.*\]/g, '')
             if (objectBeforeQuery) {
                 workingObject = workingObject[objectBeforeQuery]
             }
-            if(!Array.isArray(workingObject)) return false;
+            if(!Array.isArray(workingObject)) return;
             const splitQuery = selectorItem.replace(/.*\[|\]/g, '').split('=')
             const queryKey = splitQuery[0].trim()
             const queryValue = isNaN(parseInt(splitQuery[1])) ? splitQuery[1] : parseInt(splitQuery[1])
