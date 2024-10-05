@@ -1,27 +1,27 @@
 import React, { Component, Fragment } from 'react';
-import { selectFromObject, setToObject } from './helpers/object.helper';
-import { OutputValues } from './types/builder.outputValues';
-import { Input, InputGetValueTypes, InputProps, InputTypes } from './types/input';
+import { selectFromObject, setToObject } from '@/helpers/general';
+import { Input, InputGetValueTypes, InputProps, InputTypes, OutputValues } from '@/types';
 
-import { AutocompleteInput } from './inputs/autocomplete/autocomplete.input';
-import { CheckboxInput } from './inputs/checkbox/checkbox.input';
-import { CustomInput } from './inputs/custom/custom.input';
-import { DateInput } from './inputs/date/date.input';
-import { DatetimeInput } from './inputs/datetime/datetime.input';
-import { FileInput } from './inputs/file/file.input';
-import { GroupInput } from './inputs/group/group.input';
-import { ItemsInput } from './inputs/items/items.input';
-import { MaskInput } from './inputs/mask/mask.input';
-import { MobileInput } from './inputs/mobile/mobile.input';
-import { NumberInput } from './inputs/number/number.input';
-import { OtpInput } from './inputs/otp/otp.input';
-import { PasswordInput } from './inputs/password/password.input';
-import { SelectInput } from './inputs/select/select.input';
-import { TextInput } from './inputs/text/text.input';
-import { TimeInput } from './inputs/time/time.input';
-import { ToggleInput } from './inputs/toggle/toggle.input';
-import { ObjectLiteral } from './types/helper.types';
-import { InputActions } from './types/input.base';
+import { AutocompleteInput } from 'inputs/autocomplete';
+import { CheckboxInput } from 'inputs/checkbox';
+import { CustomInput } from 'inputs/custom';
+import { DateInput } from 'inputs/date';
+import { DatetimeInput } from 'inputs/datetime';
+import { FileInput } from 'inputs/file';
+import { GroupInput } from 'inputs/group';
+import { ItemsInput } from 'inputs/items';
+import { MaskInput } from 'inputs/mask';
+import { MobileInput } from 'inputs/mobile';
+import { NumberInput } from 'inputs/number';
+import { OtpInput } from 'inputs/otp';
+import { PasswordInput } from 'inputs/password';
+import { SelectInput } from 'inputs/select';
+import { TextInput } from 'inputs/text';
+import { TimeInput } from 'inputs/time';
+import { ToggleInput } from 'inputs/toggle';
+
+import { ObjectLiteral } from '@/types/helpers';
+import { InputActions } from '@/types';
 
 interface FormBuilderImplements {
     getValues: (validation: boolean) => OutputValues;
@@ -83,7 +83,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         this.setState({ ...this.state, isMounted: false })
     }
 
-    componentDidUpdate(prevProps: Readonly<IProps>, prevState: Readonly<IState>, snapshot?: any): void {
+    componentDidUpdate(): void {
         this.props.inputs.forEach((item) => {
             const prevVisible = this.lastVisibilityOfInputs[item.selector]?.prev
             const nowVisible = this.lastVisibilityOfInputs[item.selector]?.now
