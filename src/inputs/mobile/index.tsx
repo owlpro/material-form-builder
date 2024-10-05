@@ -1,9 +1,9 @@
+import { mask } from '@/helpers/general';
+import { InputImplement } from '@/types';
 import { Box, InputAdornment, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import React, { Component, FocusEvent } from "react";
-import { mask } from '@/helpers/general';
-import { InputImplement } from '@/types';
 import { Country, countries } from "./countries";
 import { MobileInputProps, MobileInputValueType } from './types';
 
@@ -123,8 +123,11 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
         this.props.onFocus?.(e)
     }
 
-    private normalizeValue = async (value: MobileInputValueType, withoutEffect?: boolean) => {
-        if (!value) return this.setValue(null, true, withoutEffect);
+    private normalizeValue = async (value: MobileInputValueType, withoutEffect?: boolean): Promise<void> => {
+        if (!value) {
+            this.setValue(null, true, withoutEffect);
+            return;
+        }
 
         value = value.replace(/^0/, '')
         const pattern = this.state.country.mask;
@@ -214,7 +217,8 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
                         )
                     })}
                 </Select>
-                <TextField {...restProps}
+                <TextField
+                    {...restProps}
                     variant={this.props.variant || "standard"}
                     error={this.state.error}
                     onChange={this.onChange}
@@ -223,13 +227,15 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
                     onFocus={this.onFocus}
                     value={this.state.value || ''}
                     inputRef={el => this.inputRef = el}
-                    InputProps={{
-                        sx: { width: this.props.fullWidth ? '100%' : inputWidth },
-                        startAdornment: (
-                            <InputAdornment position='start'>
-                                <Box ml={'56px'}></Box>
-                            </InputAdornment>
-                        )
+                    slotProps={{
+                        input: {
+                            sx: { width: this.props.fullWidth ? '100%' : inputWidth },
+                            startAdornment: (
+                                <InputAdornment position='start'>
+                                    <Box ml={'56px'}></Box>
+                                </InputAdornment>
+                            )
+                        }
                     }}
                 />
             </Box>

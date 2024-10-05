@@ -20,7 +20,7 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
     validationTimeout: NodeJS.Timeout | undefined;
     formBuilderRef: { [key: string]: FormBuilder | null } = {};
 
-    shouldComponentUpdate(nextProps: ItemsInputProps, nextState: IState) {
+    shouldComponentUpdate(_: any, nextState: IState) {
         switch (true) {
             case JSON.stringify(this.state.items) !== JSON.stringify(nextState.items):
                 return true;
@@ -126,8 +126,8 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         }
     }
 
-    removeItem = (key: string) => async () => {
-        if (typeof (this.props.minItems) === "number" && this.state.items.length <= this.props.minItems) return Promise.resolve('')
+    removeItem = (key: string) => async (): Promise<void> => {
+        if (typeof (this.props.minItems) === "number" && this.state.items.length <= this.props.minItems) return Promise.resolve()
         const formBuilderRef = this.formBuilderRef[key];
         if (formBuilderRef) {
             await formBuilderRef.clear()

@@ -1,6 +1,6 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Box, CircularProgress, FormControl, Grow, InputLabel, ListSubheader, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import React, { Component, MouseEvent, SyntheticEvent } from "react";
+import React, { Component, SyntheticEvent } from "react";
 import { InputImplement } from '@/types';
 import { SelectInputProps, SelectInputValueType } from './types';
 interface IState {
@@ -8,7 +8,7 @@ interface IState {
     error: boolean
 }
 
-const LoadingComponent = (props: any) => (
+const LoadingComponent = () => (
     <Grow in={true} timeout={550}>
         <Box sx={{ paddingRight: '16px', paddingTop: '4px' }}>
             <CircularProgress size={18} />

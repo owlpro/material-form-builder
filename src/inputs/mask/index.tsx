@@ -39,7 +39,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if(!withoutEffect) this.props._call_parent_for_update?.()
+                if (!withoutEffect) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as MaskInputValueType)
                 resolve(value)
             })
@@ -80,8 +80,11 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
         this.props.onChange?.(event)
     };
 
-    private normalizeValue = async (value: MaskInputValueType) => {
-        if (!value) return this.setValue(null);
+    private normalizeValue = async (value: MaskInputValueType): Promise<void> => {
+        if (!value) {
+            this.setValue(null)
+            return;
+        }
         const pattern = this.props.pattern;
         const pureValue = value.replace(/[^0-9]/g, '')
         const maskedValues = mask(pureValue, pattern, this.props.char || '_')

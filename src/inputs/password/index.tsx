@@ -1,10 +1,10 @@
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import VisibilityIcon  from '@mui/icons-material/Visibility';
 
+import { InputImplement } from '@/types';
 import { IconButton, InputAdornment } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { Component, FocusEvent, MouseEvent } from "react";
-import { InputImplement } from '@/types';
 import { PasswordInputProps, PasswordInputValueType } from './types';
 
 interface IState {
@@ -43,7 +43,7 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if(!withoutEffect) this.props._call_parent_for_update?.()
+                if (!withoutEffect) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as PasswordInputValueType)
                 resolve(value)
             })
@@ -140,14 +140,16 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
                 onFocus={this.onFocus}
                 value={this.state.value || ''}
                 inputRef={el => this.inputRef = el}
-                InputProps={{
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <IconButton onClick={this.handleClickShowPassword}>
-                                {this.state.showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                            </IconButton>
-                        </InputAdornment>
-                    )
+                slotProps={{
+                    input: {
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={this.handleClickShowPassword}>
+                                    {this.state.showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                </IconButton>
+                            </InputAdornment>
+                        )
+                    }
                 }}
             />
         )

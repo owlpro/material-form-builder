@@ -22,7 +22,7 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
 
     inputRef: HTMLInputElement | undefined | null
 
-    shouldComponentUpdate(nextProps: OtpInputProps, nextState: IState) {
+    shouldComponentUpdate(_: OtpInputProps, nextState: IState) {
 
         switch (true) {
             case this.state.value !== nextState.value:
