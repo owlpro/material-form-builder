@@ -1,38 +1,52 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "module": "ESNext",
-        "jsx": "react",
-        "sourceMap": true,
-        "outDir": "./dist",
-        "strict": true,
-        "moduleResolution": "node",
-        "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
+        /* Language and Environment */
+        "target": "es2020",
+        "jsx": "react-jsx",
 
-        "declaration": true,
-        "emitDeclarationOnly": true,
-        // "declarationDir": "/dist/types",
+        /* Modules */
+        "module": "ES2020",
+        "moduleResolution": "Bundler",
 
-        "noEmit": false,
-        "baseUrl": "./src",
-        "lib": ["dom", "dom.iterable", "esnext"],
+        /* Resolve */
+        "rootDir": "./src",
         "paths": {
-            "*": ["*"]
+            "*": ["./src/*"],
+            "@/*": ["./src/*"]
         },
+        /* JavaScript Support */
         "allowJs": true,
+        "maxNodeModuleJsDepth": 1,
+
+        /* Emit */
+        "noEmit": true,
         "isolatedModules": true,
-        "noImplicitAny": true,
-        "resolveJsonModule": true,
-        "strictNullChecks": true,
+        "esModuleInterop": true,
+        "checkJs": true,
+        // "emitDeclarationOnly": true,
+        // "sourceMap": true,
+
+        // "outDir": "dist",
+        "declaration": true,
+        "declarationDir": "dist/types",
+
+        /* Interop Constraints */
+        // "allowSyntheticDefaultImports": true,
+        // "esModuleInterop": true,
+        // "forceConsistentCasingInFileNames": true,
+
+        /* Type Checking */
+        "strict": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "downlevelIteration": true,
+        "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
-        "noImplicitReturns": true
+        "noUncheckedIndexedAccess": true,
+        "allowUnreachableCode": false,
+
+        /* Completeness */
+        "skipLibCheck": true
     },
-    "include": ["src", "*.tsx", "*.ts"],
+    "include": ["src", "*.tsx", "*.ts", "./general.d.ts"],
     "exclude": ["coverage", "config", "dist", "node_modules/**", "docs", "all_flags"]
 }

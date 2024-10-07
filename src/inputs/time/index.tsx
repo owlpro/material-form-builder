@@ -3,7 +3,7 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { LocalizationProvider, PickerChangeHandlerContext, TimePicker, TimeValidationError } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
-import React, { Component, MouseEvent } from "react";
+import { Component, MouseEvent } from "react";
 import { TimeInputProps, TimeInputValueType } from './types';
 
 interface IState {

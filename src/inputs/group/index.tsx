@@ -1,5 +1,5 @@
 import { InputImplement, OutputValues } from '../../types';
-import React, { Component, createRef, RefObject } from "react";
+import { Component, createRef, RefObject } from "react";
 import { FormBuilder } from "../../formBuilder";
 import { GroupInputProps, GroupInputValueType } from './types';
 

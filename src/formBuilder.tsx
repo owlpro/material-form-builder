@@ -1,8 +1,6 @@
 import React, { Component, createElement, Fragment } from 'react';
 import { selectFromObject, setToObject } from './helpers/general';
-import { OutputValues } from './types';
-
-import { Input, InputProps } from "./input.types"
+import { Input, InputProps, OutputValues, InputActions, ObjectLiteral} from "./types";
 
 import { AutocompleteInput } from './inputs/autocomplete';
 import { CheckboxInput } from './inputs/checkbox';
@@ -21,8 +19,6 @@ import { SelectInput } from './inputs/select';
 import { TextInput } from './inputs/text';
 import { TimeInput } from './inputs/time';
 import { ToggleInput } from './inputs/toggle';
-
-import { InputActions, ObjectLiteral } from './types';
 
 interface FormBuilderImplements {
     getValues: (validation: boolean) => OutputValues;
@@ -128,9 +124,10 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
     }
 
     private async setObjectValues(object: ObjectLiteral, path: string[] = []): Promise<any> {
-        const objectKeys = Object.keys(object);
+        const objectKeys: string[] = Object.keys(object);
         for (let i = 0; i < objectKeys.length; i++) {
             const key = objectKeys[i]
+            if(!key) return
             const value = object[key]
             const joinedSelector = [...path, key].join('.');
             const directInput = this.props.inputs.find(i => i.selector === joinedSelector)

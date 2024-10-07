@@ -1,6 +1,12 @@
-export { FormBuilder } from './formBuilder'
+import { FormBuilder } from './formBuilder'
 
-// export { AutocompleteInput } from './inputs/autocomplete'
+export { FormBuilder }
+
+export default FormBuilder
+
+// export * from "types"
+
+// export { AutocompleteInput } from './inputs/autocomplete/index'
 // export { CheckboxInput } from './inputs/checkbox'
 // export { CustomInput } from './inputs/custom'
 // export { DateInput } from './inputs/date'

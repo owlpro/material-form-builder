@@ -1,17 +1,16 @@
-import { isNull } from '../../helpers/general';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ClearIcon from '@mui/icons-material/Clear';
-import Box from "@mui/material/Box"
-import Autocomplete, {AutocompleteChangeDetails, AutocompleteChangeReason, AutocompleteRenderInputParams} from "@mui/material/Autocomplete"
-import CircularProgress from "@mui/material/CircularProgress"
-import Grow from "@mui/material/Grow"
-import IconButton from "@mui/material/IconButton"
-import InputAdornment from "@mui/material/InputAdornment"
-import TextField from '@mui/material/TextField';
+import Autocomplete, { AutocompleteChangeDetails, AutocompleteChangeReason, AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Grow from "@mui/material/Grow";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import TextField, { TextFieldProps } from '@mui/material/TextField';
 import React, { Component } from "react";
-// import { InputImplement } from '../../';
-import { AutocompleteInputProps, AutocompleteInputValueType, AutocompleteOptionType, AutocompleteValueType } from './index.d';
+import { isNull } from '../../helpers/general';
 import { InputImplement } from '../../types';
+import { AutocompleteInputProps, AutocompleteInputValueType, AutocompleteOptionType, AutocompleteValueType } from './types';
 
 
 interface IState {
@@ -68,13 +67,15 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         return undefined;
     }
 
-    private loadingComponent = (): JSX.Element => (
-        <Grow in={true} timeout={550}>
-            <Box sx={{ paddingRight: '8px', paddingTop: '4px' }}>
-                <CircularProgress size={18} />
-            </Box>
-        </Grow>
-    )
+    private loadingComponent = (): JSX.Element => {
+        return (
+            <Grow in={true} timeout={550}>
+                <Box sx={{ paddingRight: '8px', paddingTop: '4px' }}>
+                    <CircularProgress size={18} />
+                </Box>
+            </Grow>
+        )
+    }
 
     componentDidUpdate(props: AutocompleteInputProps) {
         if (this.props.options?.map((i) => this.optionGetter(i, 'value')).join('@') !== props.options?.map((i) => this.optionGetter(i, 'value')).join('@')) {
@@ -175,6 +176,16 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         return typeof option === "string" ? option === (typeof value === "string" ? value : value.value.toString()) : option.value.toString() === (typeof value === "string" ? value : value.value.toString());
     }
 
+    renderInput = (params: TextFieldProps) => {
+        params.inputRef = (el: any) => this.inputRef = el
+        params.error = this.state.error;
+        params.variant = this.props.variant || "standard"
+        params.label = this.props.label;
+        params.required = this.props.required
+        params.onClick = this.onClick
+        return this.props.renderInput?.(params)
+    }
+
     render() {
         const { defaultValue, onChangeValue, InputProps, renderInput, label, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
         let variantWidth = '207px';
@@ -195,15 +206,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
                 clearOnBlur={this.props.multiple || (this.props.multiple && this.props.freeSolo) || (!this.props.multiple && !this.props.freeSolo)}
                 popupIcon={this.props.loading ? this.loadingComponent() : (this.props.popupIcon || <ArrowDropDownIcon />)}
                 isOptionEqualToValue={this.props.isOptionEqualToValue ?? this.isOptionEqualToValue}
-                renderInput={renderInput ? (params: any) => {
-                    params.inputRef = (el: any) => this.inputRef = el
-                    params.error = this.state.error;
-                    params.variant = variant || "standard"
-                    params.label = label;
-                    params.required = required
-                    params.onClick = this.onClick
-                    return renderInput(params)
-                } : ((params: AutocompleteRenderInputParams) => (
+                renderInput={renderInput ? this.renderInput : ((params: AutocompleteRenderInputParams) => (
                     <TextField
                         {...params}
                         {...InputProps}

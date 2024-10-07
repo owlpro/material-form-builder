@@ -1,6 +1,5 @@
-import { InputImplement } from '../../types';
-import { Input } from "../../input.types"
-import React, { Component, createElement, Fragment } from "react";
+import { Component, createElement, Fragment } from "react";
+import { Input, InputImplement } from '../../types';
 import { CustomInputProps, CustomInputValueType } from "./types";
 
 interface IState {

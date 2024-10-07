@@ -24,13 +24,13 @@ const StylesImage = styled('img')({
     width: 28
 });
 
-
+const defaultCountry: Country = countries[0]!;
 export class MobileInput extends Component<MobileInputProps, IState> implements InputImplement<MobileInputValueType> {
     state: IState = {
         value: this.props.defaultValue || null,
         value_when_focus: this.props.defaultValue || null,
         error: false,
-        country: countries[0],
+        country: defaultCountry,
     }
 
     validationTimeout: any;
@@ -55,14 +55,14 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
         if (value && !internalSet) {
             const splits = value.split('-')
             if (splits.length > 1) {
-                const dialCode = splits[0].replace(/[^0-9]/g, '');
+                const dialCode = splits[0]!.replace(/[^0-9]/g, '');
                 const country = countries.find(c => c.dialCode === dialCode)
 
                 if (country) {
                     this.setState({ ...this.state, country })
                 }
-                this.normalizeValue(splits[1])
-                return Promise.resolve(splits[1])
+                this.normalizeValue(splits[1]!)
+                return Promise.resolve(splits[1]!)
             } else {
                 this.normalizeValue(value)
                 return Promise.resolve(value)

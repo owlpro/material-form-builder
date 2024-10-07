@@ -4,7 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import React, { Component } from "react";
+import { Component } from "react";
 import { FormBuilder } from "../../formBuilder";
 import { randomString } from "../../helpers/general";
 import { InputImplement, OutputValues } from "../../types";

@@ -45,8 +45,8 @@ export const selectFromObject = (selector: string, data: any) => {
             }
             if(!Array.isArray(workingObject)) return;
             const splitQuery = selectorItem.replace(/.*\[|\]/g, '').split('=')
-            const queryKey = splitQuery[0].trim()
-            const queryValue = isNaN(parseInt(splitQuery[1])) ? splitQuery[1] : parseInt(splitQuery[1])
+            const queryKey = splitQuery[0]!.trim()
+            const queryValue = isNaN(parseInt(splitQuery[1]!)) ? splitQuery[1] : parseInt(splitQuery[1]!)
             workingObject = workingObject.find((ob: any) => ob[queryKey] === queryValue)
         } else {
             workingObject = workingObject[selectorItem]
@@ -67,8 +67,8 @@ export const setToObject = (selector: string, value: any, object: any) => {
                 const replacedSelectorItem = selectorItem.replace(/\[.*\]/, '')
                 if (!workingObject.hasOwnProperty(replacedSelectorItem)) workingObject[replacedSelectorItem] = []
                 const splitQuery = selectorItem.replace(/.*\[|\]/g, '').split('=')
-                const queryKey = splitQuery[0].trim()
-                const queryValue = isNaN(parseInt(splitQuery[1])) ? splitQuery[1] : parseInt(splitQuery[1])
+                const queryKey = splitQuery[0]!.trim()
+                const queryValue = isNaN(parseInt(splitQuery[1]!)) ? splitQuery[1] : parseInt(splitQuery[1]!)
                 const exists = workingObject[replacedSelectorItem].find((item: any) => item[queryKey] === queryValue)
                 if (exists) {
                     workingObject = exists
