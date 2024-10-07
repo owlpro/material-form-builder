@@ -1,7 +1,14 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { Box, CircularProgress, FormControl, Grow, InputLabel, ListSubheader, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import FormControl from "@mui/material/FormControl";
+import Grow from "@mui/material/Grow";
+import InputLabel from "@mui/material/InputLabel";
+import ListSubheader from "@mui/material/ListSubheader";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import React, { Component, SyntheticEvent } from "react";
-import { InputImplement } from '@/types';
+import { InputImplement } from '../../types';
 import { SelectInputProps, SelectInputValueType } from './types';
 interface IState {
     value: SelectInputValueType,
@@ -22,7 +29,7 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
         error: false
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
 
     inputRef: HTMLInputElement | null | undefined;
 

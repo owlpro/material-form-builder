@@ -1,6 +1,6 @@
 import TextField from '@mui/material/TextField';
 import React, { Component, FocusEvent, MouseEvent } from "react";
-import { InputImplement } from '@/types';
+import { InputImplement } from '../../types';
 import { TextInputProps, TextInputValueType } from './types';
 
 interface IState {
@@ -16,7 +16,7 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
         error: false
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
 
     inputRef: HTMLInputElement | undefined
 

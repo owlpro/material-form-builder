@@ -1,4 +1,4 @@
-import { InputImplement } from '@/types';
+import { InputImplement } from '../../types';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { LocalizationProvider, PickerChangeHandlerContext, TimePicker, TimeValidationError } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -17,7 +17,7 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
         error: false
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
 
     shouldComponentUpdate(nextProps: TimeInputProps, nextState: IState) {
         switch (true) {

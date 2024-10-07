@@ -2,7 +2,7 @@ import TextField from '@mui/material/TextField';
 import { DateTimePicker, DateTimeValidationError, LocalizationProvider, PickerChangeHandlerContext } from '@mui/x-date-pickers';
 import React, { Component } from "react";
 
-import { InputImplement } from '@/types';
+import { InputImplement } from '../../types';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
@@ -19,7 +19,7 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
         error: false
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
     inputRef: HTMLInputElement | null | undefined;
 
     shouldComponentUpdate(nextProps: DatetimeInputProps, nextState: IState) {

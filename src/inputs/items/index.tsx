@@ -1,9 +1,13 @@
-import { FormBuilder } from "@/formBuilder";
-import { randomString } from "@/helpers/general";
-import { InputImplement, OutputValues } from "@/types";
-import { Add, CopyAll, Delete, Remove } from "@mui/icons-material";
-import { Box, IconButton } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import CopyAllIcon from "@mui/icons-material/CopyAll";
+import DeleteIcon from "@mui/icons-material/Delete";
+import RemoveIcon from "@mui/icons-material/Remove";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 import React, { Component } from "react";
+import { FormBuilder } from "../../formBuilder";
+import { randomString } from "../../helpers/general";
+import { InputImplement, OutputValues } from "../../types";
 import { ItemsInputProps, ItemsInputValueType } from './types';
 
 interface IState {
@@ -17,7 +21,7 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         items: []
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
     formBuilderRef: { [key: string]: FormBuilder | null } = {};
 
     shouldComponentUpdate(_: any, nextState: IState) {
@@ -160,11 +164,11 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         return (
             <Box key={key} display="flex" alignItems="center">
                 {this.props.removeIcon !== false ? (
-                    <IconButton onClick={this.removeItem(key)}>{this.props.removeIcon ? this.props.removeIcon : <Remove />}</IconButton>
+                    <IconButton onClick={this.removeItem(key)}>{this.props.removeIcon ? this.props.removeIcon : <RemoveIcon />}</IconButton>
                 ) : null}
                 <FormBuilder inputs={this.props.inputs} ref={el => this.formBuilderRef = { ...this.formBuilderRef, [key]: el }} />
                 {this.props.copyIcon !== false ? (
-                    <IconButton onClick={this.copyItem(key)}>{this.props.copyIcon ? this.props.copyIcon : <CopyAll />}</IconButton>
+                    <IconButton onClick={this.copyItem(key)}>{this.props.copyIcon ? this.props.copyIcon : <CopyAllIcon />}</IconButton>
                 ) : null}
             </Box>
         )
@@ -179,8 +183,8 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
                     this.props.renderHeader(this.addItem, this.removeAll)
                 ) : (
                     <Box>
-                        <IconButton onClick={this.addItem}><Add /></IconButton>
-                        <IconButton onClick={this.removeAll}><Delete /></IconButton>
+                        <IconButton onClick={this.addItem}><AddIcon /></IconButton>
+                        <IconButton onClick={this.removeAll}><DeleteIcon /></IconButton>
                     </Box>
                 )}
 

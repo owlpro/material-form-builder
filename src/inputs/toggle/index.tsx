@@ -1,7 +1,8 @@
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import React, { Component } from "react";
-import { checkValue } from '@/helpers/general';
-import { InputImplement } from '@/types';
+import { checkValue } from '../../helpers/general';
+import { InputImplement } from '../../types';
 import { ToggleInputProps, ToggleInputValueType } from './types';
 
 interface IState {
@@ -15,7 +16,7 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
         error: false
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
 
     inputRef: HTMLInputElement | undefined
 

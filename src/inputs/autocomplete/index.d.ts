@@ -1,6 +1,6 @@
-import { AutocompleteProps, TextFieldProps } from '@mui/material'
-import { Variant } from '@/types/helpers'
-import { BaseInput } from '@/types'
+import { TextFieldProps } from '@mui/material/TextField'
+import { AutocompleteProps } from '@mui/material/Autocomplete'
+import { BaseInput, Variant } from '../../types'
 
 export type AutocompleteOptionType = {
     label: string

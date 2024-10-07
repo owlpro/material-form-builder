@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import React, { Component, FocusEvent } from "react";
-import { checkValue } from '@/helpers/general';
-import { InputImplement } from '@/types';
+import { checkValue } from '../../helpers/general';
+import { InputImplement } from '../../types';
 import { NumberInputProps, NumberInputValueType } from './types';
 
 interface IState {
@@ -17,7 +17,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
         error: false
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
     inputRef: HTMLInputElement | null | undefined;
 
     shouldComponentUpdate(nextProps: NumberInputProps, nextState: IState) {

@@ -1,6 +1,5 @@
-import { BaseInput } from '@/types'
-import { Variant } from '@/types/helpers'
-import { TextFieldProps } from '@mui/material'
+import { BaseInput, Variant } from '../../types'
+import { TextFieldProps } from '@mui/material/TextField'
 import { MuiPickersAdapter, TimePickerProps } from '@mui/x-date-pickers'
 import { Dayjs } from 'dayjs'
 

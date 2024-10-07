@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import React, { Component, FocusEvent, MouseEvent } from "react";
-import { mask } from '@/helpers/general';
-import { InputImplement } from '@/types';
+import { mask } from '../../helpers/general';
+import { InputImplement } from '../../types';
 import { MaskInputProps, MaskInputValueType } from './types';
 
 interface IState {
@@ -17,7 +17,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
         error: false
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
     inputRef: HTMLInputElement | undefined
 
     shouldComponentUpdate(nextProps: MaskInputProps, nextState: IState) {

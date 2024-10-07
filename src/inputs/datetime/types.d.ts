@@ -1,8 +1,7 @@
-import { TextFieldProps } from '@mui/material'
+import { TextFieldProps } from '@mui/material/TextField'
 import { DateTimePickerProps, MuiPickersAdapter } from '@mui/x-date-pickers'
 import { Dayjs } from 'dayjs'
-import { Variant } from '@/types/helpers'
-import { BaseInput } from '@/types'
+import { BaseInput, Variant } from '../../types'
 
 export type DatetimeInputValueType = Dayjs | null
 export interface DatetimeInputProps extends BaseInput<DatetimeInputValueType>, Omit<DateTimePickerProps<Dayjs, false>, 'value' | 'renderInput' | 'ref'> {

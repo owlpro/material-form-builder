@@ -1,86 +1,68 @@
 import { defineConfig } from 'rollup'
 
-import image from '@rollup/plugin-image'
+import { readFileSync } from 'fs'
+
 import commonjs from '@rollup/plugin-commonjs'
+import image from '@rollup/plugin-image'
 import resolve from '@rollup/plugin-node-resolve'
 import typescript from '@rollup/plugin-typescript'
 import dts from 'rollup-plugin-dts'
 import external from 'rollup-plugin-peer-deps-external'
-import postcss from 'rollup-plugin-postcss'
+// import postcss from 'rollup-plugin-postcss'
 import typescriptEngine from 'typescript'
-import pkg from './package.json'
+// import pkg from './package.json'
+import { typescriptPaths } from 'rollup-plugin-typescript-paths'
+import svg from 'rollup-plugin-svg'
 
-export default defineConfig(
+const packageJson = JSON.parse(readFileSync('./package.json'))
+
+export default [
     {
         input: 'src/index.ts',
         output: [
             {
-                file: pkg.main,
+                file: packageJson.main,
                 format: 'cjs',
-                sourcemap: false,
+                sourcemap: true,
                 exports: 'named',
-                name: pkg.name,
+                name: packageJson.name,
             },
             {
-                file: pkg.module,
+                file: packageJson.module,
                 format: 'es',
                 exports: 'named',
-                sourcemap: false,
+                sourcemap: true,
             },
         ],
         plugins: [
-            postcss({
-                plugins: [],
-                minimize: true,
-            }),
             external({
                 includeDependencies: true,
             }),
-            resolve(),
+            resolve({
+                jsnext: true,
+                main: true,
+                browser: true,
+                // browser: true,
+                // preferBuiltins: false,
+            }),
             commonjs({
-                include: ['node_modules/**', 'src/types/svg.d.ts', 'src/inputs/mobile/flags'],
+                include: ['node_modules/**', 'general.d.ts', 'src/inputs/mobile/flags'],
                 // namedExports: {
                 //     'node_modules/react/react.js': ['Children', 'Component', 'PropTypes', 'createElement'],
                 //     'node_modules/react-dom/index.js': ['render'],
                 // },
             }),
-            // svg(),
-            image(),
+            svg(),
+            // image(),
             typescript({
-                tsconfig: './tsconfig.json',
-                typescript: typescriptEngine,
-                sourceMap: false,
-                exclude: [
-                    'coverage',
-                    '.storybook',
-                    'storybook-static',
-                    'config',
-                    'dist',
-                    'node_modules/**',
-                    '*.cjs',
-                    '*.mjs',
-                    '**/__snapshots__/*',
-                    '**/__tests__',
-                    '**/*.test.js+(|x)',
-                    '**/*.test.ts+(|x)',
-                    '**/*.mdx',
-                    '**/*.story.ts+(|x)',
-                    '**/*.story.js+(|x)',
-                    '**/*.stories.ts+(|x)',
-                    '**/*.stories.js+(|x)',
-                    'setupTests.ts',
-                    'vitest.config.ts',
-                ],
-                //   rollupCommonJSResolveHack: true,
-                //   exclude: "**/__tests__/**",
-                //   clean: true
+                sourceMap: true,
             }),
+            // terser()
         ],
     },
     {
-        input: 'dist/esm/types/src/index.d.ts',
-        output: [{ file: 'dist/index.d.ts', format: 'esm' }],
-        external: [/\.(sc|sa|c)ss$/],
+        input: './src/types.d.ts',
+        output: [{ file: './dist/index.d.ts', format: 'es' }],
         plugins: [dts()],
-    }
-)
+    },
+]

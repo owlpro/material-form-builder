@@ -1,5 +1,5 @@
-import { SelectProps, TextFieldProps } from '@mui/material'
-import { BaseInput } from '@/types'
+import { SelectProps } from '@mui/material/Select'
+import { BaseInput } from '../../types'
 
 export type SelectInputValueType = any
 export type SelectOptionType = {

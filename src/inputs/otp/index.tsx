@@ -1,6 +1,8 @@
-import { Box, Slide, Typography } from '@mui/material';
+import Box from "@mui/material/Box";
+import Slide from "@mui/material/Slide";
+import Typography from "@mui/material/Typography";
 import React, { Component, FocusEvent, Fragment } from "react";
-import { InputImplement } from '@/types';
+import { InputImplement } from '../../types';
 import { OtpInputProps, OtpInputValueType } from './types';
 
 interface IState {
@@ -18,7 +20,7 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
         isInputFocused: false
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
 
     inputRef: HTMLInputElement | undefined | null
 

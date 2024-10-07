@@ -1,8 +1,6 @@
 import TextField, { TextFieldProps } from '@mui/material/TextField';
-// import { DatePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-
-import { InputImplement } from '@/types';
+import { InputImplement } from '../../types';
 import { DatePicker, DateValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
@@ -20,7 +18,7 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
         error: false
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
 
     inputRef: HTMLInputElement | null | undefined;
 

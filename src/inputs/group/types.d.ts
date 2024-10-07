@@ -1,5 +1,4 @@
-import { ObjectLiteral } from '@/types/helpers'
-import { BaseInput, OutputValues, InputProps } from '@/types'
+import { BaseInput, OutputValues, InputProps, ObjectLiteral} from '../../types'
 
 export type GroupInputValueType = ObjectLiteral | undefined | null
 export interface GroupInputProps extends Omit<BaseInput<GroupInputValueType>, 'onChangeValue'> {

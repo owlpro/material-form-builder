@@ -1,5 +1,6 @@
-import { Input, InputImplement } from '@/types';
-import React, { Component, Fragment } from "react";
+import { InputImplement } from '../../types';
+import { Input } from "../../input.types"
+import React, { Component, createElement, Fragment } from "react";
 import { CustomInputProps, CustomInputValueType } from "./types";
 
 interface IState {
@@ -55,7 +56,7 @@ export class CustomInput extends Component<CustomInputProps, IState> implements 
 
     render() {
         const { element, ...rest } = this.props;
-        const render = React.createElement(element, { ref: (el: Input) => this.elementRef = el, ...rest });
+        const render = createElement(element, { ref: (el: Input) => this.elementRef = el, ...rest });
 
         return (
             <Fragment> {render} </Fragment>

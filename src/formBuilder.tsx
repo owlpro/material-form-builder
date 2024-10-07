@@ -1,38 +1,33 @@
-import React, { Component, Fragment } from 'react';
-import { selectFromObject, setToObject } from '@/helpers/general';
-import { Input, InputGetValueTypes, InputProps, InputTypes, OutputValues } from '@/types';
+import React, { Component, createElement, Fragment } from 'react';
+import { selectFromObject, setToObject } from './helpers/general';
+import { OutputValues } from './types';
 
-import { AutocompleteInput } from 'inputs/autocomplete';
-import { CheckboxInput } from 'inputs/checkbox';
-import { CustomInput } from 'inputs/custom';
-import { DateInput } from 'inputs/date';
-import { DatetimeInput } from 'inputs/datetime';
-import { FileInput } from 'inputs/file';
-import { GroupInput } from 'inputs/group';
-import { ItemsInput } from 'inputs/items';
-import { MaskInput } from 'inputs/mask';
-import { MobileInput } from 'inputs/mobile';
-import { NumberInput } from 'inputs/number';
-import { OtpInput } from 'inputs/otp';
-import { PasswordInput } from 'inputs/password';
-import { SelectInput } from 'inputs/select';
-import { TextInput } from 'inputs/text';
-import { TimeInput } from 'inputs/time';
-import { ToggleInput } from 'inputs/toggle';
+import { Input, InputProps } from "./input.types"
 
-import { ObjectLiteral } from '@/types/helpers';
-import { InputActions } from '@/types';
+import { AutocompleteInput } from './inputs/autocomplete';
+import { CheckboxInput } from './inputs/checkbox';
+import { CustomInput } from './inputs/custom';
+import { DateInput } from './inputs/date';
+import { DatetimeInput } from './inputs/datetime';
+import { FileInput } from './inputs/file';
+import { GroupInput } from './inputs/group';
+import { ItemsInput } from './inputs/items';
+import { MaskInput } from './inputs/mask';
+import { MobileInput } from './inputs/mobile';
+import { NumberInput } from './inputs/number';
+import { OtpInput } from './inputs/otp';
+import { PasswordInput } from './inputs/password';
+import { SelectInput } from './inputs/select';
+import { TextInput } from './inputs/text';
+import { TimeInput } from './inputs/time';
+import { ToggleInput } from './inputs/toggle';
+
+import { InputActions, ObjectLiteral } from './types';
 
 interface FormBuilderImplements {
     getValues: (validation: boolean) => OutputValues;
     setValues: (values: ObjectLiteral) => Promise<void>;
     clear: () => Promise<void>;
-}
-
-interface IProps {
-    inputs: InputProps[],
-    onChange?: Function,
-    onMount?: Function
 }
 
 interface IState {
@@ -41,7 +36,13 @@ interface IState {
     inInternalSettingProcess: boolean
 }
 
-export class FormBuilder extends Component<IProps, IState> implements FormBuilderImplements {
+export interface FormBuilderProps {
+    inputs: InputProps[],
+    onChange?: Function,
+    onMount?: Function
+}
+
+export class FormBuilder extends Component<FormBuilderProps, IState> implements FormBuilderImplements {
     state: IState = {
         isMounted: false,
         time: null,
@@ -49,7 +50,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
     }
 
     private inputRefs: { [key: string]: Input } = {}
-    private inputs: { [key in InputTypes]: React.ElementType } = {
+    private inputs: { [key in InputProps['type']]: React.ElementType } = {
         text: TextInput,
         number: NumberInput,
         items: ItemsInput,
@@ -144,7 +145,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         }
     }
 
-    private async setNormalValue(selector: string, value: InputGetValueTypes) {
+    private async setNormalValue(selector: string, value: any) {
         const regex = new RegExp('^(' + selector + ')\\[.*\\=.*\\]\\..*')
         const keyValueSelectors = Object.keys(this.inputRefs).filter(i => regex.test(i))
         if (Array.isArray(value) && keyValueSelectors.length) {
@@ -173,7 +174,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
         }
     }
 
-    private async setValue(selector: string, value: InputGetValueTypes) {
+    private async setValue(selector: string, value: any) {
         const directInput = this.props.inputs.find(i => i.selector === selector)
         if (directInput && (directInput.type === "group" || (directInput.type === "custom" && directInput.allowObject))) {
             return await this.setNormalValue(selector, value)
@@ -300,7 +301,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
     private renderInput = (input: InputProps, index: number): JSX.Element | null => {
         if (!this.checkVisibility(input)) return null;
         const { wrapper, getMutator, setMutator, ref, ...props } = input
-        const actions: InputActions<InputGetValueTypes> = {
+        const actions: InputActions<any> = {
             setValue: (value: any): Promise<any> => this.executeAction(input.selector, 'setValue', value),
             getValue: (validation?: boolean): Promise<any> => this.executeAction(input.selector, 'getValue', validation),
             clear: (): Promise<any> => this.executeAction(input.selector, 'clear'),
@@ -314,7 +315,7 @@ export class FormBuilder extends Component<IProps, IState> implements FormBuilde
             if (typeof (ref) === "function") ref(el)
         }
 
-        const element = React.createElement(this.inputs[input.type], { ref: (el: Input) => refSetter(el), ...props, _call_parent_for_update: this.onUpdateInputs });
+        const element = createElement(this.inputs[input.type], { ref: (el: Input) => refSetter(el), ...props, _call_parent_for_update: this.onUpdateInputs });
         const output = (
             <Fragment key={index}>
                 {wrapper ? wrapper(element as JSX.Element, actions as InputActions) : element}

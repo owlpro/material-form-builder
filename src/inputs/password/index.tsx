@@ -1,8 +1,11 @@
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-import { InputImplement } from '@/types';
-import { IconButton, InputAdornment } from '@mui/material';
+import { InputImplement } from '../../types';
+
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+
 import TextField from '@mui/material/TextField';
 import React, { Component, FocusEvent, MouseEvent } from "react";
 import { PasswordInputProps, PasswordInputValueType } from './types';
@@ -22,7 +25,7 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
         showPassword: false
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
     inputRef: HTMLInputElement | null | undefined;
 
     shouldComponentUpdate(nextProps: PasswordInputProps, nextState: IState) {

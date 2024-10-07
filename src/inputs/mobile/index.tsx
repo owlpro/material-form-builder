@@ -1,9 +1,13 @@
-import { mask } from '@/helpers/general';
-import { InputImplement } from '@/types';
-import { Box, InputAdornment, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material';
+import Box from "@mui/material/Box";
+import InputAdornment from "@mui/material/InputAdornment";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TextField from '@mui/material/TextField';
+import Typography from "@mui/material/Typography";
 import { styled } from '@mui/material/styles';
 import React, { Component, FocusEvent } from "react";
+import { mask } from '../../helpers/general';
+import { InputImplement } from '../../types';
 import { Country, countries } from "./countries";
 import { MobileInputProps, MobileInputValueType } from './types';
 
@@ -29,7 +33,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
         country: countries[0],
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
 
     inputRef: HTMLInputElement | undefined
 

@@ -1,4 +1,4 @@
-import { BaseInput } from '@/types'
+import { BaseInput } from '../../types'
 
 export type CustomInputValueType = any
 export interface CustomInputProps extends Omit<BaseInput, 'onChangeValue' | 'ref'> {

@@ -1,7 +1,7 @@
-import { Checkbox, FormControlLabel } from '@mui/material';
-import { grey, red } from '@mui/material/colors';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import React, { Component } from "react";
-import { InputImplement } from '@/types';
+import { InputImplement } from '../../types';
 import { CheckboxInputProps, CheckboxInputValueType } from './types';
 
 interface IState {
@@ -15,7 +15,7 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
         error: false
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
 
     inputRef: HTMLInputElement | null | undefined;
 
@@ -92,7 +92,7 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
             <FormControlLabel onClick={this.onClick} control={
                 <Checkbox
                     {...restProps}
-                    sx={{ color: this.state.error ? red[700] : grey[700] }}
+                    sx={{ color: this.state.error ? "#d32f2f" : "#616161" }}
                     checked={this.state.value}
                     onChange={this.onChange}
                     inputRef={el => this.inputRef = el}

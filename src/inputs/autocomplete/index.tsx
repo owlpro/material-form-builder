@@ -1,32 +1,19 @@
-import { isNull } from '@/helpers/general';
+import { isNull } from '../../helpers/general';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ClearIcon from '@mui/icons-material/Clear';
-import {
-    Autocomplete,
-    AutocompleteChangeDetails,
-    AutocompleteChangeReason,
-    AutocompleteRenderInputParams,
-    Box,
-    CircularProgress,
-    Grow,
-    IconButton,
-    InputAdornment
-} from '@mui/material';
+import Box from "@mui/material/Box"
+import Autocomplete, {AutocompleteChangeDetails, AutocompleteChangeReason, AutocompleteRenderInputParams} from "@mui/material/Autocomplete"
+import CircularProgress from "@mui/material/CircularProgress"
+import Grow from "@mui/material/Grow"
+import IconButton from "@mui/material/IconButton"
+import InputAdornment from "@mui/material/InputAdornment"
 import TextField from '@mui/material/TextField';
 import React, { Component } from "react";
+// import { InputImplement } from '../../';
+import { AutocompleteInputProps, AutocompleteInputValueType, AutocompleteOptionType, AutocompleteValueType } from './index.d';
+import { InputImplement } from '../../types';
 
-import { InputImplement } from '@/types';
 
-import { AutocompleteInputProps, AutocompleteInputValueType, AutocompleteOptionType, AutocompleteValueType } from './types';
-// import { AutocompleteInputProps, AutocompleteInputValueType, AutocompleteOptionType, AutocompleteValueType } from './autocomplete.types';
-
-const LoadingComponent = () => (
-    <Grow in={true} timeout={550}>
-        <Box sx={{ paddingRight: '8px', paddingTop: '4px' }}>
-            <CircularProgress size={18} />
-        </Box>
-    </Grow>
-)
 interface IState {
     value: AutocompleteValueType | null,
     error: boolean
@@ -38,7 +25,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         error: false
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
 
     inputRef: HTMLInputElement | undefined
 
@@ -80,6 +67,14 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         }
         return undefined;
     }
+
+    private loadingComponent = (): JSX.Element => (
+        <Grow in={true} timeout={550}>
+            <Box sx={{ paddingRight: '8px', paddingTop: '4px' }}>
+                <CircularProgress size={18} />
+            </Box>
+        </Grow>
+    )
 
     componentDidUpdate(props: AutocompleteInputProps) {
         if (this.props.options?.map((i) => this.optionGetter(i, 'value')).join('@') !== props.options?.map((i) => this.optionGetter(i, 'value')).join('@')) {
@@ -198,7 +193,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
                 value={this.state.value ?? (this.props.multiple ? [] : (this.props.freeSolo ? "" : null))}
                 disabled={this.props.disabled || this.props.loading}
                 clearOnBlur={this.props.multiple || (this.props.multiple && this.props.freeSolo) || (!this.props.multiple && !this.props.freeSolo)}
-                popupIcon={this.props.loading ? <LoadingComponent /> : (this.props.popupIcon || <ArrowDropDownIcon />)}
+                popupIcon={this.props.loading ? this.loadingComponent() : (this.props.popupIcon || <ArrowDropDownIcon />)}
                 isOptionEqualToValue={this.props.isOptionEqualToValue ?? this.isOptionEqualToValue}
                 renderInput={renderInput ? (params: any) => {
                     params.inputRef = (el: any) => this.inputRef = el

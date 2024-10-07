@@ -1,6 +1,6 @@
-import { InputImplement, OutputValues } from '@/types';
+import { InputImplement, OutputValues } from '../../types';
 import React, { Component, createRef, RefObject } from "react";
-import { FormBuilder } from "@/formBuilder";
+import { FormBuilder } from "../../formBuilder";
 import { GroupInputProps, GroupInputValueType } from './types';
 
 interface IState {
@@ -14,7 +14,7 @@ export class GroupInput extends Component<GroupInputProps, IState> implements In
         value: null
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
     builderRef: RefObject<FormBuilder>;
 
     constructor(props: GroupInputProps) {

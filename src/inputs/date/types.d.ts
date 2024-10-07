@@ -1,8 +1,7 @@
-import { TextFieldProps } from '@mui/material'
-import { DatePickerProps, MuiPickersAdapter } from '@mui/x-date-pickers'
-// import { MuiPickersAdapter } from '@mui/x-date-pickers/internals'
-import { Variant } from '@/types/helpers'
-import { BaseInput } from '@/types'
+import { TextFieldProps } from '@mui/material/TextField'
+import { DatePickerProps} from '@mui/x-date-pickers/DatePicker'
+import { MuiPickersAdapter } from '@mui/x-date-pickers'
+import { BaseInput, Variant } from '../../types'
 import { Dayjs } from 'dayjs'
 
 export type DateInputValueType = Dayjs | null

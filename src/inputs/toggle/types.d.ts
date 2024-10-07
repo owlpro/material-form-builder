@@ -1,6 +1,6 @@
-import { ToggleButtonGroupProps } from '@mui/material'
-import { BaseInput } from '@/types'
+import { ToggleButtonGroupProps } from '@mui/material/ToggleButtonGroup'
 import { ReactNode } from 'react'
+import { BaseInput } from '../../types'
 
 export type ToggleInputValueType = string | string[] | null
 export type ToggleInputOptionType = {

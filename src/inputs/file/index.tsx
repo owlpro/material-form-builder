@@ -1,7 +1,10 @@
-import { FormControl, FormHelperText, Input, InputLabel } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
 import React, { Component } from "react";
-import { randomString } from '@/helpers/general';
-import { InputImplement } from '@/types';
+import { randomString } from '../../helpers/general';
+import { InputImplement } from '../../types';
 import { FileInputProps, FileInputValueType } from './types';
 
 interface IState {
@@ -17,7 +20,7 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
         inputKey: randomString(20)
     }
 
-    validationTimeout: NodeJS.Timeout | undefined;
+    validationTimeout: any;
     inputIdentity: string = ''
     textHelperIdentity: string = ''
     inputRef: HTMLInputElement | undefined
@@ -100,7 +103,7 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
     }
 
     render() {
-        const { defaultValue, onChangeValue, label, helperText, FormControlProps, InputLabelProps, FormHelperTextProps, InputProps, multiple, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { defaultValue, onChangeValue, label, helperText, FormControlProps, InputLabelProps, FormHelperTextProps, multiple, visible, _call_parent_for_update, ...restProps } = this.props;
         return (
             <FormControl {...FormControlProps} variant={FormControlProps?.variant ?? 'standard'} >
 
@@ -110,18 +113,17 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
                 <Input
                     {...restProps}
                     id={this.inputIdentity}
-                    // key={this.state.inputKey}
                     aria-describedby={this.textHelperIdentity}
                     type="file"
-                    inputProps={{
-                        multiple: multiple || false,
-                        ...InputProps,
-                        key: this.state.inputKey
+                    slotProps={{
+                        input: {
+                            multiple: multiple ?? false,
+                            ...restProps.slotProps?.input
+                        }
                     }}
                     error={this.state.error}
                     onChange={this.onChange}
                     onClick={this.onClick}
-                    // value={this.state.value?.length ? this.state.value[0].name : ''}
                     inputRef={el => this.inputRef = el}
                 />
                 {helperText ? (

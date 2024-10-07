@@ -1,4 +1,4 @@
-import { BaseInput, InputProps } from '@/types'
+import { BaseInput, InputProps } from '../../types'
 
 export type ItemsInputValueType = any
 export interface ItemsInputProps extends Omit<BaseInput<ItemsInputValueType>, 'onChangeValue'> {

@@ -1,9 +1,12 @@
-import { FormControlProps, FormHelperTextProps, InputBaseComponentProps, InputBaseProps, InputLabelProps, InputProps } from '@mui/material'
-import { Variant } from '@/types/helpers'
-import { BaseInput } from '@/types'
+import { FormControlProps } from '@mui/material/FormControl'
+import { FormHelperTextProps } from '@mui/material/FormHelperText'
+import { InputProps as MuiInputProps} from '@mui/material/Input'
+import { InputBaseProps } from '@mui/material/InputBase'
+import { InputLabelProps } from '@mui/material/InputLabel'
+import { BaseInput, Variant } from '../../types'
 
 export type FileInputValueType = FileList | null
-export interface FileInputProps extends BaseInput<FileInputValueType>, Omit<InputProps, 'ref'> {
+export interface FileInputProps extends BaseInput<FileInputValueType>, Omit<MuiInputProps, 'ref'> {
     type: 'file'
     label?: string
     defaultValue?: FileInputValueType
@@ -13,5 +16,4 @@ export interface FileInputProps extends BaseInput<FileInputValueType>, Omit<Inpu
     InputLabelProps?: InputLabelProps
     FormHelperTextProps?: FormHelperTextProps
     multiple?: boolean
-    InputProps?: InputBaseComponentProps
 }
