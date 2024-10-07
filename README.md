@@ -4,7 +4,15 @@
   <img width="150" src="https://raw.githubusercontent.com/mui/material-ui/master/docs/public/static/logo.svg" alt="MUI logo"></a>
 </p>
 
+
 <h2 align="center" style="font-weight: 800; letter-spacing: 1px;font-size: 32px;">material form builder (MFB)</h2>
+
+### Mui Version Compatibility
+| MUI version | MFB version |
+| ---- | ---- |
+| ^5.x | ^0.x |
+| ^6.x | ^1.x |
+
 
 ## Quick Access
 
