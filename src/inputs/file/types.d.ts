@@ -1,7 +1,6 @@
 import { FormControlProps } from '@mui/material/FormControl'
 import { FormHelperTextProps } from '@mui/material/FormHelperText'
-import { InputProps as MuiInputProps} from '@mui/material/Input'
-import { InputBaseProps } from '@mui/material/InputBase'
+import { InputProps as MuiInputProps } from '@mui/material/Input'
 import { InputLabelProps } from '@mui/material/InputLabel'
 import { BaseInput, Variant } from '../../types'
 

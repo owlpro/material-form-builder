@@ -4,7 +4,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import typescript from '@rollup/plugin-typescript'
 import dts from 'rollup-plugin-dts'
-import peerDepsExternal from 'rollup-plugin-peer-deps-external'
+// import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 // import postcss from 'rollup-plugin-postcss'
 // import pkg from './package.json'
 import alias from '@rollup/plugin-alias'
@@ -33,13 +33,14 @@ export default [
             }
         ],
         plugins: [
-            peerDepsExternal(),
+            // peerDepsExternal(),
             
             resolve({
                 // jsnext: true,
                 // main: true,
-                browser: true,
                 // browser: true,
+                // browser: true,
+                
                 // preferBuiltins: false,
             }),
             commonjs({
@@ -57,13 +58,15 @@ export default [
             //     tsconfig: './tsconfig.json',
             //     include: ['./general.d.ts']
             // }),
-            esbuild()
+            esbuild({
+                exclude: ['/node_modules/', '/dist']
+            })
             // terser()
         ],
     },
     {
         input: './src/index.ts',
-        output: [{ file: './dist/index.d.ts', format: 'es' }],
+        output: [{ file: './dist/index.d.ts', format: 'esm' }],
         external: [/\.(css|less|scss)$/],
         plugins: [
             dts({
