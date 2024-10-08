@@ -3,13 +3,16 @@ import resolve from '@rollup/plugin-node-resolve'
 import dts from 'rollup-plugin-dts'
 import svg from 'rollup-plugin-svg'
 import esbuild from 'rollup-plugin-esbuild'
-import packageJson from "./package.json" assert { type: "json" };
-import terser from '@rollup/plugin-terser';
+import packageJson from './package.json' assert { type: 'json' }
+import terser from '@rollup/plugin-terser'
+import peerDepsExternal from 'rollup-plugin-peer-deps-external'
+import nodeExternals from 'rollup-plugin-node-externals'
+import typescript from '@rollup/plugin-typescript'
+// import nodeResolve f-rom '@rollup/plugin-node-resolve'
 
 export default [
     {
-        input: 'src/index.ts',
-        external: Object.keys(packageJson.peerDependencies),
+        input: './src/index.ts',
         output: [
             {
                 file: packageJson.main,
@@ -17,33 +20,27 @@ export default [
                 sourcemap: true,
                 exports: 'named',
                 name: packageJson.name,
+                // preserveModules: true,
             },
             {
                 file: packageJson.module,
                 format: 'es',
                 sourcemap: true,
                 exports: 'named',
-            }
+                // preserveModules: true,
+            },
         ],
-        plugins: [
-            resolve(),
-            commonjs({
-                include: ['node_modules/**', 'general.d.ts', 'src/inputs/mobile/flags'],
-            }),
-            svg(),
-            esbuild({
-                exclude: ['/node_modules/', '/dist']
-            }),
-            terser()
-        ],
+        plugins: [nodeExternals(), resolve(), commonjs(), typescript(), svg(), terser()],
+        external: [Object.keys(packageJson.peerDependencies)],
+
     },
     {
         input: './src/index.ts',
         output: [{ file: './dist/index.d.ts', format: 'esm' }],
-        external: [/\.(css|less|scss)$/],
+        external: [/\.(css|less|scss)$/, /node_modules/],
         plugins: [
             dts({
-                tsconfig: './tsconfig.json'
+                tsconfig: './tsconfig.json',
             }),
         ],
     },

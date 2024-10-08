@@ -6,12 +6,13 @@
 
         /* Modules */
         "module": "ESNext",
-        "moduleResolution": "Bundler",
+        "moduleResolution": "node",
 
         /* Resolve */
         "rootDir": "./src",
+        "baseUrl": "./",
         "paths": {
-            "*": ["./src/*"],
+            "*": ["*"],
             "@/*": ["./src/*"]
         },
         /* JavaScript Support */
@@ -21,19 +22,18 @@
         /* Emit */
         "noEmit": true,
         "isolatedModules": true,
-        "esModuleInterop": true,
         "checkJs": true,
         // "emitDeclarationOnly": true,
-        // "sourceMap": true,
+        "sourceMap": true,
 
-        // "outDir": "dist",
+        "outDir": "dist",
         "declaration": true,
         "declarationDir": "dist/types",
 
         /* Interop Constraints */
-        // "allowSyntheticDefaultImports": true,
-        // "esModuleInterop": true,
-        // "forceConsistentCasingInFileNames": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
 
         /* Type Checking */
         "strict": true,
@@ -44,9 +44,11 @@
         "noUncheckedIndexedAccess": true,
         "allowUnreachableCode": false,
 
+        "incremental": false,
+
         /* Completeness */
         "skipLibCheck": true
     },
-    "include": ["src", "*.tsx", "*.ts", "./general.d.ts"],
-    "exclude": ["coverage", "config", "dist", "node_modules/**", "docs", "all_flags"]
+    "include": ["src", "*.tsx", "*.ts"],
+    "exclude": ["coverage", "config", "dist", "node_modules", "docs", "all_flags"]
 }
