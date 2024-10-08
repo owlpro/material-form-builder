@@ -1,4 +1,4 @@
-import TextField from '@mui/material/TextField';
+import { TextField } from '@mui/material';
 import React, { Component, FocusEvent, MouseEvent } from "react";
 import { InputImplement } from '../../types';
 import { TextInputProps, TextInputValueType } from './types';
@@ -36,7 +36,7 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
         if (value === this.state.value) return Promise.resolve(value)
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if(!withoutEffect) this.props._call_parent_for_update?.()
+                if (!withoutEffect) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as TextInputValueType)
                 resolve(value)
             })

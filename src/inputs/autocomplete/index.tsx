@@ -1,12 +1,6 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ClearIcon from '@mui/icons-material/Clear';
-import Autocomplete, { AutocompleteChangeDetails, AutocompleteChangeReason, AutocompleteRenderInputParams } from "@mui/material/Autocomplete";
-import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
-import Grow from "@mui/material/Grow";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import TextField, { TextFieldProps } from '@mui/material/TextField';
+import { Autocomplete, AutocompleteChangeDetails, AutocompleteChangeReason, AutocompleteRenderInputParams, Box, CircularProgress, Grow, IconButton, InputAdornment, TextField, TextFieldProps } from "@mui/material";
 import React, { Component } from "react";
 import { isNull } from '../../helpers/general';
 import { InputImplement } from '../../types';

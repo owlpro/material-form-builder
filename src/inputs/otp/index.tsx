@@ -1,6 +1,4 @@
-import Box from "@mui/material/Box";
-import Slide from "@mui/material/Slide";
-import Typography from "@mui/material/Typography";
+import { Box, Slide, Typography } from "@mui/material";
 import React, { Component, FocusEvent, Fragment } from "react";
 import { InputImplement } from '../../types';
 import { OtpInputProps, OtpInputValueType } from './types';

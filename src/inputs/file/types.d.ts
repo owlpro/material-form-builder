@@ -1,7 +1,4 @@
-import { FormControlProps } from '@mui/material/FormControl'
-import { FormHelperTextProps } from '@mui/material/FormHelperText'
-import { InputProps as MuiInputProps } from '@mui/material/Input'
-import { InputLabelProps } from '@mui/material/InputLabel'
+import { FormControlProps, FormHelperTextProps, InputLabelProps, InputProps as MuiInputProps } from '@mui/material'
 import { BaseInput, Variant } from '../../types'
 
 export type FileInputValueType = FileList | null

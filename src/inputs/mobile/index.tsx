@@ -1,10 +1,4 @@
-import Box from "@mui/material/Box";
-import InputAdornment from "@mui/material/InputAdornment";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import TextField from '@mui/material/TextField';
-import Typography from "@mui/material/Typography";
-import { styled } from '@mui/material/styles';
+import { Box, InputAdornment, MenuItem, Select, SelectChangeEvent, TextField, Typography, styled } from "@mui/material";
 import React, { Component, FocusEvent } from "react";
 import { mask } from '../../helpers/general';
 import { InputImplement } from '../../types';

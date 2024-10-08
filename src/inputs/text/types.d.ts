@@ -1,4 +1,4 @@
-import { TextFieldProps } from '@mui/material/TextField'
+import { TextFieldProps } from '@mui/material'
 import { BaseInput } from '../../types'
 
 export type TextInputValueType = string | null

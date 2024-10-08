@@ -1,4 +1,4 @@
-import TextField from '@mui/material/TextField';
+import { TextField } from '@mui/material';
 import React, { Component, FocusEvent } from "react";
 import { checkValue } from '../../helpers/general';
 import { InputImplement } from '../../types';
@@ -36,7 +36,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
         if (value === this.state.value) return Promise.resolve(value)
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if(!withoutEffect) this.props._call_parent_for_update?.()
+                if (!withoutEffect) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as NumberInputValueType)
                 resolve(value)
             })

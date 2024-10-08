@@ -1,5 +1,5 @@
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import { Checkbox } from '@mui/material';
+import { FormControlLabel } from '@mui/material';
 import React, { Component } from "react";
 import { InputImplement } from '../../types';
 import { CheckboxInputProps, CheckboxInputValueType } from './types';

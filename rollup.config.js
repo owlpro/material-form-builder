@@ -30,7 +30,10 @@ export default [
                 // preserveModules: true,
             },
         ],
-        plugins: [nodeExternals(), resolve(), commonjs(), typescript(), svg(), terser()],
+        plugins: [nodeExternals({
+            devDeps: false,
+            deps: false
+        }), resolve(), commonjs(), typescript(), svg(), terser()],
         external: [Object.keys(packageJson.peerDependencies)],
 
     },

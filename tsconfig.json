@@ -27,8 +27,8 @@
         "sourceMap": true,
 
         "outDir": "dist",
-        "declaration": true,
-        "declarationDir": "dist/types",
+        // "declaration": false,
+        // "declarationDir": "dist/types",
 
         /* Interop Constraints */
         "allowSyntheticDefaultImports": true,

@@ -312,7 +312,7 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
             if (typeof (ref) === "function") ref(el)
         }
 
-        const element = createElement(this.inputs[input.type], { ref: (el: Input) => refSetter(el), ...props, _call_parent_for_update: this.onUpdateInputs });
+        const element = createElement(this.inputs[input.type]!, { ref: (el: Input) => refSetter(el), ...props, _call_parent_for_update: this.onUpdateInputs });
         const output = (
             <Fragment key={index}>
                 {wrapper ? wrapper(element as JSX.Element, actions as InputActions) : element}

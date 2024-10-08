@@ -1,7 +1,4 @@
-import FormControl from '@mui/material/FormControl';
-import FormHelperText from '@mui/material/FormHelperText';
-import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
+import { FormControl, FormHelperText, Input, InputLabel } from '@mui/material';
 import React, { Component } from "react";
 import { randomString } from '../../helpers/general';
 import { InputImplement } from '../../types';

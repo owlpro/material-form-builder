@@ -1,53 +1,53 @@
-import { AutocompleteInput } from 'inputs/autocomplete'
-import type { AutocompleteInputProps } from 'inputs/autocomplete/types'
+import { AutocompleteInput } from './inputs/autocomplete'
+import type { AutocompleteInputProps } from './inputs/autocomplete/types'
 
-import { CheckboxInput } from 'inputs/checkbox'
-import type { CheckboxInputProps } from 'inputs/checkbox/types'
+import { CheckboxInput } from './inputs/checkbox'
+import type { CheckboxInputProps } from './inputs/checkbox/types'
 
-import { CustomInput } from 'inputs/custom'
-import type { CustomInputProps } from 'inputs/custom/types'
+import { CustomInput } from './inputs/custom'
+import type { CustomInputProps } from './inputs/custom/types'
 
-import { DateInput } from 'inputs/date'
-import type { DateInputProps } from 'inputs/date/types'
+import { DateInput } from './inputs/date'
+import type { DateInputProps } from './inputs/date/types'
 
-import { DatetimeInput } from 'inputs/datetime'
-import type { DatetimeInputProps } from 'inputs/datetime/types'
+import { DatetimeInput } from './inputs/datetime'
+import type { DatetimeInputProps } from './inputs/datetime/types'
 
-import { FileInput } from 'inputs/file'
-import type { FileInputProps } from 'inputs/file/types'
+import { FileInput } from './inputs/file'
+import type { FileInputProps } from './inputs/file/types'
 
-import { GroupInput } from 'inputs/group'
-import type { GroupInputProps } from 'inputs/group/types'
+import { GroupInput } from './inputs/group'
+import type { GroupInputProps } from './inputs/group/types'
 
-import { ItemsInput } from 'inputs/items'
-import type { ItemsInputProps } from 'inputs/items/types'
+import { ItemsInput } from './inputs/items'
+import type { ItemsInputProps } from './inputs/items/types'
 
-import { MaskInput } from 'inputs/mask'
-import type { MaskInputProps } from 'inputs/mask/types'
+import { MaskInput } from './inputs/mask'
+import type { MaskInputProps } from './inputs/mask/types'
 
-import { MobileInput } from 'inputs/mobile'
-import type { MobileInputProps } from 'inputs/mobile/types'
+import { MobileInput } from './inputs/mobile'
+import type { MobileInputProps } from './inputs/mobile/types'
 
-import { NumberInput } from 'inputs/number'
-import type { NumberInputProps } from 'inputs/number/types'
+import { NumberInput } from './inputs/number'
+import type { NumberInputProps } from './inputs/number/types'
 
-import { OtpInput } from 'inputs/otp'
-import type { OtpInputProps } from 'inputs/otp/types'
+import { OtpInput } from './inputs/otp'
+import type { OtpInputProps } from './inputs/otp/types'
 
-import { PasswordInput } from 'inputs/password'
-import type { PasswordInputProps } from 'inputs/password/types'
+import { PasswordInput } from './inputs/password'
+import type { PasswordInputProps } from './inputs/password/types'
 
-import { SelectInput } from 'inputs/select'
-import type { SelectInputProps } from 'inputs/select/types'
+import { SelectInput } from './inputs/select'
+import type { SelectInputProps } from './inputs/select/types'
 
-import { TextInput } from 'inputs/text'
-import type { TextInputProps } from 'inputs/text/types'
+import { TextInput } from './inputs/text'
+import type { TextInputProps } from './inputs/text/types'
 
-import { TimeInput } from 'inputs/time'
-import type { TimeInputProps } from 'inputs/time/types'
+import { TimeInput } from './inputs/time'
+import type { TimeInputProps } from './inputs/time/types'
 
-import { ToggleInput } from 'inputs/toggle'
-import type { ToggleInputProps } from 'inputs/toggle/types'
+import { ToggleInput } from './inputs/toggle'
+import type { ToggleInputProps } from './inputs/toggle/types'
 
 type InputProps =
     | TextInputProps

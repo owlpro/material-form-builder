@@ -1,5 +1,4 @@
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import React, { Component } from "react";
 import { checkValue } from '../../helpers/general';
 import { InputImplement } from '../../types';

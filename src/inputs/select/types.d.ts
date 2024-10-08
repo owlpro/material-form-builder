@@ -1,4 +1,4 @@
-import { SelectProps } from '@mui/material/Select'
+import { SelectProps } from '@mui/material'
 import { BaseInput } from '../../types'
 
 export type SelectInputValueType = any

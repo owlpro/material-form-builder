@@ -1,9 +1,8 @@
-import { InputImplement } from '../../types';
-import TextField, { TextFieldProps } from '@mui/material/TextField';
-import { LocalizationProvider, PickerChangeHandlerContext, TimePicker, TimeValidationError } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TextField, TextFieldProps } from '@mui/material';
+import { PickerChangeHandlerContext, TimePicker, TimeValidationError } from '@mui/x-date-pickers';
 import { Dayjs } from 'dayjs';
 import { Component, MouseEvent } from "react";
+import { InputImplement } from '../../types';
 import { TimeInputProps, TimeInputValueType } from './types';
 
 interface IState {
@@ -91,30 +90,28 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
 
 
     render() {
-        const { defaultValue, onChangeValue, dateAdapter, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { defaultValue, onChangeValue, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
         return (
-            <LocalizationProvider dateAdapter={dateAdapter || AdapterDayjs}>
-                <TimePicker
-                    {...restProps}
-                    ampm={this.props.ampm || false}
-                    value={this.state.value}
-                    onChange={this.onChange}
-                    inputRef={el => this.inputRef = el}
-                    slots={{
-                        textField: (params: TextFieldProps) => (
-                            <TextField
-                                {...params}
-                                {...this.props.InputProps}
-                                fullWidth={this.props.fullWidth || false}
-                                variant={variant || "standard"}
-                                required={required || false}
-                                error={this.state.error}
-                                onClick={this.onClick}
-                            />
-                        )
-                    }}
-                />
-            </LocalizationProvider>
+            <TimePicker
+                {...restProps}
+                ampm={this.props.ampm || false}
+                value={this.state.value}
+                onChange={this.onChange}
+                inputRef={el => this.inputRef = el}
+                slots={{
+                    textField: (params: TextFieldProps) => (
+                        <TextField
+                            {...params}
+                            {...this.props.InputProps}
+                            fullWidth={this.props.fullWidth || false}
+                            variant={variant || "standard"}
+                            required={required || false}
+                            error={this.state.error}
+                            onClick={this.onClick}
+                        />
+                    )
+                }}
+            />
         )
     }
 }
