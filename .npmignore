@@ -1,5 +1,6 @@
 /src
 yarn.lock
+yalc.lock
 tsconfig.json
 rollup.config.js
 .gitignore
