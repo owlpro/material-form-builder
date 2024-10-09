@@ -9,6 +9,7 @@ import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 import nodeExternals from 'rollup-plugin-node-externals'
 import typescript from '@rollup/plugin-typescript'
 // import nodeResolve f-rom '@rollup/plugin-node-resolve'
+import sourcemaps from 'rollup-plugin-sourcemaps'
 
 export default [
     {
@@ -17,7 +18,6 @@ export default [
             {
                 file: packageJson.main,
                 format: 'cjs',
-                sourcemap: "inline",
                 exports: 'named',
                 name: packageJson.name,
                 // preserveModules: true,
@@ -25,17 +25,22 @@ export default [
             {
                 file: packageJson.module,
                 format: 'es',
-                sourcemap: "inline",
                 exports: 'named',
                 // preserveModules: true,
             },
         ],
-        plugins: [nodeExternals({
-            devDeps: false,
-            deps: false
-        }), resolve(), commonjs(), typescript(), svg(), terser()],
+        plugins: [
+            nodeExternals({
+                devDeps: false,
+                deps: false,
+            }),
+            resolve(),
+            commonjs(),
+            typescript(),
+            svg(),
+            terser(),
+        ],
         external: [Object.keys(packageJson.peerDependencies)],
-
     },
     {
         input: './src/index.ts',
