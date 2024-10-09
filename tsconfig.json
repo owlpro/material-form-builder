@@ -44,8 +44,6 @@
         "noUncheckedIndexedAccess": true,
         "allowUnreachableCode": false,
 
-        "incremental": false,
-
         /* Completeness */
         "skipLibCheck": true
     },
