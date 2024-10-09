@@ -112,6 +112,7 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
                     id={this.inputIdentity}
                     aria-describedby={this.textHelperIdentity}
                     type="file"
+                    key={this.state.inputKey}
                     slotProps={{
                         input: {
                             multiple: multiple ?? false,
