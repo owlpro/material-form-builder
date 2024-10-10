@@ -39,6 +39,8 @@ import type { PasswordInputProps } from './inputs/password/types'
 
 import { SelectInput } from './inputs/select'
 import type { SelectInputProps } from './inputs/select/types'
+import { SwitchInput } from './inputs/switch'
+import { SwitchInputProps } from './inputs/switch/types'
 
 import { TextInput } from './inputs/text'
 import type { TextInputProps } from './inputs/text/types'
@@ -67,6 +69,7 @@ type InputProps =
     | AutocompleteInputProps
     | ToggleInputProps
     | GroupInputProps
+    | SwitchInputProps
 
 type Input =
     | TextInput
@@ -86,6 +89,7 @@ type Input =
     | AutocompleteInput
     | ToggleInput
     | GroupInput
+    | SwitchInput
 
 type ObjectLiteral = { [key: string]: any }
 type Variant = 'standard' | 'filled' | 'outlined'

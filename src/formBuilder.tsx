@@ -19,6 +19,7 @@ import { SelectInput } from './inputs/select';
 import { TextInput } from './inputs/text';
 import { TimeInput } from './inputs/time';
 import { ToggleInput } from './inputs/toggle';
+import { SwitchInput } from './inputs/switch';
 
 interface FormBuilderImplements {
     getValues: (validation: boolean) => OutputValues;
@@ -63,7 +64,8 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
         file: FileInput,
         autocomplete: AutocompleteInput,
         toggle: ToggleInput,
-        group: GroupInput
+        group: GroupInput,
+        switch: SwitchInput,
     }
 
     private defaultValues: ObjectLiteral | null = null;
