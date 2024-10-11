@@ -1,5 +1,5 @@
-import { TextField, TextFieldProps } from '@mui/material';
-import { DatePicker, DateValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers';
+import { DateValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker/index.js';
 import { Dayjs } from 'dayjs';
 import React, { Component } from "react";
 import { InputImplement } from '../../types';
@@ -86,25 +86,21 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
     }
 
     render() {
-        const { onChangeValue, defaultValue, dateAdapter, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { onChangeValue, defaultValue, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
         return (
             <DatePicker
                 {...restProps}
                 value={this.state.value}
                 onChange={this.onChange}
                 inputRef={el => this.inputRef = el}
-                slots={{
-                    textField: (params: TextFieldProps) => (
-                        <TextField
-                            {...params}
-                            {...restProps.slotProps?.textField}
-                            fullWidth={this.props.fullWidth || false}
-                            variant={variant || 'standard'}
-                            required={required || false}
-                            error={this.state.error}
-                            onClick={this.onClick}
-                        />
-                    )
+                slotProps={{
+                    textField: {
+                        fullWidth: this.props.fullWidth ?? false,
+                        variant: variant ?? "standard",
+                        required: required ?? false,
+                        error: this.state.error,
+                        onClick: this.onClick
+                    }
                 }}
             />
         )

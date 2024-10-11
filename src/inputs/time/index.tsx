@@ -1,9 +1,12 @@
-import { TextField, TextFieldProps } from '@mui/material';
-import { PickerChangeHandlerContext, TimePicker, TimeValidationError } from '@mui/x-date-pickers';
+import { PickerChangeHandlerContext, TimeValidationError } from '@mui/x-date-pickers';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs/index.js';
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/index.js';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker/index.js';
 import { Dayjs } from 'dayjs';
 import { Component, MouseEvent } from "react";
 import { InputImplement } from '../../types';
 import { TimeInputProps, TimeInputValueType } from './types';
+
 
 interface IState {
     value: TimeInputValueType,
@@ -90,28 +93,27 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
 
 
     render() {
-        const { defaultValue, onChangeValue, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { selector, type, label, defaultValue, onChangeValue, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
         return (
+            // <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
                 {...restProps}
                 ampm={this.props.ampm || false}
                 value={this.state.value}
                 onChange={this.onChange}
                 inputRef={el => this.inputRef = el}
-                slots={{
-                    textField: (params: TextFieldProps) => (
-                        <TextField
-                            {...params}
-                            {...this.props.InputProps}
-                            fullWidth={this.props.fullWidth || false}
-                            variant={variant || "standard"}
-                            required={required || false}
-                            error={this.state.error}
-                            onClick={this.onClick}
-                        />
-                    )
+                slotProps={{
+                    textField: {
+                        fullWidth: this.props.fullWidth ?? false,
+                        variant: variant ?? "standard",
+                        required: required ?? false,
+                        error: this.state.error,
+                        onClick: this.onClick
+                    }
                 }}
             />
+            // </LocalizationProvider>
+
         )
     }
 }

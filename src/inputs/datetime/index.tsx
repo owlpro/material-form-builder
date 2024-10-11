@@ -1,5 +1,5 @@
-import { TextField } from '@mui/material';
-import { DateTimePicker, DateTimeValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers';
+import { DateTimeValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker/index.js';
 import React, { Component } from "react";
 
 import { InputImplement } from '../../types';
@@ -97,16 +97,13 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
                 onChange={this.onChange}
                 inputRef={el => this.inputRef = el}
                 slotProps={{
-                    textField: (params: any) => (
-                        <TextField
-                            {...params}
-                            fullWidth={this.props.fullWidth || false}
-                            variant={variant || 'standard'}
-                            required={required || false}
-                            error={this.state.error}
-                            onClick={this.onClick}
-                        />
-                    )
+                    textField: {
+                        fullWidth: this.props.fullWidth ?? false,
+                        variant: variant ?? "standard",
+                        required: required ?? false,
+                        error: this.state.error,
+                        onClick: this.onClick
+                    }
                 }}
             />
         )

@@ -64,7 +64,6 @@ export class SwitchInput extends Component<SwitchInputProps, IState> implements 
     }
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-        console.log(event)
         this.setValue(checked || false)
         this.props.onChange?.(event, checked)
     };
