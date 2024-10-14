@@ -22,12 +22,13 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
 
     inputRef: HTMLInputElement | undefined | null
 
-    shouldComponentUpdate(_: OtpInputProps, nextState: IState) {
+    shouldComponentUpdate(nextProps: OtpInputProps, nextState: IState) {
 
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
             case this.state.isInputFocused !== nextState.isInputFocused:
+            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
                 return true;
             default: return false;
         }

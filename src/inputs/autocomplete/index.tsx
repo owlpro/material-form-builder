@@ -27,11 +27,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
             case this.state.value !== nextState.value:
             case this.getValueForCheck(this.state.value || undefined) !== this.getValueForCheck(nextState.value || undefined):
             case this.state.error !== nextState.error:
-            case this.props.options?.map((i) => this.optionGetter(i, 'value')).join('@') !== nextProps.options?.map((i) => this.optionGetter(i, 'value')).join('@'):
-            case this.props.loading !== nextProps.loading:
-            case this.props.loadingText !== nextProps.loadingText:
-            case this.props.label !== nextProps.label:
-            case this.props.disabled !== nextProps.disabled:
+            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
                 return true;
             default: return false;
         }

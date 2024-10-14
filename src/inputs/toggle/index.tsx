@@ -23,9 +23,7 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case this.props.label !== nextProps.label:
-            case this.props.options.map(i => i.value).join('@') !== nextProps.options.map(i => i.value).join('@'):
-            case this.props.label !== nextProps.label:
+            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
                 return true;
             default: return false;
         }

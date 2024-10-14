@@ -36,9 +36,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
             case this.state.country.dialCode !== nextState.country.dialCode:
-            case this.props.label !== nextProps.label:
-            case this.props.disabled !== nextProps.disabled:
-                // case this.props.variant !== this.props.variant:
+            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
                 return true;
             default: return false;
         }

@@ -23,8 +23,7 @@ export class SwitchInput extends Component<SwitchInputProps, IState> implements 
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case this.props.label !== nextProps.label:
-            case this.props.disabled !== nextProps.disabled:
+            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
                 return true;
             default: return false;
         }

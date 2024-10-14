@@ -1,6 +1,6 @@
 import { PickerChangeHandlerContext, TimeValidationError } from '@mui/x-date-pickers';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs/index.js';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/index.js';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs/index.js';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/index.js';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker/index.js';
 import { Dayjs } from 'dayjs';
 import { Component, MouseEvent } from "react";
@@ -25,8 +25,7 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case this.props.label !== nextProps.label:
-            case this.props.label !== nextProps.label:
+            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
                 return true;
             default: return false;
         }
@@ -95,7 +94,7 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
     render() {
         const { selector, type, label, defaultValue, onChangeValue, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
         return (
-            // <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
                 {...restProps}
                 ampm={this.props.ampm || false}
@@ -112,7 +111,7 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
                     }
                 }}
             />
-            // </LocalizationProvider>
+            </LocalizationProvider>
 
         )
     }

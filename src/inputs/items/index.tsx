@@ -23,9 +23,10 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
     validationTimeout: any;
     formBuilderRef: { [key: string]: FormBuilder | null } = {};
 
-    shouldComponentUpdate(_: any, nextState: IState) {
+    shouldComponentUpdate(nextProps: any, nextState: IState) {
         switch (true) {
             case JSON.stringify(this.state.items) !== JSON.stringify(nextState.items):
+            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
                 return true;
             default: return false;
         }
