@@ -6,8 +6,8 @@ import { InputImplement } from '../../types';
 
 // import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
-import { DatetimeInputProps, DatetimeInputValueType } from './types';
 import { stringify } from 'src/helpers/general';
+import { DatetimeInputProps, DatetimeInputValueType } from './types';
 
 interface IState {
     value: DatetimeInputValueType,
@@ -97,7 +97,9 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
                 onChange={this.onChange}
                 inputRef={el => this.inputRef = el}
                 slotProps={{
+                    ...this.props.slotProps,
                     textField: {
+                        ...this.props.slotProps?.textField,
                         fullWidth: this.props.fullWidth ?? false,
                         variant: variant ?? "standard",
                         required: required ?? false,

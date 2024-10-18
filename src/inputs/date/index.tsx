@@ -94,7 +94,9 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
                 onChange={this.onChange}
                 inputRef={el => this.inputRef = el}
                 slotProps={{
+                    ...this.props.slotProps,
                     textField: {
+                        ...this.props.slotProps?.textField,
                         fullWidth: this.props.fullWidth ?? false,
                         variant: variant ?? "standard",
                         required: required ?? false,
