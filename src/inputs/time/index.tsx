@@ -4,9 +4,9 @@ import { PickerChangeHandlerContext, TimeValidationError } from '@mui/x-date-pic
 import { TimePicker } from '@mui/x-date-pickers/TimePicker/index.js';
 import { Dayjs } from 'dayjs';
 import { Component, MouseEvent } from "react";
+import { stringify } from 'src/helpers/general';
 import { InputImplement } from '../../types';
 import { TimeInputProps, TimeInputValueType } from './types';
-import { stringify } from 'src/helpers/general';
 
 
 interface IState {
@@ -26,7 +26,7 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case stringify(nextProps) !== stringify(this.props):
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }
@@ -96,22 +96,22 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
         const { selector, type, label, defaultValue, onChangeValue, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
         return (
             // <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-                {...restProps}
-                ampm={this.props.ampm || false}
-                value={this.state.value}
-                onChange={this.onChange}
-                inputRef={el => this.inputRef = el}
-                slotProps={{
-                    textField: {
-                        fullWidth: this.props.fullWidth ?? false,
-                        variant: variant ?? "standard",
-                        required: required ?? false,
-                        error: this.state.error,
-                        onClick: this.onClick
-                    }
-                }}
-            />
+                <TimePicker
+                    {...restProps}
+                    ampm={this.props.ampm || false}
+                    value={this.state.value}
+                    onChange={this.onChange}
+                    inputRef={el => this.inputRef = el}
+                    slotProps={{
+                        textField: {
+                            fullWidth: this.props.fullWidth ?? false,
+                            variant: variant ?? "standard",
+                            required: required ?? false,
+                            error: this.state.error,
+                            onClick: this.onClick
+                        }
+                    }}
+                />
             // </LocalizationProvider>
 
         )

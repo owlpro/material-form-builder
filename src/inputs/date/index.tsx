@@ -26,7 +26,7 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case stringify(nextProps) !== stringify(this.props):
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }

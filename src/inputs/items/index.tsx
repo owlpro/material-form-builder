@@ -26,7 +26,7 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
     shouldComponentUpdate(nextProps: any, nextState: IState) {
         switch (true) {
             case stringify(this.state.items) !== stringify(nextState.items):
-            case stringify(nextProps) !== stringify(this.props):
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }

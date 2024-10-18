@@ -3,9 +3,9 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 import { IconButton, InputAdornment, TextField } from "@mui/material";
 import React, { Component, FocusEvent, MouseEvent } from "react";
+import { stringify } from 'src/helpers/general';
 import { InputImplement } from '../../types';
 import { PasswordInputProps, PasswordInputValueType } from './types';
-import { stringify } from 'src/helpers/general';
 
 interface IState {
     value: PasswordInputValueType,
@@ -31,7 +31,7 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
             case this.state.showPassword !== nextState.showPassword:
-            case stringify(nextProps) !== stringify(this.props):
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }

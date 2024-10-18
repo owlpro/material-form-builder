@@ -3,6 +3,7 @@ import React, { Component, FocusEvent, MouseEvent } from "react";
 import { InputImplement } from '../../types';
 import { TextInputProps, TextInputValueType } from './types';
 import { stringify } from 'src/helpers/general';
+// import { stringify } from 'src/helpers/general';
 
 interface IState {
     value: TextInputValueType,
@@ -26,7 +27,7 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case stringify(nextProps) !== stringify(this.props):
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }

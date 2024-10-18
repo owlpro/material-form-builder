@@ -112,6 +112,17 @@ interface BaseInput<ValueType = any> {
      */
     visible?: ((e: any) => boolean | undefined) | boolean
     wrapper?: (children: JSX.Element, actions: InputActions<ValueType>) => JSX.Element
+
+    /**
+     * listen for changes to update component from external state or resource
+     * @examples
+     * updateListener: {
+     *      disabled: this.state.isDisabled
+     * }
+     * 
+     * 
+     */
+    updateListener?: Array<string | null | number | undefined | boolean> | { [key: number | string]: string | null | number | undefined | boolean }
     onChangeValue?: (value: ValueType) => void
     getMutator?: (value: any) => any
     setMutator?: (value: any) => any

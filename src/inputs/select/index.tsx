@@ -1,9 +1,9 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Box, CircularProgress, FormControl, Grow, InputLabel, ListSubheader, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import React, { Component, SyntheticEvent } from "react";
+import { stringify } from 'src/helpers/general';
 import { InputImplement } from '../../types';
 import { SelectInputProps, SelectInputValueType } from './types';
-import { stringify } from 'src/helpers/general';
 interface IState {
     value: SelectInputValueType,
     error: boolean
@@ -31,7 +31,7 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case stringify(nextProps) !== stringify(this.props):
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }

@@ -21,11 +21,11 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
     inputRef: HTMLInputElement | undefined
 
     shouldComponentUpdate(nextProps: MaskInputProps, nextState: IState) {
-
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case stringify(nextProps) !== stringify(this.props):
+            case this.props.disabled !== nextProps.disabled:
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }
