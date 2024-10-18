@@ -1,6 +1,6 @@
 import { PickerChangeHandlerContext, TimeValidationError } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs/index.js';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/index.js';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs/index.js';
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider/index.js';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker/index.js';
 import { Dayjs } from 'dayjs';
 import { Component, MouseEvent } from "react";
@@ -93,9 +93,11 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
 
 
     render() {
-        const { selector, type, label, defaultValue, onChangeValue, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { slotProps, fullWidth, selector, type, label, defaultValue, onChangeValue, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { textField: textFieldSlotProps, ...restSlotProps } = slotProps as any;
+
         return (
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            // <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <TimePicker
                     {...restProps}
                     ampm={this.props.ampm || false}
@@ -103,18 +105,20 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
                     onChange={this.onChange}
                     inputRef={el => this.inputRef = el}
                     slotProps={{
-                        ...this.props.slotProps,
+                        ...restSlotProps,
                         textField: {
-                            ...this.props.slotProps?.textField,
-                            fullWidth: this.props.fullWidth ?? false,
+                            fullWidth: fullWidth ?? false,
                             variant: variant ?? "standard",
                             required: required ?? false,
+
+                            ...textFieldSlotProps,
+
                             error: this.state.error,
                             onClick: this.onClick
                         }
                     }}
                 />
-            </LocalizationProvider>
+            // </LocalizationProvider>
 
         )
     }

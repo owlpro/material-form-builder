@@ -2,9 +2,9 @@ import { DateValidationError, PickerChangeHandlerContext } from '@mui/x-date-pic
 import { DatePicker } from '@mui/x-date-pickers/DatePicker/index.js';
 import { Dayjs } from 'dayjs';
 import React, { Component } from "react";
+import { stringify } from 'src/helpers/general';
 import { InputImplement } from '../../types';
 import { DateInputProps, DateInputValueType } from './types';
-import { stringify } from 'src/helpers/general';
 
 interface IState {
     value: DateInputValueType,
@@ -86,7 +86,9 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
     }
 
     render() {
-        const { onChangeValue, defaultValue, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { slotProps, fullWidth, onChangeValue, defaultValue, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { textField: textFieldSlotProps, ...restSlotProps } = slotProps as any;
+
         return (
             <DatePicker
                 {...restProps}
@@ -94,12 +96,14 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
                 onChange={this.onChange}
                 inputRef={el => this.inputRef = el}
                 slotProps={{
-                    ...this.props.slotProps,
+                    ...restSlotProps,
                     textField: {
-                        ...this.props.slotProps?.textField,
-                        fullWidth: this.props.fullWidth ?? false,
+                        fullWidth: fullWidth ?? false,
                         variant: variant ?? "standard",
                         required: required ?? false,
+
+                        ...textFieldSlotProps,
+
                         error: this.state.error,
                         onClick: this.onClick
                     }

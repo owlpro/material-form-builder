@@ -88,7 +88,9 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
     }
 
     render() {
-        const { onChangeValue, defaultValue, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { slotProps, fullWidth, onChangeValue, defaultValue, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { textField: textFieldSlotProps, ...restSlotProps } = slotProps as any;
+
         return (
             <DateTimePicker
                 {...restProps}
@@ -97,12 +99,14 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
                 onChange={this.onChange}
                 inputRef={el => this.inputRef = el}
                 slotProps={{
-                    ...this.props.slotProps,
+                    ...restSlotProps,
                     textField: {
-                        ...this.props.slotProps?.textField,
-                        fullWidth: this.props.fullWidth ?? false,
+                        fullWidth: fullWidth ?? false,
                         variant: variant ?? "standard",
                         required: required ?? false,
+                        
+                        ...textFieldSlotProps,
+
                         error: this.state.error,
                         onClick: this.onClick
                     }
