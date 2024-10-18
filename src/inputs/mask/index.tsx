@@ -1,6 +1,6 @@
 import { TextField } from '@mui/material';
 import React, { Component, FocusEvent, MouseEvent } from "react";
-import { mask } from '../../helpers/general';
+import { mask, stringify } from '../../helpers/general';
 import { InputImplement } from '../../types';
 import { MaskInputProps, MaskInputValueType } from './types';
 
@@ -25,7 +25,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
+            case stringify(nextProps) !== stringify(this.props):
                 return true;
             default: return false;
         }

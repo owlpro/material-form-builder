@@ -1,6 +1,6 @@
 import { Box, InputAdornment, MenuItem, Select, SelectChangeEvent, TextField, Typography, styled } from "@mui/material";
 import React, { Component, FocusEvent } from "react";
-import { mask } from '../../helpers/general';
+import { mask, stringify } from '../../helpers/general';
 import { InputImplement } from '../../types';
 import { Country, countries } from "./countries";
 import { MobileInputProps, MobileInputValueType } from './types';
@@ -36,7 +36,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
             case this.state.country.dialCode !== nextState.country.dialCode:
-            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
+            case stringify(nextProps) !== stringify(this.props):
                 return true;
             default: return false;
         }

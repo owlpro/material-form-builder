@@ -7,6 +7,7 @@ import { InputImplement } from '../../types';
 // import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from 'dayjs';
 import { DatetimeInputProps, DatetimeInputValueType } from './types';
+import { stringify } from 'src/helpers/general';
 
 interface IState {
     value: DatetimeInputValueType,
@@ -27,7 +28,7 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
+            case stringify(nextProps) !== stringify(this.props):
                 return true;
             default: return false;
         }

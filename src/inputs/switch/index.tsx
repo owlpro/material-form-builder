@@ -2,6 +2,7 @@ import { FormControlLabel, Switch } from '@mui/material';
 import React, { Component } from "react";
 import { InputImplement } from '../../types';
 import { SwitchInputProps, SwitchInputValueType } from './types';
+import { stringify } from 'src/helpers/general';
 
 interface IState {
     value: SwitchInputValueType,
@@ -23,7 +24,7 @@ export class SwitchInput extends Component<SwitchInputProps, IState> implements 
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
+            case stringify(nextProps) !== stringify(this.props):
                 return true;
             default: return false;
         }

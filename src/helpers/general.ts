@@ -1,3 +1,5 @@
+import { ObjectLiteral } from 'src/types'
+
 export const randomString = (length: number) => {
     var result = ''
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -23,13 +25,13 @@ export const isNull = (data: any): boolean => {
 }
 
 export const checkValue = (value: any): boolean => {
-    if(value === null) return false;
-    if(value === undefined) return false;
-    return true;
+    if (value === null) return false
+    if (value === undefined) return false
+    return true
 }
 
 export const sleep = (ms: number) => {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 export const selectFromObject = (selector: string, data: any) => {
@@ -43,7 +45,7 @@ export const selectFromObject = (selector: string, data: any) => {
             if (objectBeforeQuery) {
                 workingObject = workingObject[objectBeforeQuery]
             }
-            if(!Array.isArray(workingObject)) return;
+            if (!Array.isArray(workingObject)) return
             const splitQuery = selectorItem.replace(/.*\[|\]/g, '').split('=')
             const queryKey = splitQuery[0]!.trim()
             const queryValue = isNaN(parseInt(splitQuery[1]!)) ? splitQuery[1] : parseInt(splitQuery[1]!)
@@ -90,4 +92,21 @@ export const setToObject = (selector: string, value: any, object: any) => {
         object[selector] = value
     }
     return object
+}
+
+export const stringify = (obj: ObjectLiteral): string => {
+    let cache: any = []
+    let str = JSON.stringify(obj, function (_, value) {
+        if (typeof value === 'object' && value !== null) {
+            if (cache.indexOf(value) !== -1) {
+                // Circular reference found, discard key
+                return
+            }
+            // Store value in our collection
+            cache.push(value)
+        }
+        return value
+    })
+    cache = null // reset the cache
+    return str
 }

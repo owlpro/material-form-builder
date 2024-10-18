@@ -1,6 +1,6 @@
 import { FormControl, FormHelperText, Input, InputLabel } from '@mui/material';
 import React, { Component } from "react";
-import { randomString } from '../../helpers/general';
+import { randomString, stringify } from '../../helpers/general';
 import { InputImplement } from '../../types';
 import { FileInputProps, FileInputValueType } from './types';
 
@@ -32,7 +32,7 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
+            case stringify(nextProps) !== stringify(this.props):
                 return true;
             default: return false;
         }

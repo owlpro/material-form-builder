@@ -3,6 +3,7 @@ import { FormControlLabel } from '@mui/material';
 import React, { Component } from "react";
 import { InputImplement } from '../../types';
 import { CheckboxInputProps, CheckboxInputValueType } from './types';
+import { stringify } from 'src/helpers/general';
 
 interface IState {
     value: CheckboxInputValueType,
@@ -24,7 +25,7 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
+            case stringify(nextProps) !== stringify(this.props):
                 return true;
             default: return false;
         }

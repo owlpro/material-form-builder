@@ -2,7 +2,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ClearIcon from '@mui/icons-material/Clear';
 import { Autocomplete, AutocompleteChangeDetails, AutocompleteChangeReason, AutocompleteRenderInputParams, Box, CircularProgress, Grow, IconButton, InputAdornment, TextField, TextFieldProps } from "@mui/material";
 import React, { Component } from "react";
-import { isNull } from '../../helpers/general';
+import { isNull, stringify } from '../../helpers/general';
 import { InputImplement } from '../../types';
 import { AutocompleteInputProps, AutocompleteInputValueType, AutocompleteOptionType, AutocompleteValueType } from './types';
 
@@ -27,7 +27,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
             case this.state.value !== nextState.value:
             case this.getValueForCheck(this.state.value || undefined) !== this.getValueForCheck(nextState.value || undefined):
             case this.state.error !== nextState.error:
-            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
+            case stringify(nextProps) !== stringify(this.props):
                 return true;
             default: return false;
         }

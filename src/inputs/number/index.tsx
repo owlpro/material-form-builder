@@ -1,6 +1,6 @@
 import { TextField } from '@mui/material';
 import React, { Component, FocusEvent } from "react";
-import { checkValue } from '../../helpers/general';
+import { checkValue, stringify } from '../../helpers/general';
 import { InputImplement } from '../../types';
 import { NumberInputProps, NumberInputValueType } from './types';
 
@@ -25,7 +25,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
+            case stringify(nextProps) !== stringify(this.props):
                 return true;
             default: return false;
         }

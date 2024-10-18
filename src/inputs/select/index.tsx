@@ -3,6 +3,7 @@ import { Box, CircularProgress, FormControl, Grow, InputLabel, ListSubheader, Me
 import React, { Component, SyntheticEvent } from "react";
 import { InputImplement } from '../../types';
 import { SelectInputProps, SelectInputValueType } from './types';
+import { stringify } from 'src/helpers/general';
 interface IState {
     value: SelectInputValueType,
     error: boolean
@@ -30,7 +31,7 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
+            case stringify(nextProps) !== stringify(this.props):
                 return true;
             default: return false;
         }

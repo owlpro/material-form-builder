@@ -2,6 +2,7 @@ import { Box, Slide, Typography } from "@mui/material";
 import React, { Component, FocusEvent, Fragment } from "react";
 import { InputImplement } from '../../types';
 import { OtpInputProps, OtpInputValueType } from './types';
+import { stringify } from "src/helpers/general";
 
 interface IState {
     value: OtpInputValueType,
@@ -28,7 +29,7 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
             case this.state.isInputFocused !== nextState.isInputFocused:
-            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
+            case stringify(nextProps) !== stringify(this.props):
                 return true;
             default: return false;
         }

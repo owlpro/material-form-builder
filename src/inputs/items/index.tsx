@@ -5,7 +5,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { Box, IconButton } from "@mui/material";
 import { Component } from "react";
 import { FormBuilder } from "../../formBuilder";
-import { randomString } from "../../helpers/general";
+import { randomString, stringify } from "../../helpers/general";
 import { InputImplement, OutputValues } from "../../types";
 import { ItemsInputProps, ItemsInputValueType } from './types';
 
@@ -25,8 +25,8 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
 
     shouldComponentUpdate(nextProps: any, nextState: IState) {
         switch (true) {
-            case JSON.stringify(this.state.items) !== JSON.stringify(nextState.items):
-            case JSON.stringify(nextProps) !== JSON.stringify(this.props):
+            case stringify(this.state.items) !== stringify(nextState.items):
+            case stringify(nextProps) !== stringify(this.props):
                 return true;
             default: return false;
         }
