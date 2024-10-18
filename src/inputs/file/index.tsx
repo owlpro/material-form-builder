@@ -99,7 +99,7 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
     }
 
     render() {
-        const { defaultValue, onChangeValue, label, helperText, FormControlProps, InputLabelProps, FormHelperTextProps, multiple, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { updateListener, defaultValue, onChangeValue, label, helperText, FormControlProps, InputLabelProps, FormHelperTextProps, multiple, visible, _call_parent_for_update, ...restProps } = this.props;
         return (
             <FormControl {...FormControlProps} variant={FormControlProps?.variant ?? 'standard'} >
 

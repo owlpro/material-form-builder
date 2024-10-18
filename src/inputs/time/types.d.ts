@@ -4,7 +4,7 @@ import { MuiPickersAdapter, TimePickerProps } from '@mui/x-date-pickers'
 import { Dayjs } from 'dayjs'
 
 export type TimeInputValueType = Dayjs | null
-export interface TimeInputProps extends BaseInput<TimeInputValueType>, Omit<TimePickerProps<Dayjs, false>, 'value' | 'renderInput' | 'ref'> {
+export interface TimeInputProps extends BaseInput<TimeInputValueType>, Omit<TimePickerProps<Dayjs, false>, 'value' | 'ref'> {
     type: 'time'
     /**
      * @deprecated

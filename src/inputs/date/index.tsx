@@ -86,8 +86,8 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
     }
 
     render() {
-        const { slotProps, fullWidth, onChangeValue, defaultValue, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
-        const { textField: textFieldSlotProps, ...restSlotProps } = slotProps as any;
+        const { updateListener, slotProps, fullWidth, onChangeValue, defaultValue, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { textField: textFieldSlotProps , ...restSlotProps } = slotProps ?? {};
 
         return (
             <DatePicker

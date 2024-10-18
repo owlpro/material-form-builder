@@ -24,7 +24,6 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
         switch (true) {
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
-            case this.props.disabled !== nextProps.disabled:
             case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
@@ -129,7 +128,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
     }
 
     render() {
-        const { onChangeValue, formatter, visible, _call_parent_for_update, defaultValue, ...restProps } = this.props;
+        const { updateListener, onChangeValue, formatter, visible, _call_parent_for_update, defaultValue, ...restProps } = this.props;
         return <TextField
             {...restProps}
             variant={this.props.variant || "standard"}

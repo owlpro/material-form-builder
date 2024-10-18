@@ -85,7 +85,9 @@ export class SwitchInput extends Component<SwitchInputProps, IState> implements 
     }
 
     render() {
-        const { type,
+        const { 
+            updateListener,
+            type,
             selector,
             defaultChecked,
             label,
