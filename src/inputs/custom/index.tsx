@@ -17,7 +17,7 @@ export class CustomInput extends Component<CustomInputProps, IState> implements 
 
     setValue(value: CustomInputValueType): Promise<CustomInputValueType> {
         if (typeof this.elementRef?.setValue === "function") {
-            return this.elementRef?.setValue(value as any)
+            return this.elementRef?.setValue(value)
         }
         return Promise.resolve(null)
     }

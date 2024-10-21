@@ -1,5 +1,6 @@
 import { CSSProperties, HTMLProps } from 'react'
 import { BaseInput } from '../../types'
+import { BoxProps, TypographyProps } from '@mui/material'
 
 export type OtpInputValueType = string | null
 export interface OtpInputProps extends BaseInput<OtpInputValueType>, Omit<HTMLProps<HTMLInputElement>, 'defaultValue' | 'ref'> {
@@ -39,12 +40,29 @@ export interface OtpInputProps extends BaseInput<OtpInputValueType>, Omit<HTMLPr
     /** @default #68b36b */
     completeColor?: CSSProperties['color']
 
-    /** @default 400 */
+    /** 
+     * @default 400
+     * use digitTextProps.sx instead
+     */
     fontWeight?: number
 
-    /** @default 23 */
+    /** 
+     * @default 23
+     * use digitTextProps.sx instead
+     */
     fontSize?: number
 
     /** @default #323232 */
-    color?: CSSProperties['color']
+    color?: CSSProperties['color'],
+
+    /**
+     * props per digit box
+     * @default undefined
+     */
+    digitBoxProps?: BoxProps,
+
+    /**
+     * 
+     */
+    digitTextProps?: TypographyProps
 }

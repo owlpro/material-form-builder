@@ -68,7 +68,7 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
     }
 
     onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let value: OtpInputValueType = event.target.value.replace(/[^0-9]/g, '')
+        let value: OtpInputValueType = event.target.value.replace(/[^۰-۹0-9]/g, '')
         if (this.props.formatter && typeof this.props.formatter === "function") {
             const formattedValue = this.props.formatter(value)
             if (formattedValue !== undefined) {
@@ -83,6 +83,7 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
 
     private onClick = (event: React.MouseEvent<HTMLInputElement>) => {
         clearTimeout(this.validationTimeout)
+        if (this.props.disabled === true) return;
         this.setState({ ...this.state, error: false, isInputFocused: true }, () => {
             this.inputRef?.focus()
             this.props.onClick?.(event)
@@ -144,7 +145,6 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
                 display: 'inline-block',
                 verticalAlign: "top",
                 position: 'relative',
-
             }}>
                 <Box onClick={this.onClick} sx={{
                     display: 'flex',
@@ -152,6 +152,7 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
                     justifyContent: 'space-between',
                 }}>
                     <input
+                        disabled={this.props.disabled ?? false}
                         autoFocus={this.props.autoFocus}
                         style={{ position: 'absolute', zIndex: -1, opacity: 0 }}
                         onChange={this.onChange}
@@ -166,39 +167,49 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
                         const value = values[key] || "";
 
                         return (
-                            <Box key={key} sx={{
-                                height: settings.height,
-                                width: settings.width,
-                                transition: '0.2s border-color',
-                                borderRadius: this.props.variant !== "outlined" ? 0 : settings.borderRadius + 'px',
-                                borderStyle: 'solid',
-                                borderWidth: settings.borderWidth + 'px',
-                                borderRightWidth: this.props.variant !== "outlined" ? 0 : settings.borderWidth,
-                                borderLeftWidth: this.props.variant !== "outlined" ? 0 : settings.borderWidth,
-                                borderTopWidth: this.props.variant !== "outlined" ? 0 : settings.borderWidth,
-                                borderColor:
-                                    this.state.error && !value ? '#d32f2f' :
-                                        this.state.isInputFocused && values.length === key
-                                            ? settings.focusColor
-                                            : (
-                                                values.length === settings.digits
-                                                    ? (this.state.isInputFocused && (settings.digits === key + 1)
-                                                        ? settings.focusColor
-                                                        : settings.completeColor)
-                                                    : settings.emptyColor
-                                            ),
-                            }}>
+                            <Box
+                                key={key}
+                                {...this.props.digitBoxProps}
+                                sx={{
+                                    height: settings.height,
+                                    width: settings.width,
+                                    transition: '0.2s border-color',
+                                    borderRadius: this.props.variant !== "outlined" ? 0 : settings.borderRadius + 'px',
+                                    borderStyle: 'solid',
+                                    borderWidth: settings.borderWidth + 'px',
+                                    borderRightWidth: this.props.variant !== "outlined" ? 0 : settings.borderWidth,
+                                    borderLeftWidth: this.props.variant !== "outlined" ? 0 : settings.borderWidth,
+                                    borderTopWidth: this.props.variant !== "outlined" ? 0 : settings.borderWidth,
+
+                                    ...this.props.digitBoxProps?.sx,
+
+                                    borderColor:
+                                        this.state.error && !value ? '#d32f2f' :
+                                            this.state.isInputFocused && values.length === key
+                                                ? settings.focusColor
+                                                : (
+                                                    values.length === settings.digits
+                                                        ? (this.state.isInputFocused && (settings.digits === key + 1)
+                                                            ? settings.focusColor
+                                                            : settings.completeColor)
+                                                        : settings.emptyColor
+                                                ),
+                                }}
+                            >
                                 <Slide in={value ? true : false} direction="down" appear={false}>
-                                    <Typography sx={{
-                                        height: '100%',
-                                        width: '100%',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        fontWeight: settings.fontWeight,
-                                        fontSize: settings.fontSize,
-                                        color: settings.color
-                                    }}>
+                                    <Typography
+                                        {...this.props.digitTextProps}
+                                        sx={{
+                                            height: '100%',
+                                            width: '100%',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontWeight: settings.fontWeight,
+                                            fontSize: settings.fontSize,
+                                            color: settings.color,
+                                            ...this.props.digitTextProps?.sx
+                                        }}>
                                         {value || "☓"}
                                     </Typography>
                                 </Slide>
