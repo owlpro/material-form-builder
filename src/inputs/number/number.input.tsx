@@ -119,6 +119,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
             onClick={this.onClick}
             onBlur={this.onBlur}
             onFocus={this.onFocus}
+            inputProps={{ inputmode: 'numeric', ...this.props.inputProps }}
             value={checkValue(this.state.value) ? this.state.value : ""}
             inputRef={el => this.inputRef = el}
         />
