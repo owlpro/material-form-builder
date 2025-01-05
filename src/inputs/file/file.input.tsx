@@ -1,6 +1,6 @@
 import { FormControl, FormHelperText, Input, InputLabel } from '@mui/material';
 import React, { Component } from "react";
-import { randomString } from '../../helpers/general.helper';
+import { randomString, stringify } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { FileInputProps, FileInputValueType } from './file.types';
 
@@ -34,6 +34,7 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
             case this.state.error !== nextState.error:
             case this.props.label !== nextProps.label:
             case this.props.disabled !== nextProps.disabled:
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }
@@ -100,7 +101,7 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
     }
 
     render() {
-        const { defaultValue, onChangeValue, label, helperText, FormControlProps, InputLabelProps, FormHelperTextProps, InputProps, multiple, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { defaultValue, onChangeValue, label, helperText, FormControlProps, InputLabelProps, FormHelperTextProps, InputProps, multiple, visible, _call_parent_for_update,updateListener, ...restProps } = this.props;
         return (
             <FormControl {...FormControlProps} variant={FormControlProps?.variant ?? 'standard'} >
 

@@ -1,6 +1,7 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Box, CircularProgress, FormControl, Grow, InputLabel, ListSubheader, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import React, { Component, MouseEvent, SyntheticEvent } from "react";
+import React, { Component, SyntheticEvent } from "react";
+import { stringify } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { SelectInputProps, SelectInputValueType } from './select.types';
 interface IState {
@@ -34,6 +35,7 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
             case this.props.loading !== nextProps.loading:
             case this.props.label !== nextProps.label:
             case this.props.disabled !== nextProps.disabled:
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }
@@ -102,7 +104,7 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
     }
 
     render() {
-        const { onChangeValue, variant, visible, required, _call_parent_for_update, loading, listSubheaderText, defaultValue, ...restProps } = this.props;
+        const { onChangeValue, variant, visible, required, _call_parent_for_update, loading, listSubheaderText, defaultValue, updateListener, ...restProps } = this.props;
         let variantWidth = '207px';
         if (this.props.variant === "outlined") variantWidth = "235px";
         if (this.props.variant === "filled") variantWidth = "231px";

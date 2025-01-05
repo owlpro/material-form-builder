@@ -3,7 +3,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { Autocomplete, AutocompleteChangeDetails, AutocompleteChangeReason, AutocompleteRenderInputParams, Box, CircularProgress, Grow, IconButton, InputAdornment } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { Component } from "react";
-import { isNull } from '../../helpers/general.helper';
+import { isNull, stringify } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { AutocompleteInputProps, AutocompleteInputValueType, AutocompleteOptionType, AutocompleteValueType } from './autocomplete.types';
 
@@ -39,6 +39,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
             case this.props.loadingText !== nextProps.loadingText:
             case this.props.label !== nextProps.label:
             case this.props.disabled !== nextProps.disabled:
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }
@@ -168,7 +169,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
     }
 
     render() {
-        const { defaultValue, onChangeValue, InputProps, renderInput, label, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { defaultValue, onChangeValue, InputProps, renderInput, label, variant, required, visible, _call_parent_for_update, updateListener, ...restProps } = this.props;
         let variantWidth = '207px';
         if (this.props.variant === "outlined") variantWidth = "235px";
         if (this.props.variant === "filled") variantWidth = "231px";

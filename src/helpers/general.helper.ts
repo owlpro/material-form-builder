@@ -1,3 +1,5 @@
+import { ObjectLiteral } from "../types/helper.types"
+
 export const randomString = (length: number) => {
     var result = ''
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -30,4 +32,21 @@ export const checkValue = (value: any): boolean => {
 
 export const sleep = (ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export const stringify = (obj: ObjectLiteral): string => {
+    let cache: any = []
+    let str = JSON.stringify(obj, function (_, value) {
+        if (typeof value === 'object' && value !== null) {
+            if (cache.indexOf(value) !== -1) {
+                // Circular reference found, discard key
+                return
+            }
+            // Store value in our collection
+            cache.push(value)
+        }
+        return value
+    })
+    cache = null // reset the cache
+    return str
 }

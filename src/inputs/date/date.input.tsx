@@ -2,6 +2,7 @@ import TextField from '@mui/material/TextField';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React, { Component } from "react";
+import { stringify } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { DateInputProps, DateInputValueType } from './date.types';
 
@@ -27,6 +28,7 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
             case this.state.error !== nextState.error:
             case this.props.label !== nextProps.label:
             case this.props.disabled !== nextProps.disabled:
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }
@@ -87,7 +89,7 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
     }
 
     render() {
-        const { onChangeValue, defaultValue, dateAdapter, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { onChangeValue, defaultValue, dateAdapter, variant, required, visible, _call_parent_for_update, updateListener, ...restProps } = this.props;
         return (
             <LocalizationProvider dateAdapter={dateAdapter || AdapterDayjs}>
                 <DatePicker

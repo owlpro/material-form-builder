@@ -21,5 +21,6 @@ export interface BaseInput<ValueType = any> {
     setMutator?: (value: any) => any
     formatter?: (value: any) => any
     _call_parent_for_update?: () => Promise<boolean>
-    ref?: any
+    ref?: any,
+    updateListener?: Array<string | null | number | undefined | boolean> | { [key: number | string]: string | null | number | undefined | boolean }
 }

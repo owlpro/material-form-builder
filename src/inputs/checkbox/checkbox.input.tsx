@@ -3,6 +3,7 @@ import { grey, red } from '@mui/material/colors';
 import React, { Component } from "react";
 import { InputImplement } from '../../types/input.implement';
 import { CheckboxInputProps, CheckboxInputValueType } from './checkbox.interface';
+import { stringify } from '../../helpers/general.helper';
 
 interface IState {
     value: CheckboxInputValueType,
@@ -26,6 +27,7 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
             case this.state.error !== nextState.error:
             case this.props.label !== nextProps.label:
             case this.props.disabled !== nextProps.disabled:
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }
@@ -86,7 +88,7 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
     }
 
     render() {
-        const { defaultChecked, defaultValue, onChangeValue, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { defaultChecked, defaultValue, onChangeValue, visible, _call_parent_for_update, updateListener, ...restProps } = this.props;
         const label = this.props.label + (this.props.required ? ' *' : '')
         return (
             <FormControlLabel onClick={this.onClick} control={

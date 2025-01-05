@@ -1,6 +1,6 @@
 import TextField from '@mui/material/TextField';
 import React, { Component, FocusEvent } from "react";
-import { checkValue } from '../../helpers/general.helper';
+import { checkValue, stringify } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { NumberInputProps, NumberInputValueType } from './number.interface';
 
@@ -27,6 +27,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
             case this.state.error !== nextState.error:
             case this.props.label !== nextProps.label:
             case this.props.disabled !== nextProps.disabled:
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }
@@ -36,7 +37,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
         if (value === this.state.value) return Promise.resolve(value)
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if(!withoutEffect) this.props._call_parent_for_update?.()
+                if (!withoutEffect) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as NumberInputValueType)
                 resolve(value)
             })
@@ -109,7 +110,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
     }
 
     render() {
-        const { onChangeValue, defaultValue, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { onChangeValue, defaultValue, visible, _call_parent_for_update, updateListener, ...restProps } = this.props;
         return <TextField
             {...restProps}
             variant={this.props.variant || "standard"}

@@ -1,5 +1,6 @@
 import TextField from '@mui/material/TextField';
 import React, { Component, FocusEvent, MouseEvent } from "react";
+import { stringify } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { TextInputProps, TextInputValueType } from './text.types';
 
@@ -27,6 +28,7 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
             case this.state.error !== nextState.error:
             case this.props.label !== nextProps.label:
             case this.props.disabled !== nextProps.disabled:
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }
@@ -36,7 +38,7 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
         if (value === this.state.value) return Promise.resolve(value)
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if(!withoutEffect) this.props._call_parent_for_update?.()
+                if (!withoutEffect) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as TextInputValueType)
                 resolve(value)
             })
@@ -111,7 +113,7 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
     }
 
     render() {
-        const { defaultValue, onChangeValue, visible, formatter, _call_parent_for_update, ...restProps } = this.props;
+        const { defaultValue, onChangeValue, visible, formatter, _call_parent_for_update, updateListener, ...restProps } = this.props;
         return <TextField
             {...restProps}
             variant={this.props.variant || "standard"}

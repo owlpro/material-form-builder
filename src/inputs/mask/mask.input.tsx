@@ -1,6 +1,6 @@
 import TextField from '@mui/material/TextField';
 import React, { Component, FocusEvent, MouseEvent } from "react";
-import { mask } from '../../helpers/general.helper';
+import { mask, stringify } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { MaskInputProps, MaskInputValueType } from './mask.types';
 
@@ -29,6 +29,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
             case this.props.pattern !== nextProps.pattern:
             case this.props.char !== nextProps.char:
             case this.props.disabled !== nextProps.disabled:
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }
@@ -39,7 +40,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if(!withoutEffect) this.props._call_parent_for_update?.()
+                if (!withoutEffect) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as MaskInputValueType)
                 resolve(value)
             })
@@ -129,7 +130,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
     }
 
     render() {
-        const { onChangeValue, formatter, visible, _call_parent_for_update, defaultValue, ...restProps } = this.props;
+        const { onChangeValue, formatter, visible, _call_parent_for_update, defaultValue, updateListener, ...restProps } = this.props;
         return <TextField
             {...restProps}
             variant={this.props.variant || "standard"}

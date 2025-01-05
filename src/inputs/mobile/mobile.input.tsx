@@ -2,7 +2,7 @@ import { Box, InputAdornment, MenuItem, Select, SelectChangeEvent, Typography } 
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import React, { Component, FocusEvent } from "react";
-import { mask } from '../../helpers/general.helper';
+import { mask, stringify } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { Country, countries } from "./countries";
 import { MobileInputProps, MobileInputValueType } from './mobile.types';
@@ -40,6 +40,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
             case this.state.country.dialCode !== nextState.country.dialCode:
             case this.props.label !== nextProps.label:
             case this.props.disabled !== nextProps.disabled:
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 // case this.props.variant !== this.props.variant:
                 return true;
             default: return false;
@@ -161,7 +162,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
     }
 
     render() {
-        const { defaultValue, onChangeValue, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { defaultValue, onChangeValue, visible, _call_parent_for_update, updateListener, ...restProps } = this.props;
         const isOutlined = this.props.variant === "outlined";
         let inputWidth = 207;
         switch (this.props.variant) {

@@ -1,8 +1,9 @@
 import React, { Component, createRef, RefObject } from "react";
 import { FormBuilder } from "../../formBuilder";
+import { stringify } from "../../helpers/general.helper";
+import { OutputValues } from "../../types/builder.outputValues";
 import { InputImplement } from '../../types/input.implement';
 import { GroupInputProps, GroupInputValueType } from './group.interface';
-import { OutputValues } from "../../types/builder.outputValues";
 
 interface IState {
     error: boolean,
@@ -26,13 +27,14 @@ export class GroupInput extends Component<GroupInputProps, IState> implements In
     shouldComponentUpdate(nextProps: GroupInputProps, nextState: IState) {
         switch (true) {
             case JSON.stringify(this.state.value) !== JSON.stringify(nextState.value):
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }
     }
 
     setValue(values: GroupInputValueType): Promise<GroupInputValueType> {
-        if(!this.builderRef.current || !values) return Promise.reject(values)
+        if (!this.builderRef.current || !values) return Promise.reject(values)
         return this.builderRef.current.setValues(values)
     }
 

@@ -1,5 +1,6 @@
 import { Box, Slide, Typography } from '@mui/material';
-import React, { Component, FocusEvent, FocusEventHandler, Fragment } from "react";
+import React, { Component, FocusEvent, Fragment } from "react";
+import { stringify } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { OtpInputProps, OtpInputValueType } from './otp.types';
 
@@ -28,6 +29,7 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
             case this.state.value !== nextState.value:
             case this.state.error !== nextState.error:
             case this.state.isInputFocused !== nextState.isInputFocused:
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }
@@ -38,7 +40,7 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if(!withoutEffect) this.props._call_parent_for_update?.()
+                if (!withoutEffect) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as OtpInputValueType)
                 resolve(value)
             })

@@ -1,6 +1,6 @@
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import React, { Component } from "react";
-import { checkValue } from '../../helpers/general.helper';
+import { checkValue, stringify } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { ToggleInputProps, ToggleInputValueType } from './toggle.types';
 
@@ -26,6 +26,7 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
             case this.props.label !== nextProps.label:
             case this.props.options.map(i => i.value).join('@') !== nextProps.options.map(i => i.value).join('@'):
             case this.props.label !== nextProps.label:
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }
@@ -80,7 +81,7 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
     }
 
     render() {
-        const { onChangeValue, visible, formatter, defaultValue, label, _call_parent_for_update, enforceValueSet, ...restProps } = this.props;
+        const { onChangeValue, visible, formatter, defaultValue, label, _call_parent_for_update, enforceValueSet, updateListener, ...restProps } = this.props;
         return (
             <ToggleButtonGroup
                 {...restProps}

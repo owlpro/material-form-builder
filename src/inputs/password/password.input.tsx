@@ -2,6 +2,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { IconButton, InputAdornment } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { Component, FocusEvent, MouseEvent } from "react";
+import { stringify } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { PasswordInputProps, PasswordInputValueType } from './password.types';
 
@@ -31,6 +32,7 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
             case this.state.showPassword !== nextState.showPassword:
             case this.props.label !== nextProps.label:
             case this.props.disabled !== nextProps.disabled:
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }
@@ -41,7 +43,7 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if(!withoutEffect) this.props._call_parent_for_update?.()
+                if (!withoutEffect) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as PasswordInputValueType)
                 resolve(value)
             })
@@ -120,7 +122,7 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
     }
 
     render() {
-        const { defaultValue, onChangeValue, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { defaultValue, onChangeValue, visible, _call_parent_for_update, updateListener, ...restProps } = this.props;
         let variantWidth = '207px';
         if (this.props.variant === "outlined") variantWidth = "235px";
         if (this.props.variant === "filled") variantWidth = "231px";

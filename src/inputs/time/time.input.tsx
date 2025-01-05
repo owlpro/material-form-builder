@@ -2,6 +2,7 @@ import TextField from '@mui/material/TextField';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React, { Component, MouseEvent } from "react";
+import { stringify } from '../../helpers/general.helper';
 import { InputImplement } from '../../types/input.implement';
 import { TimeInputProps, TimeInputValueType } from './time.types';
 
@@ -24,6 +25,7 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
             case this.state.error !== nextState.error:
             case this.props.label !== nextProps.label:
             case this.props.label !== nextProps.label:
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
                 return true;
             default: return false;
         }
@@ -90,7 +92,7 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
 
 
     render() {
-        const { defaultValue, onChangeValue, dateAdapter, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { defaultValue, onChangeValue, dateAdapter, variant, required, visible, _call_parent_for_update, updateListener, ...restProps } = this.props;
         return (
             <LocalizationProvider dateAdapter={dateAdapter || AdapterDayjs}>
                 <TimePicker
