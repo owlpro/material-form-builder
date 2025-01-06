@@ -93,7 +93,7 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
     }
 
     public getValues = (validation = true): OutputValues => {
-        const data: ObjectLiteral = this.defaultValues || {};
+        const data: ObjectLiteral = this.defaultValues ? {...this.defaultValues} : {};
 
         const invalidInputs: InputProps[] = [];
 
@@ -168,7 +168,6 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
                 const mutatedValue = inputProps.setMutator(value);
                 value = mutatedValue !== undefined ? mutatedValue : value;
             }
-
             return await input?.setValue(value)
         }
     }
@@ -195,8 +194,7 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
     }
 
     private syncSetValues = async (value: ObjectLiteral): Promise<any> => {
-        this.defaultValues = value;
-
+        this.defaultValues = {...value};
         return new Promise((resolve) => {
             this.setState({ ...this.state, inInternalSettingProcess: true }, async () => {
 
