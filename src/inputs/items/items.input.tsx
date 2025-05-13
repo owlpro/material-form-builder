@@ -1,6 +1,6 @@
 import { Add, CopyAll, Delete, Remove } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { FormBuilder } from "../../formBuilder";
 import { randomString, stringify } from "../../helpers/general.helper";
 import { OutputValues } from "../../types/builder.outputValues";
@@ -31,10 +31,11 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
     }
 
     UNSAFE_componentWillMount(): void {
-        if (this.props.minItems && this.props.minItems > 0) {
+        const setupItems = this.props.defaultItems ?? this.props.minItems ?? 0
+        if (setupItems > 0) {
             const items: IState['items'] = [];
 
-            [...Array(this.props.minItems).keys()].forEach(() => {
+            [...Array(setupItems).keys()].forEach(() => {
                 const random = this.getRandomKey()
                 items.push(random)
             })
@@ -94,8 +95,8 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         return this.removeAll()
     }
 
-    validation(): boolean {
-        const data = this.exportFormBuilderData(true);
+    validation(validation?: boolean): boolean {
+        const data = this.exportFormBuilderData(validation ?? true);
         return !data.some(datum => !datum?.validation.status);
     }
 
@@ -160,16 +161,32 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
     public focus = () => { }
     public blur = () => { }
 
-    renderItem = (key: string) => {
-        return (
-            <Box key={key} display="flex" alignItems="center">
-                {this.props.removeIcon !== false ? (
+    renderItem = (key: string, withoutExtraElement: boolean = false) => {
+        const removeButton = (
+            this.props.removeIcon !== false ? (
+                this.props.renderRemoveButton ? this.props.renderRemoveButton(this.removeItem(key)) : (
                     <IconButton onClick={this.removeItem(key)}>{this.props.removeIcon ? this.props.removeIcon : <Remove />}</IconButton>
-                ) : null}
-                <FormBuilder inputs={this.props.inputs} ref={el => this.formBuilderRef = { ...this.formBuilderRef, [key]: el }} />
-                {this.props.copyIcon !== false ? (
+                )
+            ) : null
+        );
+        const copyButton = (
+            this.props.copyIcon !== false ? (
+                this.props.renderCopyButton ? this.props.renderCopyButton(this.copyItem(key)) : (
                     <IconButton onClick={this.copyItem(key)}>{this.props.copyIcon ? this.props.copyIcon : <CopyAll />}</IconButton>
-                ) : null}
+                )
+            ) : null
+        )
+        return withoutExtraElement ? (
+            <Fragment key={key}>
+                {removeButton}
+                <FormBuilder inputs={this.props.inputs} ref={el => this.formBuilderRef = { ...this.formBuilderRef, [key]: el }} />
+                {copyButton}
+            </Fragment>
+        ) : (
+            <Box key={key} display="flex" alignItems="center">
+                {removeButton}
+                <FormBuilder inputs={this.props.inputs} ref={el => this.formBuilderRef = { ...this.formBuilderRef, [key]: el }} />
+                {copyButton}
             </Box>
         )
     }
@@ -178,7 +195,7 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
 
     render() {
         return (
-            <Box>
+            <>
                 {this.props.renderHeader ? (
                     this.props.renderHeader(this.addItem, this.removeAll)
                 ) : (
@@ -190,10 +207,10 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
 
                 {this.state.items.map((key) =>
                     this.props.itemWrapper
-                        ? this.props.itemWrapper(this.renderItem(key), key)
+                        ? this.props.itemWrapper(this.renderItem(key, true), key)
                         : this.renderItem(key)
                 )}
-            </Box>
+            </>
         )
     }
 }

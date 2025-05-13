@@ -11,9 +11,19 @@ export interface ItemsInputProps extends Omit<BaseInput<ItemsInputValueType>, 'o
      * @example itemWrapper: (el, key) => <Box key={key}>{el}</Box>,
      */
     itemWrapper?: (children: ReactNode, key: string) => ReactNode
-    renderHeader?: (addItem: Function, removeAll: Function) => ReactNode
+    renderHeader?: (addItem: () => any, removeAll: () => any) => ReactNode
+
+    renderRemoveButton?: (action: () => any) => ReactNode
+    renderCopyButton?: (action: () => any) => ReactNode
+    /**
+     * `false` = hidden
+     */
     removeIcon?: ReactNode | boolean
+    /**
+     * `false` = hidden
+     */
     copyIcon?: ReactNode | boolean
     minItems?: number
+    defaultItems?: number
     maxItems?: number
 }
