@@ -1,23 +1,43 @@
-import { FormBuilder } from './formBuilder'
+import { FormBuilder } from "./formBuilder";
 
-export type { AutocompleteInputProps, AutocompleteOptionType, AutocompleteValueType } from './inputs/autocomplete/types'
-export type { CheckboxInputProps, CheckboxInputValueType } from './inputs/checkbox/types'
-export type { CustomInputProps, CustomInputValueType } from './inputs/custom/types'
-export type { DateInputProps, DateInputValueType } from './inputs/date/types'
-export type { DatetimeInputProps, DatetimeInputValueType } from './inputs/datetime/types'
-export type { FileInputProps, FileInputValueType } from './inputs/file/types'
-export type { GroupInputProps, GroupInputValueType } from './inputs/group/types'
-export type { ItemsInputProps, ItemsInputValueType } from './inputs/items/types'
-export type { MaskInputProps, MaskInputValueType } from './inputs/mask/types'
-export type { MobileInputProps, MobileInputValueType } from './inputs/mobile/types'
-export type { NumberInputProps, NumberInputValueType } from './inputs/number/types'
-export type { OtpInputProps, OtpInputValueType } from './inputs/otp/types'
-export type { PasswordInputProps, PasswordInputValueType } from './inputs/password/types'
-export type { SelectInputProps, SelectInputValueType } from './inputs/select/types'
-export type { TextInputProps, TextInputValueType } from './inputs/text/types'
-export type { TimeInputProps, TimeInputValueType } from './inputs/time/types'
-export type { ToggleInputProps, ToggleInputValueType } from './inputs/toggle/types'
+export type { AutocompleteInputProps, AutocompleteOptionType, AutocompleteValueType } from "./inputs/autocomplete/types";
+export type { CheckboxInputProps, CheckboxInputValueType } from "./inputs/checkbox/types";
+export type { CustomInputProps, CustomInputValueType } from "./inputs/custom/types";
+export type { DateInputProps, DateInputValueType } from "./inputs/date/types";
+export type { DatetimeInputProps, DatetimeInputValueType } from "./inputs/datetime/types";
+export type { FileInputProps, FileInputValueType } from "./inputs/file/types";
+export type { GroupInputProps, GroupInputValueType } from "./inputs/group/types";
+export type { ItemsInputProps, ItemsInputValueType } from "./inputs/items/types";
+export type { MaskInputProps, MaskInputValueType } from "./inputs/mask/types";
+export type { MobileInputProps, MobileInputValueType } from "./inputs/mobile/types";
+export type { NumberInputProps, NumberInputValueType } from "./inputs/number/types";
+export type { OtpInputProps, OtpInputValueType } from "./inputs/otp/types";
+export type { PasswordInputProps, PasswordInputValueType } from "./inputs/password/types";
+export type { SelectInputProps, SelectInputValueType } from "./inputs/select/types";
+export type { TextInputProps, TextInputValueType } from "./inputs/text/types";
+export type { TimeInputProps, TimeInputValueType } from "./inputs/time/types";
+export type { ToggleInputProps, ToggleInputValueType } from "./inputs/toggle/types";
 
-export type { BuilderValue, Input, InputImplement, InputProps, OutputValues, WrapperActions, WrapperElement,InputActions } from './types'
-export { FormBuilder }
-export default FormBuilder
+export type {
+	CheckboxInput,
+	CustomInput,
+	DateInput,
+	DatetimeInput,
+	FileInput,
+	GroupInput,
+	ItemsInput,
+	MaskInput,
+	MobileInput,
+	NumberInput,
+	OtpInput,
+	PasswordInput,
+	SelectInput,
+	SwitchInput,
+	TextInput,
+	TimeInput,
+	ToggleInput,
+} from "./types";
+
+export type { BuilderValue, Input, InputImplement, InputProps, OutputValues, WrapperActions, WrapperElement, InputActions } from "./types";
+export { FormBuilder };
+export default FormBuilder;

@@ -51,6 +51,26 @@ import type { TimeInputProps } from './inputs/time/types'
 import { ToggleInput } from './inputs/toggle'
 import type { ToggleInputProps } from './inputs/toggle/types'
 
+export type {
+	CheckboxInput,
+	CustomInput,
+	DateInput,
+	DatetimeInput,
+	FileInput,
+	GroupInput,
+	ItemsInput,
+	MaskInput,
+	MobileInput,
+	NumberInput,
+	OtpInput,
+	PasswordInput,
+	SelectInput,
+	SwitchInput,
+	TextInput,
+	TimeInput,
+	ToggleInput,
+};
+
 type InputProps =
     | TextInputProps
     | NumberInputProps
