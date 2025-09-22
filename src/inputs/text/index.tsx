@@ -35,6 +35,18 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
 
     setValue(value: TextInputValueType, withoutEffect?: boolean): Promise<TextInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
+        if (this.props.autoDirection === true) {
+            const firstChar = (value ?? "")[0];
+            if (firstChar) {
+                const isEnglish = /^[\x00-\x7F]$/.test(firstChar);
+                if (this.inputRef) {
+                    this.inputRef.style.direction = isEnglish ? "ltr" : "rtl";
+                    this.inputRef.style.textAlign = isEnglish ? "left" : "right";
+                    this.inputRef.dataset.dirSet = "true";
+                }
+            }
+        }
+
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
                 if (!withoutEffect) this.props._call_parent_for_update?.()
@@ -112,7 +124,7 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
     }
 
     render() {
-        const { updateListener, defaultValue, onChangeValue, visible, formatter, _call_parent_for_update, ...restProps } = this.props;
+        const { updateListener, defaultValue, onChangeValue, visible, formatter, _call_parent_for_update, autoDirection, ...restProps } = this.props;
         return <TextField
             {...restProps}
             variant={this.props.variant || "standard"}
