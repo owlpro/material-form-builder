@@ -91,9 +91,11 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
     };
 
     private onClick = (event: MouseEvent<HTMLDivElement>) => {
-        clearTimeout(this.validationTimeout)
-        this.setState({ ...this.state, error: false })
-        this.props.onClick?.(event)
+        setTimeout(() => {
+            clearTimeout(this.validationTimeout)
+            this.setState({ ...this.state, error: false })
+            this.props.onClick?.(event)
+        }, 0)
     }
 
     private onBlur = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
@@ -106,9 +108,12 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
     }
 
     private onFocus = (e: FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
-        const value_when_focus: TextInputValueType = e.target.value || null
-        if (this.state.value_when_focus !== value_when_focus) this.setState({ ...this.state, value_when_focus })
-        this.props.onFocus?.(e)
+        setTimeout(() => {
+            const value_when_focus: TextInputValueType = e.target.value || null
+            if (this.state.value_when_focus !== value_when_focus) this.setState({ ...this.state, value_when_focus })
+            this.props.onFocus?.(e)
+        }, 0)
+
     }
 
     public click = () => {

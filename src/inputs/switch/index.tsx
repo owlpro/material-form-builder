@@ -85,7 +85,7 @@ export class SwitchInput extends Component<SwitchInputProps, IState> implements 
     }
 
     render() {
-        const { 
+        const {
             updateListener,
             type,
             selector,
@@ -95,17 +95,18 @@ export class SwitchInput extends Component<SwitchInputProps, IState> implements 
             onChangeValue,
             visible,
             _call_parent_for_update,
+            sx,
             ...restProps } = this.props;
         const input = <Switch
             {...restProps}
-            sx={{ color: this.state.error ? "#d32f2f" : "#616161" }}
+            sx={{ color: this.state.error ? "#d32f2f" : "#616161", ...(!label && { ...sx }) }}
             checked={this.state.value}
             onChange={this.onChange}
             inputRef={el => this.inputRef = el}
         />;
         return (
             label ? (
-                <FormControlLabel onClick={this.onClick} control={input} style={{ userSelect: 'none' }} label={label} />
+                <FormControlLabel sx={sx} onClick={this.onClick} control={input} style={{ userSelect: 'none' }} label={label} />
             ) : input
         )
     }
