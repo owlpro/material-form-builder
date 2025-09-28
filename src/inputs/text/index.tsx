@@ -33,7 +33,7 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
         }
     }
 
-    setValue(value: TextInputValueType, withoutEffect?: boolean): Promise<TextInputValueType> {
+    setValue(value: TextInputValueType, disableOnChangeEvent?: boolean): Promise<TextInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
         if (this.props.autoDirection === true) {
             const firstChar = (value ?? "")[0];
@@ -49,7 +49,7 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if (!withoutEffect) this.props._call_parent_for_update?.()
+                if (!disableOnChangeEvent) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as TextInputValueType)
                 resolve(value)
             })

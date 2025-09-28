@@ -31,11 +31,11 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
         }
     }
 
-    setValue(value: NumberInputValueType, withoutEffect?: boolean): Promise<NumberInputValueType> {
+    setValue(value: NumberInputValueType, disableOnChangeEvent?: boolean): Promise<NumberInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if (!withoutEffect) this.props._call_parent_for_update?.()
+                if (!disableOnChangeEvent) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as NumberInputValueType)
                 resolve(value)
             })

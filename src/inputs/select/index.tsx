@@ -43,12 +43,12 @@ export class SelectInput extends Component<SelectInputProps, IState> implements 
         }
     }
 
-    setValue(value: SelectInputValueType): Promise<SelectInputValueType> {
+    setValue(value: SelectInputValueType, disableOnChangeEvent?: boolean): Promise<SelectInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
         const valueToSet: SelectInputValueType = value;
         return new Promise((resolve) => {
             this.setState({ ...this.state, value: valueToSet }, () => {
-                this.props._call_parent_for_update?.()
+                if (!disableOnChangeEvent) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(valueToSet as SelectInputValueType)
                 resolve(valueToSet)
             })

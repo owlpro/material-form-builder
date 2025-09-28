@@ -32,12 +32,12 @@ export class DateInput extends Component<DateInputProps, IState> implements Inpu
         }
     }
 
-    setValue(value: DateInputValueType): Promise<DateInputValueType> {
+    setValue(value: DateInputValueType, disableOnChangeEvent?: boolean): Promise<DateInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                this.props._call_parent_for_update?.()
+                if (!disableOnChangeEvent) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as DateInputValueType)
                 resolve(value)
             })

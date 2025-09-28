@@ -32,12 +32,12 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
         }
     }
 
-    setValue(value: TimeInputValueType): Promise<TimeInputValueType> {
+    setValue(value: TimeInputValueType, disableOnChangeEvent?: boolean): Promise<TimeInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                this.props._call_parent_for_update?.()
+                if (!disableOnChangeEvent) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as TimeInputValueType)
                 resolve(value)
             })

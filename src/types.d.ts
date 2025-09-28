@@ -152,7 +152,7 @@ interface BaseInput<ValueType = any> {
 }
 
 interface InputImplement<ValueType> {
-    setValue: (data: ValueType, withoutEffect?: boolean) => Promise<ValueType>
+    setValue: (data: ValueType, disableOnChangeEvent?: boolean) => Promise<ValueType>
     getValue: () => ValueType
     clear: () => Promise<ValueType>
     validation?: () => boolean

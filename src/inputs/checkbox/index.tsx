@@ -31,12 +31,12 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
         }
     }
 
-    setValue(value: CheckboxInputValueType): Promise<CheckboxInputValueType> {
+    setValue(value: CheckboxInputValueType, disableOnChangeEvent?: boolean): Promise<CheckboxInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                this.props._call_parent_for_update?.()
+                if (!disableOnChangeEvent) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as CheckboxInputValueType)
 
                 resolve(value)

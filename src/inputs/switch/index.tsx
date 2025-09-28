@@ -30,12 +30,12 @@ export class SwitchInput extends Component<SwitchInputProps, IState> implements 
         }
     }
 
-    setValue(value: SwitchInputValueType): Promise<SwitchInputValueType> {
+    setValue(value: SwitchInputValueType, disableOnChangeEvent?: boolean): Promise<SwitchInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                this.props._call_parent_for_update?.()
+                if (!disableOnChangeEvent) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as SwitchInputValueType)
 
                 resolve(value)

@@ -38,7 +38,7 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
         }
     }
 
-    setValue(value: FileInputValueType): Promise<any> {
+    setValue(value: FileInputValueType, disableOnChangeEvent?: boolean): Promise<any> {
         if (value === this.state.value) return Promise.resolve(value)
 
         return new Promise((resolve) => {
@@ -47,7 +47,7 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
                 if (this.inputRef && value) {
                     this.inputRef.files = value
                 }
-                this.props._call_parent_for_update?.()
+                if (!disableOnChangeEvent) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as FileInputValueType)
                 resolve(value)
             })

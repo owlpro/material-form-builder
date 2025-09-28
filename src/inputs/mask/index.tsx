@@ -30,12 +30,12 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
         }
     }
 
-    setValue(value: MaskInputValueType, withoutEffect?: boolean): Promise<MaskInputValueType> {
+    setValue(value: MaskInputValueType, disableOnChangeEvent?: boolean): Promise<MaskInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if (!withoutEffect) this.props._call_parent_for_update?.()
+                if (!disableOnChangeEvent) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as MaskInputValueType)
                 resolve(value)
             })

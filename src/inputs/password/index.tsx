@@ -37,12 +37,12 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
         }
     }
 
-    setValue(value: PasswordInputValueType, withoutEffect?: boolean): Promise<PasswordInputValueType> {
+    setValue(value: PasswordInputValueType, disableOnChangeEvent?: boolean): Promise<PasswordInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if (!withoutEffect) this.props._call_parent_for_update?.()
+                if (!disableOnChangeEvent) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as PasswordInputValueType)
                 resolve(value)
             })

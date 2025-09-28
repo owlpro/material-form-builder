@@ -34,12 +34,12 @@ export class DatetimeInput extends Component<DatetimeInputProps, IState> impleme
         }
     }
 
-    setValue(value: DatetimeInputValueType): Promise<DatetimeInputValueType> {
+    setValue(value: DatetimeInputValueType, disableOnChangeEvent?: boolean): Promise<DatetimeInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                this.props._call_parent_for_update?.()
+                if (!disableOnChangeEvent) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as DatetimeInputValueType)
                 resolve(value)
             })

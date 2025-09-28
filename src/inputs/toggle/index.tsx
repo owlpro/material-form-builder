@@ -29,12 +29,12 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
         }
     }
 
-    setValue(value: ToggleInputValueType): Promise<ToggleInputValueType> {
+    setValue(value: ToggleInputValueType, disableOnChangeEvent?: boolean): Promise<ToggleInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                this.props._call_parent_for_update?.()
+                if (!disableOnChangeEvent) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as ToggleInputValueType)
                 resolve(value)
             })

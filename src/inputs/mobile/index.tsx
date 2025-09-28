@@ -42,7 +42,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
         }
     }
 
-    setValue(value: MobileInputValueType, internalSet: boolean = false, withoutEffect?: boolean): Promise<MobileInputValueType> {
+    setValue(value: MobileInputValueType, internalSet: boolean = false, disableOnChangeEvent?: boolean): Promise<MobileInputValueType> {
         if (value === this.state.value) return Promise.resolve(value)
         if (value && !internalSet) {
             const splits = value.split('-')
@@ -63,7 +63,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
 
         return new Promise((resolve) => {
             this.setState({ ...this.state, value }, () => {
-                if (!withoutEffect) this.props._call_parent_for_update?.();
+                if (!disableOnChangeEvent) this.props._call_parent_for_update?.();
                 this.props.onChangeValue?.(value as MobileInputValueType)
                 resolve(value)
             })
@@ -119,9 +119,9 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
         this.props.onFocus?.(e)
     }
 
-    private normalizeValue = async (value: MobileInputValueType, withoutEffect?: boolean): Promise<void> => {
+    private normalizeValue = async (value: MobileInputValueType, disableOnChangeEvent?: boolean): Promise<void> => {
         if (!value) {
-            this.setValue(null, true, withoutEffect);
+            this.setValue(null, true, disableOnChangeEvent);
             return;
         }
 
@@ -129,7 +129,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
         const pattern = this.state.country.mask;
         const pureValue = value.replace(/[^0-9]/g, '')
         const maskedValues = mask(pureValue, pattern, '_')
-        await this.setValue(pureValue ? maskedValues : null, true, withoutEffect)
+        await this.setValue(pureValue ? maskedValues : null, true, disableOnChangeEvent)
         const valueForLength = maskedValues.match(/.*[0-9]/)
         if (this.inputRef && valueForLength) {
             this.inputRef.selectionStart = this.inputRef.selectionEnd = valueForLength[0].length

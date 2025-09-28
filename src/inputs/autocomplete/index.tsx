@@ -73,11 +73,11 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         }
     }
 
-    setValue(value: AutocompleteInputValueType): Promise<AutocompleteInputValueType> {
+    setValue(value: AutocompleteInputValueType, disableOnChangeEvent?: boolean): Promise<AutocompleteInputValueType> {
         const valueToSet = this.getValuesFrom(value)
         return new Promise((resolve) => {
             this.setState({ ...this.state, value: valueToSet }, () => {
-                this.props._call_parent_for_update?.()
+                if (!disableOnChangeEvent) this.props._call_parent_for_update?.()
                 this.props.onChangeValue?.(value as AutocompleteInputValueType)
                 resolve(value)
             })
