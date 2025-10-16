@@ -3,7 +3,7 @@ import CopyAllIcon from "@mui/icons-material/CopyAll";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { Box, IconButton } from "@mui/material";
-import { Component } from "react";
+import { Component, Fragment } from "react";
 import { FormBuilder } from "../../formBuilder";
 import { randomString, stringify } from "../../helpers/general";
 import { InputImplement, OutputValues } from "../../types";
@@ -161,7 +161,17 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
     public blur = () => { }
 
     renderItem = (key: string) => {
-        return (
+        return this.props.disableDefaultItemWrapper ? (
+            <Fragment key={key}>
+                {this.props.removeIcon !== false ? (
+                    <IconButton onClick={this.removeItem(key)}>{this.props.removeIcon ? this.props.removeIcon : <RemoveIcon />}</IconButton>
+                ) : null}
+                <FormBuilder inputs={this.props.inputs} ref={el => this.formBuilderRef = { ...this.formBuilderRef, [key]: el }} />
+                {this.props.copyIcon !== false ? (
+                    <IconButton onClick={this.copyItem(key)}>{this.props.copyIcon ? this.props.copyIcon : <CopyAllIcon />}</IconButton>
+                ) : null}
+            </Fragment>
+        ) : (
             <Box key={key} display="flex" alignItems="center">
                 {this.props.removeIcon !== false ? (
                     <IconButton onClick={this.removeItem(key)}>{this.props.removeIcon ? this.props.removeIcon : <RemoveIcon />}</IconButton>
@@ -173,8 +183,6 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
             </Box>
         )
     }
-
-
 
     render() {
         return (
@@ -190,7 +198,10 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
 
                 {this.state.items.map((key) =>
                     this.props.itemWrapper
-                        ? this.props.itemWrapper(this.renderItem(key))
+                        ? this.props.itemWrapper(this.renderItem(key), {
+                            copyItem: this.copyItem(key),
+                            removeItem: this.removeItem(key)
+                        })
                         : this.renderItem(key)
                 )}
             </Box>
