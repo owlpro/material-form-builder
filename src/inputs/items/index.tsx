@@ -198,7 +198,7 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
 
                 {this.state.items.map((key) =>
                     this.props.itemWrapper
-                        ? this.props.itemWrapper(this.renderItem(key), {
+                        ? this.props.itemWrapper(this.renderItem(key), key, {
                             copyItem: this.copyItem(key),
                             removeItem: this.removeItem(key)
                         })
