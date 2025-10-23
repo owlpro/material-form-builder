@@ -1,75 +1,80 @@
 {
-    "name": "material-form-builder",
-    "version": "1.3.5",
-    "description": "FormBuilder For React.js",
-    "type": "module",
-    "main": "dist/index.js",
-    "module": "dist/index.es.js",
-    "types": "dist/index.d.ts",
-    "files": [
-        "dist"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/owlpro/material-form-builder.git"
-    },
-    "author": "Mohammad Mahdi Sadegh-zadeh",
-    "license": "MIT",
-    "private": false,
-    "scripts": {
-        "build": "rm -rf ./dist && yarn cache clean && rollup -c",
-        "watch": "rm -rf ./dist && yarn cache clean && rollup -cw"
-    },
-    "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ]
-    },
-    "devDependencies": {
-        "@emotion/react": "^11.13.3",
-        "@emotion/styled": "^11.13.0",
-        "@mui/icons-material": "^6.1.2",
-        "@mui/material": "^6.1.2",
-        "@mui/x-date-pickers": "^7.19.0",
-        "@rollup/plugin-alias": "^5.1.1",
-        "@rollup/plugin-commonjs": "^28.0.0",
-        "@rollup/plugin-image": "^2.1.1",
-        "@rollup/plugin-node-resolve": "^15.3.0",
-        "@rollup/plugin-terser": "^0.4.4",
-        "@rollup/plugin-typescript": "^12.1.0",
-        "@types/react": "^18.3.11",
-        "@types/react-dom": "^18.3.0",
-        "@types/react-test-renderer": "^18.3.0",
-        "dayjs": "^1.11.13",
-        "rollup": "^4.24.0",
-        "rollup-plugin-dts": "^6.1.1",
-        "rollup-plugin-node-externals": "^7.1.3",
-        "rollup-plugin-svg": "^2.0.0",
-        "tslib": "^2.7.0",
-        "typescript": "^5.6.2"
-    },
-    "peerDependencies": {
-        "@emotion/react": "^11.13.3",
-        "@emotion/styled": "^11.13.0",
-        "@mui/icons-material": "^6.1.2",
-        "@mui/material": "^6.1.2",
-        "@mui/x-date-pickers": "^7.19.0",
-        "dayjs": "^1.11.13",
-        "react": "^17.0.0 || ^18.0.0",
-        "react-dom": "^17.0.0 || ^18.0.0"
-    },
-    "resolutions": {
-        "@types/react": "^18.3.11"
-    },
-    "bugs": {
-        "url": "https://github.com/owlpro/material-form-builder/issues"
-    },
-    "homepage": "https://github.com/owlpro/material-form-builder#readme",
-    "keywords": [
-        "form-builder",
-        "react-form-builder",
-        "material-form-builder",
-        "mui-form-builder"
-    ]
+	"name": "material-form-builder",
+	"version": "1.3.5",
+	"description": "A dynamic React form builder using Material UI",
+	"type": "module",
+	"main": "dist/index.js",
+	"module": "dist/index.es.js",
+	"types": "dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/owlpro/material-form-builder.git"
+	},
+	"author": "Mahdi Amiri",
+	"license": "MIT",
+	"private": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build": "rm -rf ./dist && yarn cache clean && rollup -c",
+		"watch": "rm -rf ./dist && yarn cache clean && rollup -cw"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"devDependencies": {
+		"@emotion/react": "^11.13.3",
+		"@emotion/styled": "^11.13.0",
+		"@mui/icons-material": "^6.1.2",
+		"@mui/material": "^6.1.2",
+		"@mui/x-date-pickers": "^7.19.0",
+		"@rollup/plugin-alias": "^5.1.1",
+		"@rollup/plugin-commonjs": "^28.0.0",
+		"@rollup/plugin-image": "^2.1.1",
+		"@rollup/plugin-node-resolve": "^15.3.0",
+		"@rollup/plugin-terser": "^0.4.4",
+		"@rollup/plugin-typescript": "^12.1.0",
+		"@types/react": "^18.3.11",
+		"@types/react-dom": "^18.3.0",
+		"@types/react-test-renderer": "^18.3.0",
+		"dayjs": "^1.11.13",
+		"rollup": "^4.24.0",
+		"rollup-plugin-dts": "^6.1.1",
+		"rollup-plugin-node-externals": "^7.1.3",
+		"rollup-plugin-svg": "^2.0.0",
+		"tslib": "^2.7.0",
+		"typescript": "^5.6.2"
+	},
+	"peerDependencies": {
+		"@emotion/react": "^11.13.3",
+		"@emotion/styled": "^11.13.0",
+		"@mui/icons-material": "^6.1.2",
+		"@mui/material": "^6.1.2",
+		"@mui/x-date-pickers": "^7.19.0",
+		"dayjs": "^1.11.13",
+		"react": "^17.0.0 || ^18.0.0",
+		"react-dom": "^17.0.0 || ^18.0.0"
+	},
+	"resolutions": {
+		"@types/react": "^18.3.11"
+	},
+	"bugs": {
+		"url": "https://github.com/owlpro/material-form-builder/issues"
+	},
+	"homepage": "https://github.com/owlpro/material-form-builder#readme",
+	"keywords": [
+		"react",
+		"form-builder",
+		"material-ui",
+		"mui",
+		"input",
+		"typescript"
+	]
 }
