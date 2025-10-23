@@ -39,5 +39,8 @@ export type {
 } from "./types";
 
 export type { BuilderValue, Input, InputImplement, InputProps, OutputValues, WrapperActions, WrapperElement, InputActions } from "./types";
+export { useFormBuilder } from "./helpers/useFormBuilder";
+
 export { FormBuilder };
 export default FormBuilder;
+
