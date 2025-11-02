@@ -3,7 +3,6 @@ import { FormBuilder } from "src/formBuilder";
 import { ObjectLiteral, OutputValues } from "src/types";
 
 export function useFormBuilder<TValues extends ObjectLiteral>() {
-	console.log("useFormBuilder");
 	const ref = useRef<FormBuilder>(null);
 
 	const getValues = useCallback((): OutputValues<TValues> => {
