@@ -5,8 +5,8 @@ import { ObjectLiteral, OutputValues } from "src/types";
 export function useFormBuilder<TValues extends ObjectLiteral>() {
 	const ref = useRef<FormBuilder>(null);
 
-	const getValues = useCallback((): OutputValues<TValues> => {
-		return ref.current?.getValues() as OutputValues<TValues>;
+	const getValues = useCallback((validation?: true): OutputValues<TValues> => {
+		return ref.current?.getValues(validation) as OutputValues<TValues>;
 	}, []);
 
 	const setValues = useCallback((values: Partial<TValues>) => {
