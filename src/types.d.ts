@@ -168,6 +168,9 @@ type OutputValues<T = ObjectLiteral> = {
     validation: {
         status: boolean
         inputs: Array<any>
+    },
+    api: {
+        refs: {[key in string]: Input}
     }
 }
 

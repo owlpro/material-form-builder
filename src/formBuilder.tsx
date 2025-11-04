@@ -122,6 +122,9 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
                 status: invalidInputs.length < 1,
                 inputs: invalidInputs
             },
+            api: {
+                refs: this.inputRefs
+            }
         }
     }
 
