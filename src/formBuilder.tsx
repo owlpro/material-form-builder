@@ -1,6 +1,6 @@
 import React, { Component, createElement, Fragment } from 'react';
 import { selectFromObject, setToObject } from './helpers/general';
-import { Input, InputProps, OutputValues, InputActions, ObjectLiteral} from "./types";
+import { Input, InputProps, OutputValues, InputActions, ObjectLiteral } from "./types";
 
 import { AutocompleteInput } from './inputs/autocomplete';
 import { CheckboxInput } from './inputs/checkbox';
@@ -93,7 +93,7 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
     }
 
     public getValues = (validation = true): OutputValues => {
-        const data: ObjectLiteral = this.defaultValues ? {...this.defaultValues} : {};
+        const data: ObjectLiteral = this.defaultValues ? { ...this.defaultValues } : {};
 
         const invalidInputs: InputProps[] = [];
 
@@ -132,7 +132,7 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
         const objectKeys: string[] = Object.keys(object);
         for (let i = 0; i < objectKeys.length; i++) {
             const key = objectKeys[i]
-            if(!key) return
+            if (!key) return
             const value = object[key]
             const joinedSelector = [...path, key].join('.');
             const directInput = this.props.inputs.find(i => i.selector === joinedSelector)
@@ -197,7 +197,7 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
     }
 
     private syncSetValues = async (value: ObjectLiteral): Promise<any> => {
-        this.defaultValues = {...value};
+        this.defaultValues = { ...value };
         return new Promise((resolve) => {
             this.setState({ ...this.state, inInternalSettingProcess: true }, async () => {
 
@@ -300,7 +300,9 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
 
     private renderInput = (input: InputProps, index: number): JSX.Element | null => {
         if (!this.checkVisibility(input)) return null;
-        const { wrapper, getMutator, setMutator, ref, ...props } = input
+        const { wrapper, getMutator, setMutator, ...props } = input
+        const userRef = input.ref;
+
         const actions: InputActions<any> = {
             setValue: (value: any): Promise<any> => this.executeAction(input.selector, 'setValue', value),
             getValue: (validation?: boolean): Promise<any> => this.executeAction(input.selector, 'getValue', validation),
@@ -312,7 +314,8 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
 
         const refSetter = (el: Input) => {
             this.inputRefs[input.selector] = el
-            if (typeof (ref) === "function") ref(el)
+            if (typeof userRef === "function") userRef(el);
+            else if (userRef && typeof userRef === "object") userRef.current = el;
         }
 
         const element = createElement(this.inputs[input.type]!, { ref: (el: Input) => refSetter(el), ...props, _call_parent_for_update: this.onUpdateInputs });
