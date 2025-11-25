@@ -300,8 +300,7 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
 
     private renderInput = (input: InputProps, index: number): JSX.Element | null => {
         if (!this.checkVisibility(input)) return null;
-        const { wrapper, getMutator, setMutator, ...props } = input
-        const userRef = input.ref;
+        const { wrapper, getMutator, setMutator, ref, ...props } = input
 
         const actions: InputActions<any> = {
             setValue: (value: any): Promise<any> => this.executeAction(input.selector, 'setValue', value),
@@ -314,8 +313,11 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
 
         const refSetter = (el: Input) => {
             this.inputRefs[input.selector] = el
-            if (typeof userRef === "function") userRef(el);
-            else if (userRef && typeof userRef === "object") userRef.current = el;
+            if (typeof ref === "function") {
+                ref(el);
+            } else if (ref && typeof ref === "object") {
+                ref.current = el;
+            }
         }
 
         const element = createElement(this.inputs[input.type]!, { ref: (el: Input) => refSetter(el), ...props, _call_parent_for_update: this.onUpdateInputs });

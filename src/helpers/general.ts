@@ -110,3 +110,16 @@ export const stringify = (obj: ObjectLiteral): string => {
     cache = null // reset the cache
     return str
 }
+
+export const mergeRefs = (...refs: any[]) => {
+    return (value: any) => {
+        refs.forEach((ref) => {
+            if (!ref) return;
+            if (typeof ref === "function") {
+                ref(value);
+            } else if (typeof ref === "object") {
+                ref.current = value;
+            }
+        });
+    };
+};
