@@ -1,6 +1,6 @@
 {
 	"name": "material-form-builder",
-	"version": "1.5.6",
+	"version": "1.5.7",
 	"description": "A dynamic React form builder using Material UI",
 	"type": "module",
 	"main": "dist/index.js",
