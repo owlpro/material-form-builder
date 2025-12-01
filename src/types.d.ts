@@ -148,7 +148,8 @@ interface BaseInput<ValueType = any> {
     setMutator?: (value: any) => any
     formatter?: (value: any) => any
     _call_parent_for_update?: () => Promise<boolean>
-    ref?: any
+    ref?: any,
+    reactKey?: string
 }
 
 interface InputImplement<ValueType> {

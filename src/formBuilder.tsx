@@ -298,7 +298,7 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
         })
     }
 
-    private renderInput = (input: InputProps, index: number): JSX.Element | null => {
+    private renderInput = (input: InputProps): JSX.Element | null => {
         if (!this.checkVisibility(input)) return null;
         const { wrapper, getMutator, setMutator, ref, ...props } = input
 
@@ -322,7 +322,7 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
 
         const element = createElement(this.inputs[input.type]!, { ref: (el: Input) => refSetter(el), ...props, _call_parent_for_update: this.onUpdateInputs });
         const output = (
-            <Fragment key={index}>
+            <Fragment key={input.reactKey ?? input.selector}>
                 {wrapper ? wrapper(element as JSX.Element, actions as InputActions) : element}
             </Fragment>
         )
