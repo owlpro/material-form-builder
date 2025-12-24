@@ -21,7 +21,7 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
     }
 
     validationTimeout: any;
-    formBuilderRef: { [key: string]: FormBuilder | null } = {};
+    formBuilderRef: { [key: string]: FormBuilder<any> | null } = {};
 
     shouldComponentUpdate(nextProps: any, nextState: IState) {
         switch (true) {

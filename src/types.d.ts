@@ -109,7 +109,14 @@ type Input =
     | AutocompleteInput
     | ToggleInput
     | GroupInput
-    | SwitchInput
+    | SwitchInput;
+
+type TypedInput<T> = InputImplement<T>
+type InputRefs<TValues extends ObjectLiteral> = {
+  [K in keyof TValues]: InputImplement<TValues[K]>
+}
+type AnyInput = InputImplement<any>;
+
 
 type ObjectLiteral = { [key: string]: any }
 type Variant = 'standard' | 'filled' | 'outlined'
@@ -154,7 +161,7 @@ interface BaseInput<ValueType = any> {
 
 interface InputImplement<ValueType> {
     setValue: (data: ValueType, disableOnChangeEvent?: boolean) => Promise<ValueType>
-    getValue: () => ValueType
+    getValue: (validation?: boolean) => ValueType
     clear: () => Promise<ValueType>
     validation?: () => boolean
     click?: () => void
@@ -171,7 +178,7 @@ type OutputValues<T = ObjectLiteral> = {
         inputs: Array<any>
     },
     api: {
-        refs: {[key in string]: Input}
+        refs: InputRefs<T>
     }
 }
 
@@ -189,7 +196,10 @@ export {
     InputProps,
     ObjectLiteral,
     OutputValues,
+    TypedInput,
+    InputRefs,
     Variant,
     WrapperActions,
     WrapperElement,
+    AnyInput
 }

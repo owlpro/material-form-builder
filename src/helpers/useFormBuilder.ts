@@ -3,7 +3,7 @@ import { FormBuilder } from "src/formBuilder";
 import { ObjectLiteral, OutputValues } from "src/types";
 
 export function useFormBuilder<TValues extends ObjectLiteral>() {
-	const ref = useRef<FormBuilder>(null);
+    const ref = useRef<FormBuilder<TValues>>(null);
 
 	const getValues = useCallback((validation?: boolean): OutputValues<TValues> => {
 		return ref.current?.getValues(validation) as OutputValues<TValues>;

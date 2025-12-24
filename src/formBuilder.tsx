@@ -1,6 +1,7 @@
 import React, { Component, createElement, Fragment } from 'react';
 import { selectFromObject, setToObject } from './helpers/general';
-import { Input, InputProps, OutputValues, InputActions, ObjectLiteral } from "./types";
+// import type { InputRefs } from "./types";
+import { Input, InputProps, OutputValues, InputActions, ObjectLiteral, AnyInput } from "./types";
 
 import { AutocompleteInput } from './inputs/autocomplete';
 import { CheckboxInput } from './inputs/checkbox';
@@ -39,14 +40,17 @@ export interface FormBuilderProps {
     onMount?: Function
 }
 
-export class FormBuilder extends Component<FormBuilderProps, IState> implements FormBuilderImplements {
+export class FormBuilder<TValues extends ObjectLiteral = ObjectLiteral> extends Component<FormBuilderProps, IState> implements FormBuilderImplements {
     state: IState = {
         isMounted: false,
         time: null,
         inInternalSettingProcess: false
     }
+    // @ts-ignore
+    private _typecheck_only!: TValues; // ✅ TS6133 fix
 
-    private inputRefs: { [key: string]: Input } = {}
+
+    private inputRefs: Record<string, AnyInput> = {};
     private inputs: { [key in InputProps['type']]: React.ElementType } = {
         text: TextInput,
         number: NumberInput,
@@ -98,10 +102,10 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
         const invalidInputs: InputProps[] = [];
 
         this.props.inputs.forEach(inputProps => {
-            const input = this.inputRefs[inputProps.selector]
+            const input = this.inputRefs[inputProps.selector] as AnyInput;
             if (input) {
                 if (validation) {
-                    const isValid = input.validation();
+                    const isValid = input.validation?.() ?? true;
                     if ((inputProps.required || inputProps.type === "items" || inputProps.type === "group" || inputProps.type === "custom") && !isValid) {
                         invalidInputs.push(inputProps)
                     }
@@ -312,7 +316,7 @@ export class FormBuilder extends Component<FormBuilderProps, IState> implements 
         };
 
         const refSetter = (el: Input) => {
-            this.inputRefs[input.selector] = el
+            this.inputRefs[input.selector] = el as AnyInput;
             if (typeof ref === "function") {
                 ref(el);
             } else if (ref && typeof ref === "object") {
