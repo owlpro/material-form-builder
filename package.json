@@ -21,7 +21,9 @@
 	},
 	"scripts": {
 		"build": "rm -rf ./dist && yarn cache clean && rollup -c",
-		"watch": "rm -rf ./dist && yarn cache clean && rollup -cw"
+		"watch": "rm -rf ./dist && yarn cache clean && rollup -cw",
+		"dev": "cd playground && node .yarn/releases/yarn-4.7.0.cjs dev",
+		"playground:install": "cd playground && node .yarn/releases/yarn-4.7.0.cjs install"
 	},
 	"eslintConfig": {
 		"extends": [
