@@ -21,15 +21,15 @@ const INPUT_GROUPS = [
     group: 'Text',
     items: [
       { label: 'Text', path: '/inputs/text', available: true },
-      { label: 'Number', path: '/inputs/number', available: false },
-      { label: 'Password', path: '/inputs/password', available: false },
-      { label: 'Mask', path: '/inputs/mask', available: false },
+      { label: 'Number', path: '/inputs/number', available: true },
+      { label: 'Password', path: '/inputs/password', available: true },
+      { label: 'Mask', path: '/inputs/mask', available: true },
     ],
   },
   {
     group: 'Selection',
     items: [
-      { label: 'Select', path: '/inputs/select', available: false },
+      { label: 'Select', path: '/inputs/select', available: true },
       { label: 'Autocomplete', path: '/inputs/autocomplete', available: false },
       { label: 'Toggle', path: '/inputs/toggle', available: false },
       { label: 'Checkbox', path: '/inputs/checkbox', available: false },
