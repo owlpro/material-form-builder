@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { LangProvider, useLang } from './contexts/LangContext'
+import { ThemeProvider } from './contexts/ThemeContext'
 import Rtl from './components/Rtl'
 import Layout from './components/Layout'
 import Home from './pages/Home'
@@ -9,6 +10,9 @@ import PasswordInputPage from './pages/inputs/PasswordInputPage'
 import MaskInputPage from './pages/inputs/MaskInputPage'
 import SelectInputPage from './pages/inputs/SelectInputPage'
 import AutocompleteInputPage from './pages/inputs/AutocompleteInputPage'
+import ToggleInputPage from './pages/inputs/ToggleInputPage'
+import CheckboxInputPage from './pages/inputs/CheckboxInputPage'
+import SwitchInputPage from './pages/inputs/SwitchInputPage'
 
 function AppContent() {
   const { isRtl } = useLang()
@@ -23,6 +27,9 @@ function AppContent() {
         <Route path="/inputs/mask" element={<MaskInputPage />} />
         <Route path="/inputs/select" element={<SelectInputPage />} />
         <Route path="/inputs/autocomplete" element={<AutocompleteInputPage />} />
+        <Route path="/inputs/toggle" element={<ToggleInputPage />} />
+        <Route path="/inputs/checkbox" element={<CheckboxInputPage />} />
+        <Route path="/inputs/switch" element={<SwitchInputPage />} />
       </Routes>
     </Layout>
   )
@@ -33,7 +40,9 @@ function AppContent() {
 export default function App() {
   return (
     <LangProvider>
-      <AppContent />
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
     </LangProvider>
   )
 }

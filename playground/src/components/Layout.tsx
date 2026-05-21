@@ -31,9 +31,9 @@ const INPUT_GROUPS = [
     items: [
       { label: 'Select', path: '/inputs/select', available: true },
       { label: 'Autocomplete', path: '/inputs/autocomplete', available: true },
-      { label: 'Toggle', path: '/inputs/toggle', available: false },
-      { label: 'Checkbox', path: '/inputs/checkbox', available: false },
-      { label: 'Switch', path: '/inputs/switch', available: false },
+      { label: 'Toggle', path: '/inputs/toggle', available: true },
+      { label: 'Checkbox', path: '/inputs/checkbox', available: true },
+      { label: 'Switch', path: '/inputs/switch', available: true },
     ],
   },
   {
@@ -78,7 +78,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             boxSizing: 'border-box',
             borderRight: '1px solid',
             borderColor: 'divider',
-            bgcolor: '#fafafa',
+            bgcolor: 'background.default',
           },
         }}
       >
