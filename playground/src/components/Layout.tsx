@@ -30,7 +30,7 @@ const INPUT_GROUPS = [
     group: 'Selection',
     items: [
       { label: 'Select', path: '/inputs/select', available: true },
-      { label: 'Autocomplete', path: '/inputs/autocomplete', available: false },
+      { label: 'Autocomplete', path: '/inputs/autocomplete', available: true },
       { label: 'Toggle', path: '/inputs/toggle', available: false },
       { label: 'Checkbox', path: '/inputs/checkbox', available: false },
       { label: 'Switch', path: '/inputs/switch', available: false },

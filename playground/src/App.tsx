@@ -8,6 +8,7 @@ import NumberInputPage from './pages/inputs/NumberInputPage'
 import PasswordInputPage from './pages/inputs/PasswordInputPage'
 import MaskInputPage from './pages/inputs/MaskInputPage'
 import SelectInputPage from './pages/inputs/SelectInputPage'
+import AutocompleteInputPage from './pages/inputs/AutocompleteInputPage'
 
 function AppContent() {
   const { isRtl } = useLang()
@@ -21,6 +22,7 @@ function AppContent() {
         <Route path="/inputs/password" element={<PasswordInputPage />} />
         <Route path="/inputs/mask" element={<MaskInputPage />} />
         <Route path="/inputs/select" element={<SelectInputPage />} />
+        <Route path="/inputs/autocomplete" element={<AutocompleteInputPage />} />
       </Routes>
     </Layout>
   )
