@@ -1,5 +1,5 @@
 import React, { Component, createElement, Fragment } from 'react';
-import { selectFromObject, setToObject } from './helpers/general';
+import { clonePlain, isPlainObject, selectFromObject, setToObject } from './helpers/general';
 // import type { InputRefs } from "./types";
 import { Input, InputProps, OutputValues, InputActions, ObjectLiteral, AnyInput } from "./types";
 
@@ -21,6 +21,30 @@ import { TextInput } from './inputs/text';
 import { TimeInput } from './inputs/time';
 import { ToggleInput } from './inputs/toggle';
 import { SwitchInput } from './inputs/switch';
+
+const removeSelector = (data: ObjectLiteral, selector: string): void => {
+    // A caller may supply either a nested object or a literal dotted key.
+    if (Object.prototype.hasOwnProperty.call(data, selector)) delete data[selector];
+    const parts = selector.split('.');
+    let current: any = data;
+    for (let index = 0; index < parts.length; index++) {
+        if (!isPlainObject(current) && !Array.isArray(current)) return;
+        const part = parts[index]!;
+        const query = /^(.+)\[([^=\]]+)=([^\]]+)\]$/.exec(part);
+        if (query) {
+            const list = (current as any)[query[1]!];
+            if (!Array.isArray(list)) return;
+            const itemIndex = list.findIndex((item: any) => String(item?.[query[2]!.trim()]) === query[3]!.trim());
+            if (itemIndex < 0) return;
+            if (index === parts.length - 1) list.splice(itemIndex, 1);
+            else current = list[itemIndex];
+        } else if (index === parts.length - 1) {
+            delete (current as any)[part];
+        } else {
+            current = (current as any)[part];
+        }
+    }
+};
 
 interface FormBuilderImplements {
     getValues: (validation: boolean) => OutputValues;
@@ -74,6 +98,9 @@ export class FormBuilder<TValues extends ObjectLiteral = ObjectLiteral> extends 
 
     private defaultValues: ObjectLiteral | null = null;
     private didMountEvent: Function[] = [];
+    private setValuesQueue: Promise<unknown> = Promise.resolve();
+    private isApplyingValues = false;
+    private pendingVisibilityUpdates: Promise<{ status: 'fulfilled' } | { status: 'rejected', error: unknown }>[] = [];
 
     componentDidMount() {
         this.setState({ ...this.state, isMounted: true }, async () => {
@@ -90,18 +117,35 @@ export class FormBuilder<TValues extends ObjectLiteral = ObjectLiteral> extends 
         this.props.inputs.forEach((item) => {
             const prevVisible = this.lastVisibilityOfInputs[item.selector]?.prev
             const nowVisible = this.lastVisibilityOfInputs[item.selector]?.now
-            if ((prevVisible !== nowVisible) && this.defaultValues && Object.keys(this.defaultValues).length) {
-                this.setValue(item.selector, this.defaultValues[item.selector])
+            if (prevVisible !== nowVisible && nowVisible && this.defaultValues) {
+                const value = Object.prototype.hasOwnProperty.call(this.defaultValues, item.selector)
+                    ? this.defaultValues[item.selector]
+                    : selectFromObject(item.selector, this.defaultValues);
+                if (value === undefined) return;
+                const update = this.setValue(item.selector, value);
+                if (this.isApplyingValues) {
+                    this.pendingVisibilityUpdates.push(update.then(
+                        () => ({ status: 'fulfilled' as const }),
+                        error => ({ status: 'rejected' as const, error })
+                    ));
+                } else {
+                    void update.catch(() => undefined);
+                }
             }
         })
     }
 
-    public getValues = (validation = true): OutputValues => {
-        const data: ObjectLiteral = this.defaultValues ? { ...this.defaultValues } : {};
+    public getValues = (validation = true): OutputValues => this.collectValues(validation, false);
 
+    private collectValues = (validation: boolean, includeHidden: boolean): OutputValues => {
+        const data: ObjectLiteral = this.defaultValues ? clonePlain(this.defaultValues) : {};
         const invalidInputs: InputProps[] = [];
 
+        // Keep unrepresented keys such as `id`, but never use saved values for known inputs.
+        if (!includeHidden) this.props.inputs.forEach(input => removeSelector(data, input.selector));
+
         this.props.inputs.forEach(inputProps => {
+            if (!includeHidden && this.lastVisibilityOfInputs[inputProps.selector]?.now === false) return;
             const input = this.inputRefs[inputProps.selector] as AnyInput;
             if (input) {
                 if (validation) {
@@ -142,7 +186,7 @@ export class FormBuilder<TValues extends ObjectLiteral = ObjectLiteral> extends 
             const directInput = this.props.inputs.find(i => i.selector === joinedSelector)
             if (directInput && (directInput.type === "group" || (directInput.type === "custom" && directInput.allowObject))) {
                 await this.setNormalValue(joinedSelector, value)
-            } else if (value !== null && typeof value === "object" && !Array.isArray(value)) {
+            } else if (isPlainObject(value)) {
                 await this.setObjectValues(value, [...path, key])
             } else {
                 const selector = [...path, key].join('.');
@@ -185,55 +229,91 @@ export class FormBuilder<TValues extends ObjectLiteral = ObjectLiteral> extends 
             return await this.setNormalValue(selector, value)
         }
 
-        if (value !== null && typeof value === "object" && !Array.isArray(value) && !(value instanceof Date)) {
+        if (isPlainObject(value)) {
             return await this.setObjectValues(value, [selector])
         } else {
             return await this.setNormalValue(selector, value)
         }
     }
 
-    public setValues = async (value: ObjectLiteral): Promise<any> => {
+    private enqueueOperation = (operation: () => Promise<any>): Promise<any> => {
+        const run = () => {
+            const queued = this.setValuesQueue.then(operation);
+            this.setValuesQueue = queued.then(() => undefined, () => undefined);
+            return queued;
+        };
         if (!this.state.isMounted) {
-            this.didMountEvent.push(() => this.syncSetValues(value))
-        } else {
-            return this.syncSetValues(value)
+            return new Promise((resolve, reject) => {
+                this.didMountEvent.push(() => run().then(resolve, reject));
+            });
         }
+        return run();
     }
+
+    public setValues = (value: ObjectLiteral): Promise<any> => this.enqueueOperation(() => this.syncSetValues(value));
 
     private syncSetValues = async (value: ObjectLiteral): Promise<any> => {
-        this.defaultValues = { ...value };
-        return new Promise((resolve) => {
-            this.setState({ ...this.state, inInternalSettingProcess: true }, async () => {
+        this.defaultValues = clonePlain(value);
+        this.isApplyingValues = true;
+        await new Promise<void>(resolve => {
+            this.setState(state => ({ ...state, inInternalSettingProcess: true }), resolve);
+        });
 
-                for (const selector in value) {
-                    const valueItem = value[selector];
-                    await this.setValue(selector, valueItem)
-                }
+        let settingError: unknown;
+        let hasSettingError = false;
+        try {
+            for (const selector in value) {
+                await this.setValue(selector, value[selector]);
+            }
+        } catch (error) {
+            settingError = error;
+            hasSettingError = true;
+        }
 
-                this.setState({ ...this.state, inInternalSettingProcess: false }, () => {
-                    this.props.onChange?.(this.getValues(false))
-                    resolve(true)
-                })
-            })
-        })
+        await new Promise<void>(resolve => {
+            this.setState(state => ({ ...state, inInternalSettingProcess: false }), resolve);
+        });
+
+        while (this.pendingVisibilityUpdates.length) {
+            const updates = this.pendingVisibilityUpdates.splice(0);
+            const results = await Promise.all(updates);
+            const rejected = results.find(result => result.status === 'rejected');
+            if (rejected?.status === 'rejected' && !hasSettingError) {
+                settingError = rejected.error;
+                hasSettingError = true;
+            }
+        }
+        this.isApplyingValues = false;
+
+        if (hasSettingError) throw settingError;
+        this.props.onChange?.(this.getValues(false));
+        return true;
     }
 
-    public clear = async (): Promise<any> => {
-        return new Promise(async (resolve) => {
-            this.setState({ ...this.state, inInternalSettingProcess: true }, async () => {
-                for (const selector in this.inputRefs) {
-                    const input = this.inputRefs[selector]
-                    if (input) {
-                        await input.clear();
-                    }
-                }
+    public clear = (): Promise<any> => this.enqueueOperation(this.syncClear);
 
-                this.setState({ ...this.state, inInternalSettingProcess: false }, () => {
-                    this.props.onChange?.(this.getValues(false))
-                    resolve(true)
-                })
-            })
-        })
+    private syncClear = async (): Promise<any> => {
+        this.defaultValues = null;
+        await new Promise<void>(resolve => {
+            this.setState(state => ({ ...state, inInternalSettingProcess: true }), resolve);
+        });
+        let clearingError: unknown;
+        let hasClearingError = false;
+        try {
+            for (const selector in this.inputRefs) {
+                const input = this.inputRefs[selector];
+                if (input) await input.clear();
+            }
+        } catch (error) {
+            clearingError = error;
+            hasClearingError = true;
+        }
+        await new Promise<void>(resolve => {
+            this.setState(state => ({ ...state, inInternalSettingProcess: false }), resolve);
+        });
+        if (hasClearingError) throw clearingError;
+        this.props.onChange?.(this.getValues(false));
+        return true;
     }
 
     private lastVisibilityOfInputs: ObjectLiteral = {}
@@ -242,7 +322,7 @@ export class FormBuilder<TValues extends ObjectLiteral = ObjectLiteral> extends 
         let visible: boolean | undefined = true;
 
         if (typeof input.visible === "function") {
-            visible = input.visible(this.getValues(false)?.data);
+            visible = input.visible(this.collectValues(false, true).data);
         } else {
             visible = input.visible;
         }

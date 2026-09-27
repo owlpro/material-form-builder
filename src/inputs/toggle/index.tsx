@@ -50,7 +50,7 @@ export class ToggleInput extends Component<ToggleInputProps, IState> implements 
     }
 
     validation(): boolean {
-        if (!checkValue(this.state.value) && this.props.required) {
+        if (this.props.required && (!checkValue(this.state.value) || (Array.isArray(this.state.value) && this.state.value.length === 0))) {
             clearTimeout(this.validationTimeout)
             this.setState({ ...this.state, error: true })
             this.validationTimeout = setTimeout(() => {

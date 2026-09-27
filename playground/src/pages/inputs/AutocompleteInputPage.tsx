@@ -24,7 +24,7 @@ const t = {
       noteTitle: 'Key behaviors',
       notes: [
         ['options change',              'When the options array changes (different values), the current value is auto-cleared — same as SelectInput. Disable with disableClearOnChangeOptions: true'],
-        ['disableClearable',            'Defaults to true — no clear (×) button shown. Set to false to expose the clear button'],
+        ['disableClearable',            'Defaults to false — the clear (×) button appears after selection. Set to true to hide it'],
         ['multiple',                    'multiple: true switches value to a string array. Empty initial value is [] not null'],
         ['freeSolo',                    'Allows typing any string not in the list. On blur the typed text is committed. Combine with multiple for a tag-style input'],
         ['loading',                     'loading: true disables the field and replaces the popup icon with a CircularProgress spinner'],
@@ -40,7 +40,7 @@ const t = {
         ['options',                     'Required. Array of { label: string, value: string }'],
         ['multiple',                    'true → multi-select; value becomes string[]'],
         ['freeSolo',                    'Allows arbitrary text; value is the typed string'],
-        ['disableClearable',            'Default true. Set false to show the × clear button'],
+        ['disableClearable',            'Default false. Set true to hide the × clear button'],
         ['disableClearOnChangeOptions', 'Prevents auto-clearing value when the options array changes'],
         ['loading',                     'Disables and shows spinner while fetching options'],
         ['defaultValue',                'Initial value on mount and after clear()'],
@@ -54,7 +54,7 @@ const t = {
       multiple:  { title: 'Multiple selection',                desc: 'multiple: true allows picking several options. getValue() returns a string array.' },
       freeSolo:  { title: 'freeSolo',                          desc: 'freeSolo: true lets users type any value. Combine with multiple for a tags-style input.' },
       loading:   { title: 'Loading state',                     desc: 'Set loading: true while fetching options. The field is disabled and shows a spinner.' },
-      clearable: { title: 'disableClearable: false',           desc: 'By default no clear button is shown. Pass disableClearable: false to expose it.' },
+      clearable: { title: 'disableClearable: true',            desc: 'The clear button is enabled by default. Pass disableClearable: true to hide it.' },
       required:  { title: 'Required & Validation',             desc: 'required: true fails when value is null (or empty array for multiple).' },
       api:       { title: 'API — getValues / setValues / clear', desc: 'getValue returns the selected string value or null.' },
     },
@@ -80,7 +80,7 @@ const t = {
       noteTitle: 'رفتارهای کلیدی',
       notes: [
         ['تغییر options',               'وقتی آرایه options تغییر کند، مقدار جاری خودکار پاک می‌شود — مثل SelectInput. با disableClearOnChangeOptions: true می‌توان غیرفعال کرد'],
-        ['disableClearable',            'پیش‌فرض true است — دکمه پاک‌کن (×) نمایش داده نمی‌شود. برای نمایش آن false بگذار'],
+        ['disableClearable',            'پیش‌فرض false است — دکمه پاک‌کن (×) پس از انتخاب نمایش داده می‌شود. برای پنهان‌کردنش true بگذار'],
         ['multiple',                    'multiple: true مقدار را به آرایه تبدیل می‌کند. مقدار اولیه خالی [] است نه null'],
         ['freeSolo',                    'امکان تایپ هر رشته‌ای را می‌دهد. با onBlur مقدار ثبت می‌شود. با multiple برای ورودی tag-style مناسب است'],
         ['loading',                     'loading: true فیلد را غیرفعال کرده و آیکون popup را با CircularProgress جایگزین می‌کند'],
@@ -96,7 +96,7 @@ const t = {
         ['options',                     'اجباری. آرایه‌ای از { label: string, value: string }'],
         ['multiple',                    'true → چندانتخابی؛ مقدار string[] می‌شود'],
         ['freeSolo',                    'امکان ورودی متن دلخواه؛ مقدار همان رشته تایپ‌شده است'],
-        ['disableClearable',            'پیش‌فرض true. برای نمایش دکمه × مقدار false بگذار'],
+        ['disableClearable',            'پیش‌فرض false. برای پنهان‌کردن دکمه × مقدار true بگذار'],
         ['disableClearOnChangeOptions', 'از پاک شدن خودکار مقدار هنگام تغییر options جلوگیری می‌کند'],
         ['loading',                     'هنگام واکشی options غیرفعال و اسپینر نمایش می‌دهد'],
         ['defaultValue',                'مقدار اولیه هنگام mount و بعد از clear()'],
@@ -110,7 +110,7 @@ const t = {
       multiple:  { title: 'انتخاب چندگانه',                   desc: 'multiple: true انتخاب چند گزینه را ممکن می‌کند. getValue() آرایه‌ای از string برمی‌گرداند.' },
       freeSolo:  { title: 'freeSolo',                          desc: 'freeSolo: true به کاربر اجازه تایپ هر مقداری را می‌دهد. با multiple برای ورودی tag استفاده کن.' },
       loading:   { title: 'حالت loading',                      desc: 'در حین واکشی options مقدار loading: true را ست کن. فیلد غیرفعال و اسپینر نمایش می‌دهد.' },
-      clearable: { title: 'disableClearable: false',           desc: 'به صورت پیش‌فرض دکمه پاک‌کن وجود ندارد. با disableClearable: false آن را فعال کن.' },
+      clearable: { title: 'disableClearable: true',            desc: 'دکمه پاک‌کن به‌صورت پیش‌فرض فعال است. با disableClearable: true آن را پنهان کن.' },
       required:  { title: 'اجباری و اعتبارسنجی',              desc: 'required: true وقتی مقدار null باشد (یا آرایه خالی برای multiple) خطا می‌دهد.' },
       api:       { title: 'API — getValues / setValues / clear', desc: 'getValue مقدار string انتخاب‌شده یا null را برمی‌گرداند.' },
     },
@@ -362,12 +362,12 @@ function LoadingDemo({ lang }: { lang: 'en' | 'fa' }) {
 
 // ─── disableClearable ─────────────────────────────────────────────────────────
 
-const clearableCode = `// default: disableClearable is true — no × button
-{ type: 'autocomplete', selector: 'a', label: 'No clear (default)', options }
+const clearableCode = `// default: disableClearable is false — × appears after selection
+{ type: 'autocomplete', selector: 'a', label: 'Clear enabled (default)', options }
 
-// disableClearable: false — shows the × button when a value is selected
-{ type: 'autocomplete', selector: 'b', label: 'With clear button',
-  options, disableClearable: false, variant: 'outlined' }`
+// disableClearable: true — hides the × button
+{ type: 'autocomplete', selector: 'b', label: 'Clear disabled',
+  options, disableClearable: true, variant: 'outlined' }`
 
 function ClearableDemo() {
   const { ref } = useFormBuilder()
@@ -376,8 +376,8 @@ function ClearableDemo() {
       <FormBuilder
         ref={ref}
         inputs={[
-          { type: 'autocomplete', selector: 'a', label: 'No clear (default)',  options: FRUITS },
-          { type: 'autocomplete', selector: 'b', label: 'With clear button',   options: FRUITS, disableClearable: false, variant: 'outlined' },
+          { type: 'autocomplete', selector: 'a', label: 'Clear enabled (default)',  options: FRUITS },
+          { type: 'autocomplete', selector: 'b', label: 'Clear disabled',          options: FRUITS, disableClearable: true, variant: 'outlined' },
         ]}
       />
     </Stack>

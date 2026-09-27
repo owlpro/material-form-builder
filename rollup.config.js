@@ -5,7 +5,7 @@ import typescript from '@rollup/plugin-typescript'
 import dts from 'rollup-plugin-dts'
 import nodeExternals from 'rollup-plugin-node-externals'
 import svg from 'rollup-plugin-svg'
-import packageJson from './package.json' assert { type: 'json' }
+import packageJson from './package.json' with { type: 'json' }
 
 export default [
     {

@@ -49,19 +49,18 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    setValue(values: ItemsInputValueType): Promise<ItemsInputValueType> {
-        if (!values) values = []
-
-        return new Promise((resolve) => {
-            this.setState({ ...this.state, items: [] }, async () => {
-                const output = await Promise.all(values.map(async (object: any) => {
-                    const key = await this.addItem();
-                    return this.setItemValue(key, object)
-                }))
-
-                resolve(output)
-            })
-        })
+    async setValue(values: ItemsInputValueType): Promise<ItemsInputValueType> {
+        const rows = Array.isArray(values) ? values : [];
+        await new Promise<void>(resolve => {
+            this.setState(state => ({ ...state, items: [] }), resolve);
+        });
+        const output: any[] = [];
+        for (const row of rows) {
+            const key = await this.addItem();
+            if (!key) break;
+            output.push(await this.setItemValue(key, row));
+        }
+        return output;
     }
 
     private setItemValue = async (key: string, object: any): Promise<any> => {
@@ -74,19 +73,19 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
         return formBuilderRef.setValues(object)
     }
 
-    exportFormBuilderData = (): OutputValues[] => {
+    exportFormBuilderData = (validation = true): OutputValues[] => {
         const values: OutputValues[] = [];
         for (const key in this.formBuilderRef) {
             const builder = this.formBuilderRef[key]
             if (builder) {
-                values.push(builder.getValues())
+                values.push(builder.getValues(validation))
             }
         }
         return values;
     }
 
-    getValue(): any {
-        const items = this.exportFormBuilderData();
+    getValue(validation = true): any {
+        const items = this.exportFormBuilderData(validation);
         return items.map(item => item.data)
     }
 
@@ -106,23 +105,20 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
     }
 
     addItem = (): Promise<string> => {
-        if (typeof (this.props.maxItems) === "number" && this.state.items.length >= this.props.maxItems) return Promise.resolve('')
-
         const random = this.getRandomKey()
-
+        let added = false;
         return new Promise((resolve) => {
-            this.setState((oldState) => {
-                let state = { ...oldState }
-                state.items = [...state.items, random];
-                return state;
-            }, () => {
-                resolve(random)
-            })
+            this.setState(oldState => {
+                if (typeof this.props.maxItems === "number" && oldState.items.length >= this.props.maxItems) return null;
+                added = true;
+                return { ...oldState, items: [...oldState.items, random] };
+            }, () => resolve(added ? random : ''));
         })
     }
 
     copyItem = (key: string) => async () => {
         const newKey = await this.addItem()
+        if (!newKey) return;
         const builder = this.formBuilderRef[key]
         if (builder) {
             const copyData = builder.getValues(false).data;
@@ -146,14 +142,7 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
     }
 
     removeAll = () => {
-        const items: IState['items'] = [];
-
-        [...Array(this.props.minItems).keys()].forEach(() => {
-            const random = this.getRandomKey()
-            items.push(random)
-        })
-
-        return this.setValue(items);
+        return this.setValue(Array.from({ length: Math.max(0, this.props.minItems ?? 0) }, () => ({})));
     }
 
     public click = () => { }

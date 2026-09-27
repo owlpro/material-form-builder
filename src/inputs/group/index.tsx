@@ -23,7 +23,9 @@ export class GroupInput extends Component<GroupInputProps, IState> implements In
     }
 
     setValue(values: GroupInputValueType): Promise<GroupInputValueType> {
-        if (!this.builderRef.current || !values) return Promise.reject(values)
+        if (values === undefined) return Promise.resolve(this.getValue(false));
+        if (!this.builderRef.current) return Promise.reject(new Error('Group builder is not mounted'));
+        if (values === null) return this.builderRef.current.clear();
         return this.builderRef.current.setValues(values)
     }
 

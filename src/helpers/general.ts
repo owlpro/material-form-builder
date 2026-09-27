@@ -30,6 +30,24 @@ export const checkValue = (value: any): boolean => {
     return true
 }
 
+export const isPlainObject = (value: any): value is ObjectLiteral => {
+    if (value === null || typeof value !== 'object') return false
+    const prototype = Object.getPrototypeOf(value)
+    return prototype === Object.prototype || prototype === null
+}
+
+export const clonePlain = <T>(value: T, seen = new WeakMap<object, any>()): T => {
+    if (!Array.isArray(value) && !isPlainObject(value)) return value
+    if (seen.has(value as object)) return seen.get(value as object)
+
+    const copy: any = Array.isArray(value) ? [] : Object.create(Object.getPrototypeOf(value))
+    seen.set(value as object, copy)
+    Object.keys(value).forEach(key => {
+        copy[key] = clonePlain((value as any)[key], seen)
+    })
+    return copy
+}
+
 export const sleep = (ms: number) => {
     return new Promise((resolve) => setTimeout(resolve, ms))
 }
@@ -67,7 +85,7 @@ export const setToObject = (selector: string, value: any, object: any) => {
             const isLast = splitSelector.length === index + 1
             if (regex.test(selectorItem)) {
                 const replacedSelectorItem = selectorItem.replace(/\[.*\]/, '')
-                if (!workingObject.hasOwnProperty(replacedSelectorItem)) workingObject[replacedSelectorItem] = []
+                if (!Object.prototype.hasOwnProperty.call(workingObject, replacedSelectorItem)) workingObject[replacedSelectorItem] = []
                 const splitQuery = selectorItem.replace(/.*\[|\]/g, '').split('=')
                 const queryKey = splitQuery[0]!.trim()
                 const queryValue = isNaN(parseInt(splitQuery[1]!)) ? splitQuery[1] : parseInt(splitQuery[1]!)
@@ -83,7 +101,7 @@ export const setToObject = (selector: string, value: any, object: any) => {
                 if (isLast) {
                     workingObject[selectorItem] = value
                 } else {
-                    if (!workingObject.hasOwnProperty(selectorItem)) workingObject[selectorItem] = {}
+                    if (!Object.prototype.hasOwnProperty.call(workingObject, selectorItem)) workingObject[selectorItem] = {}
                     workingObject = workingObject[selectorItem]
                 }
             }
