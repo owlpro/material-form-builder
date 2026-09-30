@@ -161,7 +161,7 @@ export class OtpInput extends Component<OtpInputProps, IState> implements InputI
                         value={this.state.value || ""}
                         maxLength={settings.digits}
                         inputMode='numeric'
-                        ref={el => this.inputRef = el}
+                        ref={el => { this.inputRef = el }}
                     />
                     {boxes.map((key) => {
                         const value = values[key] || "";

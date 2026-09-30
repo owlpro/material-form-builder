@@ -1,6 +1,6 @@
 import { TextField } from '@mui/material';
 import React, { Component, FocusEvent, MouseEvent } from "react";
-import { mask, stringify } from '../../helpers/general';
+import { mask, stringify, withLegacySlotProps } from '../../helpers/general';
 import { InputImplement } from '../../types';
 import { MaskInputProps, MaskInputValueType } from './types';
 
@@ -130,7 +130,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
     render() {
         const { updateListener, onChangeValue, formatter, visible, _call_parent_for_update, defaultValue, ...restProps } = this.props;
         return <TextField
-            {...restProps}
+            {...withLegacySlotProps(restProps)}
             variant={this.props.variant || "standard"}
             error={this.state.error}
             onChange={this.onChange}
@@ -138,7 +138,7 @@ export class MaskInput extends Component<MaskInputProps, IState> implements Inpu
             onBlur={this.onBlur}
             onFocus={this.onFocus}
             value={this.state.value || ''}
-            inputRef={el => this.inputRef = el}
+            inputRef={el => { this.inputRef = el }}
         />
     }
 }

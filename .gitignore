@@ -4,3 +4,5 @@ yarn.lock
 dist
 .prettierrc
 yalc.lock
+.yarn
+*.tgz

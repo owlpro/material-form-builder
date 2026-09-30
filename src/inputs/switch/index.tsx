@@ -1,6 +1,6 @@
 import { FormControlLabel, Switch } from '@mui/material';
 import React, { Component } from "react";
-import { stringify } from 'src/helpers/general';
+import { mergeSlot, stringify } from 'src/helpers/general';
 import { InputImplement } from '../../types';
 import { SwitchInputProps, SwitchInputValueType } from './types';
 
@@ -96,13 +96,14 @@ export class SwitchInput extends Component<SwitchInputProps, IState> implements 
             visible,
             _call_parent_for_update,
             sx,
+            slotProps,
             ...restProps } = this.props;
         const input = <Switch
             {...restProps}
             sx={{ color: this.state.error ? "#d32f2f" : "#616161", ...(!label && { ...sx }) }}
             checked={this.state.value}
             onChange={this.onChange}
-            inputRef={el => this.inputRef = el}
+            slotProps={{ ...slotProps, input: mergeSlot(slotProps?.input, { ref: (el: HTMLInputElement | null) => { this.inputRef = el } }) }}
         />;
         return (
             label ? (

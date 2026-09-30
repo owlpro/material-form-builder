@@ -1,6 +1,7 @@
 import { TextFieldProps } from '@mui/material'
 import { AutocompleteProps } from '@mui/material'
 import { BaseInput, Variant } from '../../types'
+import { LegacyTextFieldProps } from '../legacyTypes'
 
 export type AutocompleteOptionType = {
     label: string
@@ -18,7 +19,7 @@ export interface AutocompleteInputProps
     variant?: Variant
     label?: string
     renderInput?: (params: TextFieldProps) => React.ReactNode
-    InputProps?: TextFieldProps
+    InputProps?: TextFieldProps & LegacyTextFieldProps
     defaultValue?: AutocompleteInputValueType
     loading?: boolean
 }

@@ -155,17 +155,17 @@ export class ItemsInput extends Component<ItemsInputProps, IState> implements In
                 {this.props.removeIcon !== false ? (
                     <IconButton onClick={this.removeItem(key)}>{this.props.removeIcon ? this.props.removeIcon : <RemoveIcon />}</IconButton>
                 ) : null}
-                <FormBuilder inputs={this.props.inputs} ref={el => this.formBuilderRef = { ...this.formBuilderRef, [key]: el }} />
+                <FormBuilder inputs={this.props.inputs} ref={el => { this.formBuilderRef = { ...this.formBuilderRef, [key]: el } }} />
                 {this.props.copyIcon !== false ? (
                     <IconButton onClick={this.copyItem(key)}>{this.props.copyIcon ? this.props.copyIcon : <CopyAllIcon />}</IconButton>
                 ) : null}
             </Fragment>
         ) : (
-            <Box key={key} display="flex" alignItems="center">
+            <Box key={key} sx={{ display: "flex", alignItems: "center" }}>
                 {this.props.removeIcon !== false ? (
                     <IconButton onClick={this.removeItem(key)}>{this.props.removeIcon ? this.props.removeIcon : <RemoveIcon />}</IconButton>
                 ) : null}
-                <FormBuilder inputs={this.props.inputs} ref={el => this.formBuilderRef = { ...this.formBuilderRef, [key]: el }} />
+                <FormBuilder inputs={this.props.inputs} ref={el => { this.formBuilderRef = { ...this.formBuilderRef, [key]: el } }} />
                 {this.props.copyIcon !== false ? (
                     <IconButton onClick={this.copyItem(key)}>{this.props.copyIcon ? this.props.copyIcon : <CopyAllIcon />}</IconButton>
                 ) : null}

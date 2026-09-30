@@ -98,10 +98,10 @@ function SwitchInputOverview({ lang }: { lang: 'en' | 'fa' }) {
   const ov = t[lang].overview
   return (
     <Paper variant="outlined" sx={{ p: 3, mb: 4, bgcolor: '#f9fafb', borderColor: '#e0e0e0', borderRadius: 2 }}>
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>{ov.howTitle}</Typography>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>{ov.howTitle}</Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{ov.howBody}</Typography>
       <Divider sx={{ mb: 2 }} />
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>{ov.noteTitle}</Typography>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>{ov.noteTitle}</Typography>
       <Stack spacing={0.8} sx={{ mb: 2 }}>
         {ov.notes.map(([name, desc]) => (
           <Box key={name} sx={{ display: 'flex', gap: 1.5, alignItems: 'baseline' }}>
@@ -113,7 +113,7 @@ function SwitchInputOverview({ lang }: { lang: 'en' | 'fa' }) {
         ))}
       </Stack>
       <Divider sx={{ mb: 2 }} />
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>{ov.exclusiveTitle}</Typography>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>{ov.exclusiveTitle}</Typography>
       <Stack spacing={0.8}>
         {ov.exclusiveProps.map(([name, desc]) => (
           <Box key={name} sx={{ display: 'flex', gap: 1.5, alignItems: 'baseline' }}>
@@ -157,7 +157,7 @@ const noLabelCode = `// with label → FormControlLabel wraps the Switch
 function NoLabelDemo() {
   const { ref } = useFormBuilder()
   return (
-    <Stack direction="row" spacing={3} alignItems="center">
+    <Stack direction="row" spacing={3} sx={{ alignItems: 'center' }}>
       <FormBuilder ref={ref} inputs={[{ type: 'switch', selector: 'a', label: 'With label' }]} />
       <FormBuilder ref={ref} inputs={[{ type: 'switch', selector: 'b' }]} />
     </Stack>
@@ -270,7 +270,7 @@ function ApiDemo() {
         ref={ref}
         inputs={[{ type: 'switch', selector: 'notifications', label: 'Enable notifications' }]}
       />
-      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+      <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap' }}>
         <Button size="small" variant="outlined" onClick={() =>
           setOutput(JSON.stringify(getValues(false).data, null, 2))
         }>getValues</Button>
@@ -299,10 +299,10 @@ function SwitchInputContent({ lang }: { lang: 'en' | 'fa' }) {
   return (
     <Box>
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h5" fontWeight={700} gutterBottom>
+        <Typography variant="h5" gutterBottom sx={{ fontWeight: 700 }}>
           {t[lang].pageTitle}
         </Typography>
-        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 3 }}>
+        <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap', mb: 3 }}>
           <Chip label='type: "switch"' size="small" variant="outlined" />
           <Chip label="value: boolean" size="small" variant="outlined" />
           <Chip label="label: optional" size="small" variant="outlined" />

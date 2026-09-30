@@ -1,3 +1,4 @@
+import type { JSX } from 'react'
 import { AutocompleteInput } from './inputs/autocomplete'
 import type { AutocompleteInputProps } from './inputs/autocomplete/types'
 
@@ -138,7 +139,7 @@ interface BaseInput<ValueType = any> {
      * @default true
      */
     visible?: ((e: any) => boolean | undefined) | boolean
-    wrapper?: (children: JSX.Element, actions: InputActions<ValueType>) => JSX.Element
+    wrapper?: (children: JSX.Element, actions: InputActions<ValueType>) => JSX.Element | null
 
     /**
      * listen for changes to update component from external state or resource

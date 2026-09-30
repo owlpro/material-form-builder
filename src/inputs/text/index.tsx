@@ -2,7 +2,7 @@ import { TextField } from '@mui/material';
 import React, { Component, FocusEvent, MouseEvent } from "react";
 import { InputImplement } from '../../types';
 import { TextInputProps, TextInputValueType } from './types';
-import { stringify } from 'src/helpers/general';
+import { stringify, withLegacySlotProps } from 'src/helpers/general';
 // import { stringify } from 'src/helpers/general';
 
 interface IState {
@@ -131,7 +131,7 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
     render() {
         const { updateListener, defaultValue, onChangeValue, visible, formatter, _call_parent_for_update, autoDirection, ...restProps } = this.props;
         return <TextField
-            {...restProps}
+            {...withLegacySlotProps(restProps)}
             variant={this.props.variant || "standard"}
             error={this.state.error}
             onChange={this.onChange}
@@ -139,7 +139,7 @@ export class TextInput extends Component<TextInputProps, IState> implements Inpu
             onBlur={this.onBlur}
             onFocus={this.onFocus}
             value={this.state.value || ''}
-            inputRef={el => this.inputRef = el}
+            inputRef={el => { this.inputRef = el }}
         />
     }
 }

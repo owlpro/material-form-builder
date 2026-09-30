@@ -1,6 +1,6 @@
 import { Box, InputAdornment, MenuItem, Select, SelectChangeEvent, TextField, Typography, styled } from "@mui/material";
 import React, { Component, FocusEvent } from "react";
-import { mask, stringify } from '../../helpers/general';
+import { mask, mergeSlot, stringify, withLegacySlotProps } from '../../helpers/general';
 import { InputImplement } from '../../types';
 import { Country, countries } from "./countries";
 import { MobileInputProps, MobileInputValueType } from './types';
@@ -161,6 +161,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
 
     render() {
         const { updateListener, defaultValue, onChangeValue, visible, _call_parent_for_update, ...restProps } = this.props;
+        const fieldProps = withLegacySlotProps(restProps);
         const isOutlined = this.props.variant === "outlined";
         let inputWidth = 207;
         switch (this.props.variant) {
@@ -189,7 +190,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
                         bottom: 2
                     }}
                     renderValue={(value) => {
-                        return <Typography paddingLeft={'8px'}>
+                        return <Typography sx={{ paddingLeft: '8px' }}>
                             +{value}
                         </Typography>;
                     }}
@@ -205,7 +206,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
                                 paddingRight: '8px',
                                 paddingLeft: '8px'
                             }}>
-                                <Typography display={'inline'}>
+                                <Typography sx={{ display: 'inline' }}>
                                     +{country.dialCode}
                                 </Typography>
                                 <StylesImage src={country.flag} />
@@ -214,7 +215,7 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
                     })}
                 </Select>
                 <TextField
-                    {...restProps}
+                    {...fieldProps}
                     variant={this.props.variant || "standard"}
                     error={this.state.error}
                     onChange={this.onChange}
@@ -222,16 +223,17 @@ export class MobileInput extends Component<MobileInputProps, IState> implements 
                     onBlur={this.onBlur}
                     onFocus={this.onFocus}
                     value={this.state.value || ''}
-                    inputRef={el => this.inputRef = el}
+                    inputRef={el => { this.inputRef = el }}
                     slotProps={{
-                        input: {
+                        ...fieldProps.slotProps,
+                        input: mergeSlot(fieldProps.slotProps.input, {
                             sx: { width: this.props.fullWidth ? '100%' : inputWidth },
                             startAdornment: (
                                 <InputAdornment position='start'>
-                                    <Box ml={'56px'}></Box>
+                                    <Box sx={{ ml: '56px' }}></Box>
                                 </InputAdornment>
                             )
-                        }
+                        })
                     }}
                 />
             </Box>

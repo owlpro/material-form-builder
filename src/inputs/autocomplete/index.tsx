@@ -1,8 +1,8 @@
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ClearIcon from '@mui/icons-material/Clear';
 import { Autocomplete, AutocompleteChangeDetails, AutocompleteChangeReason, AutocompleteRenderInputParams, Box, CircularProgress, Grow, IconButton, TextField, TextFieldProps } from "@mui/material";
-import React, { Component } from "react";
-import { isNull, stringify } from '../../helpers/general';
+import React, { Component, JSX } from "react";
+import { isNull, mergeSlot, stringify, withLegacySlotProps } from '../../helpers/general';
 import { InputImplement } from '../../types';
 import { AutocompleteInputProps, AutocompleteInputValueType, AutocompleteOptionType, AutocompleteValueType } from './types';
 
@@ -167,7 +167,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
     }
 
     renderInput = (params: TextFieldProps) => {
-        params.inputRef = (el: any) => this.inputRef = el
+        params.inputRef = (el: any) => { this.inputRef = el }
         params.error = this.state.error;
         params.variant = this.props.variant || "standard"
         params.label = this.props.label;
@@ -182,6 +182,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
         if (this.props.variant === "outlined") variantWidth = "235px";
         if (this.props.variant === "filled") variantWidth = "231px";
         const inputWidth = this.props.fullWidth ? '100%' : variantWidth;
+        const fieldProps = withLegacySlotProps(InputProps ?? {});
         return (
             <Autocomplete
                 {...restProps}
@@ -206,22 +207,24 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
                 renderInput={renderInput ? this.renderInput : ((params: AutocompleteRenderInputParams) => (
                     <TextField
                         {...params}
-                        {...InputProps}
+                        {...fieldProps}
                         label={label}
                         placeholder={InputProps?.placeholder}
                         variant={variant || "standard"}
                         required={required}
                         onClick={this.onClick}
                         error={this.state.error}
-                        inputRef={el => this.inputRef = el}
+                        inputRef={el => { this.inputRef = el }}
                         slotProps={{
-                            input: {
-                                ...InputProps?.slotProps?.input,
-                                ...params.InputProps,
+                            ...fieldProps.slotProps,
+                            inputLabel: mergeSlot(params.slotProps.inputLabel, fieldProps.slotProps.inputLabel),
+                            htmlInput: mergeSlot(params.slotProps.htmlInput, fieldProps.slotProps.htmlInput),
+                            input: mergeSlot(fieldProps.slotProps.input, {
+                                ...params.slotProps.input,
                                 onBlur: this.onInputBlur,
                                 endAdornment: (
                                     <>
-                                        {params.InputProps.endAdornment}
+                                        {params.slotProps.input.endAdornment}
                                         {!this.props.disableClearable && this.getValueForCheck(this.state.value) ? (
                                             <IconButton
                                                 size="small"
@@ -241,7 +244,7 @@ export class AutocompleteInput extends Component<AutocompleteInputProps, IState>
                                         ) : null}
                                     </>
                                 )
-                            }
+                            })
                         }}
                     />
                 )

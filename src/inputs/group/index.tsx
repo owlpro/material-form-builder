@@ -15,7 +15,7 @@ export class GroupInput extends Component<GroupInputProps, IState> implements In
     }
 
     validationTimeout: any;
-    builderRef: RefObject<FormBuilder>;
+    builderRef: RefObject<FormBuilder | null>;
 
     constructor(props: GroupInputProps) {
         super(props)

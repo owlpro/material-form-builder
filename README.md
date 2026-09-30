@@ -1,6 +1,6 @@
 # Material Form Builder
 
-> A dynamic, composable, and type-safe form builder built on top of **Material-UI (MUI 5 & 6)** — designed for developers who want power and flexibility in building complex, data-driven forms.
+> A dynamic, composable, and type-safe form builder built on top of **Material-UI (MUI 9)** — designed for developers who want power and flexibility in building complex, data-driven forms.
 
 Created and maintained by [**Mahdi Amiri (@owlpro)**](https://github.com/owlpro)
 
@@ -21,7 +21,7 @@ It’s perfect for admin panels, CMS dashboards, product editors, or anywhere yo
 ✅ **Full MUI support** – all unknown props are passed to the underlying MUI components  
 ✅ **Custom Input API** – create reusable input types with full `setValue` / `getValue` / `clear` control  
 ✅ **TypeScript ready** – fully typed generics for safe development  
-✅ **Works with React >=17 and MUI 5 & 6**
+✅ **Works with React 18 / 19 and MUI 9** (use 1.x for MUI 6)
 
 ---
 
@@ -36,8 +36,32 @@ yarn add material-form-builder
 Make sure you have these peer dependencies installed:
 
 ```bash
-npm install @mui/material @mui/icons-material @emotion/react @emotion/styled dayjs
+npm install @mui/material @mui/icons-material @mui/x-date-pickers @emotion/react @emotion/styled dayjs
 ```
+
+| material-form-builder | @mui/material | @mui/x-date-pickers | react |
+|---|---|---|---|
+| 2.x | 9 | 9 | 18 / 19 |
+| 1.x | 6 | 7 | 17 / 18 |
+
+### Upgrading from 1.x
+
+- Upgrade `@mui/material`, `@mui/icons-material` and `@mui/x-date-pickers` to v9.
+- MUI v9 removed `InputProps`, `inputProps`, `InputLabelProps`, `SelectProps` and `FormHelperTextProps` from `TextField`.
+  The form builder inputs still accept them and move them into `slotProps`, so existing configs keep working.
+  For new code, use `slotProps` directly:
+
+| Old prop | `slotProps` key |
+|---|---|
+| `InputProps` | `input` |
+| `inputProps` | `htmlInput` |
+| `InputLabelProps` | `inputLabel` |
+| `SelectProps` | `select` |
+| `FormHelperTextProps` | `formHelperText` |
+
+- A custom `renderInput` on the `autocomplete` input receives the v9 params: read `params.slotProps.input` instead of `params.InputProps`.
+- The `date`, `time` and `datetime` inputs use the v9 field, where the value is shown in sections next to a hidden `<input>`.
+  `focus()`, `blur()` and `click()` still work through the input ref.
 
 ---
 

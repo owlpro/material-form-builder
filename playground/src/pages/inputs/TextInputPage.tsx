@@ -19,8 +19,10 @@ const t = {
               TextField
             </a>
           </code>
-          . Every prop — <code>variant</code>, <code>fullWidth</code>, <code>InputProps</code>,{' '}
-          <code>inputProps</code>, <code>sx</code>, event handlers and anything else — is passed directly to MUI.
+          . Every prop — <code>variant</code>, <code>fullWidth</code>, <code>slotProps</code>,{' '}
+          <code>sx</code>, event handlers and anything else — is passed directly to MUI. The old{' '}
+          <code>InputProps</code> / <code>inputProps</code> / <code>InputLabelProps</code> are still accepted and moved into{' '}
+          <code>slotProps</code>.
         </>
       ),
       internalTitle: 'Internal connections',
@@ -46,7 +48,7 @@ const t = {
       basic:         { title: 'Basic' },
       variants:      { title: 'Variants',               desc: 'Supports all MUI TextField variants. Default is standard.' },
       required:      { title: 'Required & Validation',  desc: 'Set required: true. Calling getValues() triggers validation — invalid fields flash red for 3 seconds.' },
-      disabled:      { title: 'Disabled & Read-only',   desc: "disabled is a MUI prop. For read-only behavior use MUI's inputProps: { readOnly: true }." },
+      disabled:      { title: 'Disabled & Read-only',   desc: "disabled is a MUI prop. For read-only behavior use slotProps: { htmlInput: { readOnly: true } }." },
       multiline:     { title: 'Multiline',              desc: 'Pass multiline + rows to turn the input into a textarea.' },
       formatter:     { title: 'Formatter',              desc: 'formatter runs on every keystroke. Transform or filter the value — return undefined to discard the change.' },
       autoDirection: { title: 'Auto Direction',         desc: "autoDirection detects the first character's script (Latin → ltr, Arabic/Persian → rtl) and sets direction automatically." },
@@ -71,7 +73,9 @@ const t = {
             </a>
           </code>{' '}
           را رندر می‌کند. تمام props — از <code>variant</code> و <code>fullWidth</code> گرفته تا{' '}
-          <code>InputProps</code>، <code>inputProps</code>، <code>sx</code>، event handler‌ها و هر چیز دیگری — مستقیماً به MUI پاس می‌شوند.
+          <code>slotProps</code>، <code>sx</code>، event handler‌ها و هر چیز دیگری — مستقیماً به MUI پاس می‌شوند. propهای قدیمی{' '}
+          <code>InputProps</code> / <code>inputProps</code> / <code>InputLabelProps</code> هنوز پذیرفته می‌شوند و به{' '}
+          <code>slotProps</code> منتقل می‌شوند.
         </>
       ),
       internalTitle: 'اتصالات داخلی',
@@ -97,7 +101,7 @@ const t = {
       basic:         { title: 'پایه' },
       variants:      { title: 'حالت‌های نمایش',        desc: 'از تمام variant‌های MUI TextField پشتیبانی می‌کند. پیش‌فرض standard است.' },
       required:      { title: 'اجباری و اعتبارسنجی',  desc: 'با required: true فعال می‌شود. صدا زدن getValues() اعتبارسنجی را اجرا می‌کند — فیلدهای نامعتبر 3 ثانیه قرمز می‌شوند.' },
-      disabled:      { title: 'غیرفعال و فقط خواندنی', desc: 'disabled یک prop از MUI است. برای read-only از inputProps: { readOnly: true } استفاده کن.' },
+      disabled:      { title: 'غیرفعال و فقط خواندنی', desc: 'disabled یک prop از MUI است. برای read-only از slotProps: { htmlInput: { readOnly: true } } استفاده کن.' },
       multiline:     { title: 'چندخطی',                desc: 'multiline + rows را ست کن تا input به textarea تبدیل شود.' },
       formatter:     { title: 'فرمت‌کننده',             desc: 'formatter روی هر keystroke اجرا می‌شود. مقدار را فیلتر یا تبدیل کن — بازگشت undefined تغییر را لغو می‌کند.' },
       autoDirection: { title: 'جهت خودکار',             desc: 'autoDirection اولین کاراکتر را شناسایی می‌کند (لاتین → ltr، فارسی/عربی → rtl) و direction را به‌طور خودکار تنظیم می‌کند.' },
@@ -117,14 +121,14 @@ function TextInputOverview({ lang }: { lang: 'en' | 'fa' }) {
   const ov = t[lang].overview
   return (
     <Paper variant="outlined" sx={{ p: 3, mb: 4, bgcolor: '#f9fafb', borderColor: '#e0e0e0', borderRadius: 2 }}>
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>
         {ov.howTitle}
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
         {ov.howBody}
       </Typography>
       <Divider sx={{ mb: 2 }} />
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>
         {ov.internalTitle}
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
@@ -141,7 +145,7 @@ function TextInputOverview({ lang }: { lang: 'en' | 'fa' }) {
         ))}
       </Stack>
       <Divider sx={{ my: 2 }} />
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>
         {ov.exclusiveTitle}
       </Typography>
       <Stack spacing={0.8}>
@@ -258,7 +262,7 @@ const disabledCode = `inputs={[
   {
     type: 'text', selector: 'b', label: 'Read-only',
     defaultValue: 'Read only', variant: 'outlined',
-    inputProps: { readOnly: true },
+    slotProps: { htmlInput: { readOnly: true } },
   },
 ]}`
 
@@ -270,7 +274,7 @@ function DisabledDemo() {
         ref={ref}
         inputs={[
           { type: 'text', selector: 'a', label: 'Disabled', defaultValue: 'Cannot edit', variant: 'outlined', disabled: true },
-          { type: 'text', selector: 'b', label: 'Read-only', defaultValue: 'Read only', variant: 'outlined', inputProps: { readOnly: true } },
+          { type: 'text', selector: 'b', label: 'Read-only', defaultValue: 'Read only', variant: 'outlined', slotProps: { htmlInput: { readOnly: true } } },
         ]}
       />
     </Stack>
@@ -436,10 +440,10 @@ function TextInputContent({ lang }: { lang: 'en' | 'fa' }) {
   return (
     <Box>
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h5" fontWeight={700} gutterBottom>
+        <Typography variant="h5" gutterBottom sx={{ fontWeight: 700 }}>
           {t[lang].pageTitle}
         </Typography>
-        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 3 }}>
+        <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap', mb: 3 }}>
           <Chip label='type: "text"' size="small" variant="outlined" />
           <Chip label="value: string | null" size="small" variant="outlined" />
           <Chip label="defaultValue?: string | null" size="small" variant="outlined" />

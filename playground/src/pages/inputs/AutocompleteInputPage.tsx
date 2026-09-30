@@ -143,10 +143,10 @@ function AutocompleteInputOverview({ lang }: { lang: 'en' | 'fa' }) {
   const ov = t[lang].overview
   return (
     <Paper variant="outlined" sx={{ p: 3, mb: 4, bgcolor: '#f9fafb', borderColor: '#e0e0e0', borderRadius: 2 }}>
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>{ov.howTitle}</Typography>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>{ov.howTitle}</Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{ov.howBody}</Typography>
       <Divider sx={{ mb: 2 }} />
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>{ov.noteTitle}</Typography>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>{ov.noteTitle}</Typography>
       <Stack spacing={0.8} sx={{ mb: 2 }}>
         {ov.notes.map(([name, desc]) => (
           <Box key={name} sx={{ display: 'flex', gap: 1.5, alignItems: 'baseline' }}>
@@ -158,7 +158,7 @@ function AutocompleteInputOverview({ lang }: { lang: 'en' | 'fa' }) {
         ))}
       </Stack>
       <Divider sx={{ mb: 2 }} />
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>{ov.connectionTitle}</Typography>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>{ov.connectionTitle}</Typography>
       <Stack spacing={0.8} sx={{ mb: 2 }}>
         {ov.connections.map(([name, desc]) => (
           <Box key={name} sx={{ display: 'flex', gap: 1.5, alignItems: 'baseline' }}>
@@ -170,7 +170,7 @@ function AutocompleteInputOverview({ lang }: { lang: 'en' | 'fa' }) {
         ))}
       </Stack>
       <Divider sx={{ mb: 2 }} />
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>{ov.exclusiveTitle}</Typography>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>{ov.exclusiveTitle}</Typography>
       <Stack spacing={0.8}>
         {ov.exclusiveProps.map(([name, desc]) => (
           <Box key={name} sx={{ display: 'flex', gap: 1.5, alignItems: 'baseline' }}>
@@ -216,7 +216,7 @@ function VariantsDemo() {
   const { ref } = useFormBuilder()
   return (
     <Stack spacing={3}>
-      <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
+      <Stack direction="row" spacing={2} useFlexGap sx={{ flexWrap: 'wrap' }}>
         <FormBuilder
           ref={ref}
           inputs={[
@@ -372,7 +372,7 @@ const clearableCode = `// default: disableClearable is false — × appears afte
 function ClearableDemo() {
   const { ref } = useFormBuilder()
   return (
-    <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
+    <Stack direction="row" spacing={2} useFlexGap sx={{ flexWrap: 'wrap' }}>
       <FormBuilder
         ref={ref}
         inputs={[
@@ -449,7 +449,7 @@ function ApiDemo() {
         ref={ref}
         inputs={[{ type: 'autocomplete', selector: 'fruit', label: 'Fruit', options: FRUITS, variant: 'outlined', fullWidth: true }]}
       />
-      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+      <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap' }}>
         <Button size="small" variant="outlined" onClick={() =>
           setOutput(JSON.stringify(getValues(false).data, null, 2))
         }>getValues</Button>
@@ -478,10 +478,10 @@ function AutocompleteInputContent({ lang }: { lang: 'en' | 'fa' }) {
   return (
     <Box>
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h5" fontWeight={700} gutterBottom>
+        <Typography variant="h5" gutterBottom sx={{ fontWeight: 700 }}>
           {t[lang].pageTitle}
         </Typography>
-        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 3 }}>
+        <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap', mb: 3 }}>
           <Chip label='type: "autocomplete"' size="small" variant="outlined" />
           <Chip label="value: string | string[] | null" size="small" variant="outlined" />
           <Chip label="options: required" size="small" variant="outlined" color="warning" />

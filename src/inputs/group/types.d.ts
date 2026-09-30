@@ -1,3 +1,4 @@
+import type { JSX } from 'react'
 import { BaseInput, OutputValues, InputProps, ObjectLiteral} from '../../types'
 
 export type GroupInputValueType = ObjectLiteral | undefined | null

@@ -3,7 +3,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 import { IconButton, InputAdornment, TextField } from "@mui/material";
 import React, { Component, FocusEvent, MouseEvent } from "react";
-import { stringify } from 'src/helpers/general';
+import { mergeSlot, stringify, withLegacySlotProps } from 'src/helpers/general';
 import { InputImplement } from '../../types';
 import { PasswordInputProps, PasswordInputValueType } from './types';
 
@@ -121,14 +121,15 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
     }
 
     render() {
-        const { updateListener, defaultValue, onChangeValue, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { updateListener, defaultValue, onChangeValue, visible, formatter, _call_parent_for_update, ...restProps } = this.props;
+        const fieldProps = withLegacySlotProps(restProps);
         let variantWidth = '207px';
         if (this.props.variant === "outlined") variantWidth = "235px";
         if (this.props.variant === "filled") variantWidth = "231px";
         const inputWidth = this.props.fullWidth ? '100%' : variantWidth;
         return (
             <TextField
-                {...restProps}
+                {...fieldProps}
                 sx={{ ...this.props.sx, width: inputWidth }}
                 type={this.state.showPassword ? 'text' : 'password'}
                 variant={this.props.variant || "standard"}
@@ -138,9 +139,10 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
                 onBlur={this.onBlur}
                 onFocus={this.onFocus}
                 value={this.state.value || ''}
-                inputRef={el => this.inputRef = el}
+                inputRef={el => { this.inputRef = el }}
                 slotProps={{
-                    input: {
+                    ...fieldProps.slotProps,
+                    input: mergeSlot(fieldProps.slotProps.input, {
                         endAdornment: (
                             <InputAdornment position="end">
                                 <IconButton onClick={this.handleClickShowPassword}>
@@ -148,7 +150,7 @@ export class PasswordInput extends Component<PasswordInputProps, IState> impleme
                                 </IconButton>
                             </InputAdornment>
                         )
-                    }
+                    })
                 }}
             />
         )

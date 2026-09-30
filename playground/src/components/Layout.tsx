@@ -121,7 +121,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                   >
                     <ListItemText
                       primary={item.label}
-                      primaryTypographyProps={{ variant: 'body2' }}
+                      slotProps={{ primary: { variant: 'body2' } }}
                     />
                     {!item.available && (
                       <Chip

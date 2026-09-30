@@ -40,7 +40,7 @@ const t = {
     demos: {
       basic:        { title: 'Basic' },
       variants:     { title: 'Variants',            desc: 'Same MUI TextField variants as Text input.' },
-      minMax:       { title: 'min / max / step',    desc: 'Pass min, max, and step via MUI inputProps. Browser enforces these on the native spinner but not on direct keyboard input — use formatter for strict enforcement.' },
+      minMax:       { title: 'min / max / step',    desc: 'Pass min, max, and step via slotProps.htmlInput. Browser enforces these on the native spinner but not on direct keyboard input — use formatter for strict enforcement.' },
       integerOnly:  { title: 'Integer only (parseInt)', desc: 'NumberInput always calls parseInt — typing 3.14 stores 3. To accept decimals you need a custom formatter that uses parseFloat.' },
       formatter:    { title: 'Formatter',           desc: 'formatter receives number | null (already parsed). Use it to clamp, transform, or reject values.' },
       textAlt:      { title: 'When to use Text + formatter instead', desc: 'Number input uses parseInt — no decimals, no display formatting. Switch to type: "text" with a formatter when you need decimals, currency symbols, or thousands separators.' },
@@ -87,7 +87,7 @@ const t = {
     demos: {
       basic:        { title: 'پایه' },
       variants:     { title: 'حالت‌های نمایش',        desc: 'همان variant‌های MUI TextField.' },
-      minMax:       { title: 'min / max / step',      desc: 'از طریق inputProps به MUI پاس می‌شوند. مرورگر اعمال می‌کند اما keyboard input را محدود نمی‌کند — برای اعمال سخت از formatter استفاده کن.' },
+      minMax:       { title: 'min / max / step',      desc: 'از طریق slotProps.htmlInput به MUI پاس می‌شوند. مرورگر اعمال می‌کند اما keyboard input را محدود نمی‌کند — برای اعمال سخت از formatter استفاده کن.' },
       integerOnly:  { title: 'فقط عدد صحیح (parseInt)', desc: 'NumberInput همیشه parseInt را صدا می‌زند — تایپ 3.14 مقدار 3 ذخیره می‌کند. برای اعشار باید formatter با parseFloat بسازی.' },
       formatter:    { title: 'فرمت‌کننده',              desc: 'formatter مقدار number | null دریافت می‌کند. برای محدودسازی، تبدیل، یا رد کردن مقادیر استفاده کن.' },
       textAlt:      { title: 'کِی از Text + formatter استفاده کنیم؟', desc: 'Number از parseInt استفاده می‌کند — اعشار ندارد، نمایش فرمت‌بندی‌شده ندارد. وقتی اعشار، نماد ارزی، یا جداکننده هزارگان نیاز داری، از type: "text" با formatter استفاده کن.' },
@@ -109,10 +109,10 @@ function NumberInputOverview({ lang }: { lang: 'en' | 'fa' }) {
   const ov = t[lang].overview
   return (
     <Paper variant="outlined" sx={{ p: 3, mb: 4, bgcolor: '#f9fafb', borderColor: '#e0e0e0', borderRadius: 2 }}>
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>{ov.howTitle}</Typography>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>{ov.howTitle}</Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{ov.howBody}</Typography>
       <Divider sx={{ mb: 2 }} />
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>{ov.diffTitle}</Typography>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>{ov.diffTitle}</Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>{ov.diffBody}</Typography>
       <Stack spacing={0.8} sx={{ mb: 2 }}>
         {ov.diffs.map(([name, desc]) => (
@@ -125,7 +125,7 @@ function NumberInputOverview({ lang }: { lang: 'en' | 'fa' }) {
         ))}
       </Stack>
       <Divider sx={{ mb: 2 }} />
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>{ov.exclusiveTitle}</Typography>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>{ov.exclusiveTitle}</Typography>
       <Stack spacing={0.8}>
         {ov.exclusiveProps.map(([name, desc]) => (
           <Box key={name} sx={{ display: 'flex', gap: 1.5, alignItems: 'baseline' }}>
@@ -187,7 +187,7 @@ const minMaxCode = `inputs={[{
   selector: 'age',
   label: 'Age (1 – 120)',
   variant: 'outlined',
-  inputProps: { min: 1, max: 120, step: 1 },
+  slotProps: { htmlInput: { min: 1, max: 120, step: 1 } },
 }]}`
 
 function MinMaxDemo() {
@@ -197,7 +197,7 @@ function MinMaxDemo() {
       ref={ref}
       inputs={[{
         type: 'number', selector: 'age', label: 'Age (1 – 120)',
-        variant: 'outlined', inputProps: { min: 1, max: 120, step: 1 },
+        variant: 'outlined', slotProps: { htmlInput: { min: 1, max: 120, step: 1 } },
       }]}
     />
   )
@@ -290,7 +290,7 @@ const textAltCode = `// ❌ number input — no decimals, no display formatting
   selector: 'price',
   label: 'Price (USD)',
   variant: 'outlined',
-  inputProps: { inputMode: 'decimal' },
+  slotProps: { htmlInput: { inputMode: 'decimal' } },
   formatter: (value) => {
     const digits = value.replace(/[^0-9.]/g, '')
     const parts = digits.split('.')
@@ -320,19 +320,19 @@ function TextAltDemo() {
         inputs={[
           {
             type: 'text', selector: 'price', label: 'Price (USD) — e.g. 1234.56',
-            variant: 'outlined', inputProps: { inputMode: 'decimal' },
+            variant: 'outlined', slotProps: { htmlInput: { inputMode: 'decimal' } },
             formatter: thousandsFormatter,
             getMutator: (v: string | null) => parseFloat((v ?? '').replace(/,/g, '')) || null,
           },
           {
             type: 'text', selector: 'decimal', label: 'Decimal — e.g. 3.14',
-            variant: 'outlined', inputProps: { inputMode: 'decimal' },
+            variant: 'outlined', slotProps: { htmlInput: { inputMode: 'decimal' } },
             formatter: (v: string) => v.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'),
             getMutator: (v: string | null) => parseFloat(v ?? '') || null,
           },
           {
             type: 'text', selector: 'negative', label: 'Allows negative — e.g. -42.5',
-            variant: 'outlined', inputProps: { inputMode: 'decimal' },
+            variant: 'outlined', slotProps: { htmlInput: { inputMode: 'decimal' } },
             formatter: (v: string) => v.replace(/[^0-9.\-]/g, '').replace(/(\..*)\./g, '$1'),
             getMutator: (v: string | null) => parseFloat(v ?? '') || null,
           },
@@ -477,10 +477,10 @@ function NumberInputContent({ lang }: { lang: 'en' | 'fa' }) {
   return (
     <Box>
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h5" fontWeight={700} gutterBottom>
+        <Typography variant="h5" gutterBottom sx={{ fontWeight: 700 }}>
           {t[lang].pageTitle}
         </Typography>
-        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 3 }}>
+        <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap', mb: 3 }}>
           <Chip label='type: "number"' size="small" variant="outlined" />
           <Chip label="value: number | null" size="small" variant="outlined" />
           <Chip label="parseInt on change" size="small" variant="outlined" color="warning" />

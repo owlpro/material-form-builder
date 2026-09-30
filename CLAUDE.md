@@ -1,7 +1,8 @@
 # material-form-builder — Project Context
 
 ## Overview
-An npm library (v1.5.x) providing a dynamic, type-safe React form builder on top of MUI v5/v6.
+An npm library (v2.x) providing a dynamic, type-safe React form builder on top of MUI v9 and MUI X v9.
+The `mui-v6` branch holds 1.x (MUI v5/v6); `mui-v9` holds 2.x.
 Author: Mahdi Amiri (@owlpro)
 
 ## Build
@@ -91,7 +92,15 @@ forwardRef(function MyInput(props: CustomInputProps, ref) {
 ```
 
 ## Peer dependencies
-`@mui/material`, `@mui/icons-material`, `@mui/x-date-pickers`, `@emotion/react`, `@emotion/styled`, `dayjs`, `react >= 17`
+`@mui/material` 9, `@mui/icons-material` 9, `@mui/x-date-pickers` 9, `@emotion/react`, `@emotion/styled`, `dayjs`, `react` 18 / 19
+
+## MUI v9 notes
+- TextField-based inputs pass their props through `withLegacySlotProps` (`src/helpers/general.ts`), which moves the removed `InputProps` / `inputProps` / `InputLabelProps` / `SelectProps` / `FormHelperTextProps` into `slotProps`. Their types live in `src/inputs/legacyTypes.d.ts`.
+- When an input adds its own `slotProps` entry, merge it with `mergeSlot` so the consumer's entry is kept (entries can be objects or callbacks).
+- Import pickers as `@mui/x-date-pickers/DatePicker`, never `.../DatePicker/index.js` — v9's `exports` map rejects the `index.js` path at runtime.
+- Picker fields render sections next to a hidden `<input>`; focus sits on a section, so `blur()` blurs the active element inside the field.
+- No system props (`display`, `alignItems`, `mt`, ...) on `Box` / `Stack` / `Typography` — use `sx`.
+- `skipLibCheck` hides errors in the `types.d.ts` files. To check them, copy them to `.ts` temporarily and run `tsc`.
 
 ## Docs
 - `README.md` — full overview + examples

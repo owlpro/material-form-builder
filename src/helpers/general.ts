@@ -141,3 +141,40 @@ export const mergeRefs = (...refs: any[]) => {
         });
     };
 };
+/**
+ * Merge two slotProps entries. Each one can be an object or an `(ownerState) => object` callback.
+ * Keys in `override` win.
+ */
+export const mergeSlot = (base: any, override: any) => {
+    if (!base) return override
+    if (!override) return base
+    if (typeof base !== 'function' && typeof override !== 'function') return { ...base, ...override }
+    return (ownerState: any) => ({
+        ...(typeof base === 'function' ? base(ownerState) : base),
+        ...(typeof override === 'function' ? override(ownerState) : override),
+    })
+}
+
+const legacySlotKeys = {
+    InputProps: 'input',
+    inputProps: 'htmlInput',
+    InputLabelProps: 'inputLabel',
+    SelectProps: 'select',
+    FormHelperTextProps: 'formHelperText',
+} as const
+
+/**
+ * MUI v9 removed InputProps, inputProps, InputLabelProps, SelectProps and FormHelperTextProps from TextField.
+ * Move them into slotProps, so input configs written for older versions keep working.
+ * A value set directly in slotProps wins over the legacy prop.
+ */
+export const withLegacySlotProps = <T extends ObjectLiteral>(props: T): Omit<T, keyof typeof legacySlotKeys> & { slotProps: ObjectLiteral } => {
+    const { slotProps, ...rest }: ObjectLiteral = props
+    const merged: ObjectLiteral = { ...slotProps }
+    Object.entries(legacySlotKeys).forEach(([legacyKey, slotKey]) => {
+        const legacy = rest[legacyKey]
+        delete rest[legacyKey]
+        if (legacy) merged[slotKey] = mergeSlot(legacy, merged[slotKey])
+    })
+    return { ...rest, slotProps: merged } as any
+}

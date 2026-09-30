@@ -1,4 +1,4 @@
-import React, { Component, createElement, Fragment } from 'react';
+import React, { Component, createElement, Fragment, JSX } from 'react';
 import { clonePlain, isPlainObject, selectFromObject, setToObject } from './helpers/general';
 // import type { InputRefs } from "./types";
 import { Input, InputProps, OutputValues, InputActions, ObjectLiteral, AnyInput } from "./types";

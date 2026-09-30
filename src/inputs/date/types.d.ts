@@ -2,10 +2,11 @@ import { TextFieldProps } from '@mui/material'
 import { DatePickerProps } from '@mui/x-date-pickers/DatePicker'
 import { MuiPickersAdapter } from '@mui/x-date-pickers'
 import { BaseInput, Variant } from '../../types'
+import { LegacyTextFieldProps } from '../legacyTypes'
 import { Dayjs } from 'dayjs'
 
 export type DateInputValueType = Dayjs | null
-export interface DateInputProps extends BaseInput<DateInputValueType>, Omit<DatePickerProps<Dayjs, false>, 'value' | 'renderInput' | 'ref'> {
+export interface DateInputProps extends BaseInput<DateInputValueType>, Omit<DatePickerProps, 'value' | 'renderInput' | 'ref'> {
     type: 'date'
     /**
      * @deprecated
@@ -16,6 +17,6 @@ export interface DateInputProps extends BaseInput<DateInputValueType>, Omit<Date
     variant?: Variant
     defaultValue?: DateInputValueType
     fullWidth?: boolean
-    InputProps?: TextFieldProps
+    InputProps?: TextFieldProps & LegacyTextFieldProps
     // onChange?: (value: any, keyboardInputValue?: string) => void
 }

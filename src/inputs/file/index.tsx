@@ -121,7 +121,7 @@ export class FileInput extends Component<FileInputProps, IState> implements Inpu
                     error={this.state.error}
                     onChange={this.onChange}
                     onClick={this.onClick}
-                    inputRef={el => this.inputRef = el}
+                    inputRef={el => { this.inputRef = el }}
                 />
                 {helperText ? (
                     <FormHelperText {...FormHelperTextProps} id={this.textHelperIdentity} >

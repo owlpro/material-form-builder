@@ -3,7 +3,7 @@ import { FormControlLabel } from '@mui/material';
 import React, { Component } from "react";
 import { InputImplement } from '../../types';
 import { CheckboxInputProps, CheckboxInputValueType } from './types';
-import { stringify } from 'src/helpers/general';
+import { mergeSlot, stringify } from 'src/helpers/general';
 
 interface IState {
     value: CheckboxInputValueType,
@@ -86,7 +86,7 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
     }
 
     render() {
-        const { updateListener, defaultChecked, defaultValue, onChangeValue, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { updateListener, defaultChecked, defaultValue, onChangeValue, visible, _call_parent_for_update, slotProps, ...restProps } = this.props;
         const label = this.props.label + (this.props.required ? ' *' : '')
         return (
             <FormControlLabel onClick={this.onClick} control={
@@ -95,7 +95,7 @@ export class CheckboxInput extends Component<CheckboxInputProps, IState> impleme
                     sx={{ color: this.state.error ? "#d32f2f" : "#616161" }}
                     checked={this.state.value}
                     onChange={this.onChange}
-                    inputRef={el => this.inputRef = el}
+                    slotProps={{ ...slotProps, input: mergeSlot(slotProps?.input, { ref: (el: HTMLInputElement | null) => { this.inputRef = el } }) }}
                 />
             } style={{ userSelect: 'none' }} label={label} />
         )

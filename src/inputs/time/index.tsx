@@ -1,8 +1,8 @@
 import { PickerChangeHandlerContext, TimeValidationError } from '@mui/x-date-pickers';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker/index.js';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { Dayjs } from 'dayjs';
 import { Component, MouseEvent } from "react";
-import { stringify } from 'src/helpers/general';
+import { mergeSlot, stringify, withLegacySlotProps } from 'src/helpers/general';
 import { InputImplement } from '../../types';
 import { TimeInputProps, TimeInputValueType } from './types';
 
@@ -86,32 +86,29 @@ export class TimeInput extends Component<TimeInputProps, IState> implements Inpu
     }
 
     public blur = () => {
-        this.inputRef?.blur()
+        // the focused element is a section next to the hidden input, not the input itself
+        const active = document.activeElement
+        if (active instanceof HTMLElement && this.inputRef?.parentElement?.contains(active)) active.blur()
     }
 
 
     render() {
-        const { slotProps, fullWidth, updateListener, selector, type, label, defaultValue, onChangeValue, variant, required, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { slotProps, fullWidth, updateListener, selector, type, defaultValue, onChangeValue, variant, required, visible, _call_parent_for_update, dateAdapter, InputProps, ...restProps } = this.props;
         const { textField: textFieldSlotProps, ...restSlotProps } = slotProps ?? {};
+        const fieldProps = withLegacySlotProps(InputProps ?? {});
         return (
             <TimePicker
                 {...restProps}
                 ampm={this.props.ampm || false}
                 value={this.state.value}
                 onChange={this.onChange}
-                inputRef={el => this.inputRef = el}
+                inputRef={el => { this.inputRef = el }}
                 slotProps={{
                     ...restSlotProps,
-                    textField: {
-                        fullWidth: fullWidth ?? false,
-                        variant: variant ?? "standard",
-                        required: required ?? false,
-
-                        ...textFieldSlotProps,
-
-                        error: this.state.error,
-                        onClick: this.onClick
-                    }
+                    textField: mergeSlot(
+                        mergeSlot({ fullWidth: fullWidth ?? false, variant: variant ?? "standard", required: required ?? false, ...fieldProps }, textFieldSlotProps),
+                        { error: this.state.error, onClick: this.onClick }
+                    )
                 }}
             />
         )

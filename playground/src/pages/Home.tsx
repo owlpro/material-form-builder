@@ -99,20 +99,20 @@ function HomeContent() {
 
   return (
     <Box>
-      <Typography variant="h4" fontWeight={700} gutterBottom>
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 700 }}>
         {T.title}
       </Typography>
       <Typography variant="body1" color="text.secondary" sx={{ mb: 2, maxWidth: 620 }}>
         {T.subtitle}
       </Typography>
-      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 5 }}>
-        <Chip label="MUI v6" size="small" variant="outlined" />
+      <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap', mb: 5 }}>
+        <Chip label="MUI v9" size="small" variant="outlined" />
         <Chip label="TypeScript" size="small" variant="outlined" />
-        <Chip label="React ≥17" size="small" variant="outlined" />
+        <Chip label="React ≥18" size="small" variant="outlined" />
         <Chip label="18 input types" size="small" variant="outlined" />
       </Stack>
 
-      <Typography variant="h6" fontWeight={700} sx={{ mb: 2 }}>
+      <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
         {T.inputTypes}
       </Typography>
       <Stack spacing={2} sx={{ mb: 5 }}>
@@ -161,7 +161,7 @@ function HomeContent() {
         ))}
       </Stack>
 
-      <Typography variant="h6" fontWeight={700} sx={{ mb: 0.5 }}>
+      <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5 }}>
         {T.sharedProps}
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>

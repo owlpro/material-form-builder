@@ -1,6 +1,6 @@
 # Text Input
 
-text input based on material ui [Text Field](https://mui.com/material-ui/react-text-field/) v5
+text input based on material ui [Text Field](https://mui.com/material-ui/react-text-field/)
 
 ## usage:
 

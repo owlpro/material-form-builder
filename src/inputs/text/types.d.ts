@@ -1,8 +1,9 @@
 import { TextFieldProps } from "@mui/material";
-import { BaseInput } from "../../types";
+import { BaseInput } from "../../types"
+import { LegacyTextFieldProps } from '../legacyTypes';
 
 export type TextInputValueType = string | null;
-export interface TextInputProps extends BaseInput<TextInputValueType>, Omit<TextFieldProps, "defaultValue" | "ref"> {
+export interface TextInputProps extends BaseInput<TextInputValueType>, LegacyTextFieldProps, Omit<TextFieldProps, "defaultValue" | "ref"> {
 	type: "text";
 	autoDirection?: boolean;
 	defaultValue?: TextInputValueType;

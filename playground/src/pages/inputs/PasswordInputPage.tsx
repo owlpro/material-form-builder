@@ -103,10 +103,10 @@ function PasswordInputOverview({ lang }: { lang: 'en' | 'fa' }) {
   const ov = t[lang].overview
   return (
     <Paper variant="outlined" sx={{ p: 3, mb: 4, bgcolor: '#f9fafb', borderColor: '#e0e0e0', borderRadius: 2 }}>
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>{ov.howTitle}</Typography>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>{ov.howTitle}</Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{ov.howBody}</Typography>
       <Divider sx={{ mb: 2 }} />
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>{ov.noteTitle}</Typography>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>{ov.noteTitle}</Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>{ov.noteBody}</Typography>
       <Stack spacing={0.8} sx={{ mb: 2 }}>
         {ov.notes.map(([name, desc]) => (
@@ -119,7 +119,7 @@ function PasswordInputOverview({ lang }: { lang: 'en' | 'fa' }) {
         ))}
       </Stack>
       <Divider sx={{ mb: 2 }} />
-      <Typography variant="subtitle2" fontWeight={700} gutterBottom>{ov.exclusiveTitle}</Typography>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>{ov.exclusiveTitle}</Typography>
       <Stack spacing={0.8}>
         {ov.exclusiveProps.map(([name, desc]) => (
           <Box key={name} sx={{ display: 'flex', gap: 1.5, alignItems: 'baseline' }}>
@@ -166,7 +166,7 @@ function VariantsDemo() {
   const { ref } = useFormBuilder()
   return (
     <Stack spacing={3}>
-      <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
+      <Stack direction="row" spacing={2} useFlexGap sx={{ flexWrap: 'wrap' }}>
         <FormBuilder
           ref={ref}
           inputs={[
@@ -378,10 +378,10 @@ function PasswordInputContent({ lang }: { lang: 'en' | 'fa' }) {
   return (
     <Box>
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h5" fontWeight={700} gutterBottom>
+        <Typography variant="h5" gutterBottom sx={{ fontWeight: 700 }}>
           {t[lang].pageTitle}
         </Typography>
-        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 3 }}>
+        <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: 'wrap', mb: 3 }}>
           <Chip label='type: "password"' size="small" variant="outlined" />
           <Chip label="value: string | null" size="small" variant="outlined" />
           <Chip label="show/hide built-in" size="small" variant="outlined" color="secondary" />

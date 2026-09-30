@@ -1,6 +1,6 @@
 import { TextField } from '@mui/material';
 import React, { Component, FocusEvent } from "react";
-import { checkValue, stringify } from '../../helpers/general';
+import { checkValue, stringify, withLegacySlotProps } from '../../helpers/general';
 import { InputImplement } from '../../types';
 import { NumberInputProps, NumberInputValueType } from './types';
 
@@ -108,9 +108,9 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
     }
 
     render() {
-        const { updateListener, onChangeValue, defaultValue, visible, _call_parent_for_update, ...restProps } = this.props;
+        const { updateListener, onChangeValue, defaultValue, visible, formatter, _call_parent_for_update, ...restProps } = this.props;
         return <TextField
-            {...restProps}
+            {...withLegacySlotProps(restProps)}
             variant={this.props.variant || "standard"}
             error={this.state.error}
             onChange={this.onChange}
@@ -118,7 +118,7 @@ export class NumberInput extends Component<NumberInputProps, IState> implements 
             onBlur={this.onBlur}
             onFocus={this.onFocus}
             value={checkValue(this.state.value) ? this.state.value : ""}
-            inputRef={el => this.inputRef = el}
+            inputRef={el => { this.inputRef = el }}
         />
     }
 }

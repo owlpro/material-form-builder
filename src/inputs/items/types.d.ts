@@ -1,3 +1,4 @@
+import type { JSX } from 'react'
 import { BaseInput, InputProps } from "../../types";
 
 export type ItemsInputValueType = any;
