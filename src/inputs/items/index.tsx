@@ -1,0 +1,199 @@
+import AddIcon from "@mui/icons-material/Add";
+import CopyAllIcon from "@mui/icons-material/CopyAll";
+import DeleteIcon from "@mui/icons-material/Delete";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { Box, IconButton } from "@mui/material";
+import { Component, Fragment } from "react";
+import { FormBuilder } from "../../formBuilder";
+import { randomString, stringify } from "../../helpers/general";
+import { InputImplement, OutputValues } from "../../types";
+import { ItemsInputProps, ItemsInputValueType } from './types';
+
+interface IState {
+    error: boolean,
+    items: string[],
+}
+
+export class ItemsInput extends Component<ItemsInputProps, IState> implements InputImplement<ItemsInputValueType> {
+    state: IState = {
+        error: false,
+        items: []
+    }
+
+    validationTimeout: any;
+    formBuilderRef: { [key: string]: FormBuilder<any> | null } = {};
+
+    shouldComponentUpdate(nextProps: any, nextState: IState) {
+        switch (true) {
+            case stringify(this.state.items) !== stringify(nextState.items):
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
+                return true;
+            default: return false;
+        }
+    }
+
+    UNSAFE_componentWillMount(): void {
+        if (this.props.minItems && this.props.minItems > 0) {
+            const items: IState['items'] = [];
+
+            [...Array(this.props.minItems).keys()].forEach(() => {
+                const random = this.getRandomKey()
+                items.push(random)
+            })
+
+            this.setState({ ...this.state, items })
+        }
+    }
+
+    private sleep = (ms: number) => {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async setValue(values: ItemsInputValueType): Promise<ItemsInputValueType> {
+        const rows = Array.isArray(values) ? values : [];
+        await new Promise<void>(resolve => {
+            this.setState(state => ({ ...state, items: [] }), resolve);
+        });
+        const output: any[] = [];
+        for (const row of rows) {
+            const key = await this.addItem();
+            if (!key) break;
+            output.push(await this.setItemValue(key, row));
+        }
+        return output;
+    }
+
+    private setItemValue = async (key: string, object: any): Promise<any> => {
+        const formBuilderRef = this.formBuilderRef[key];
+        if (!formBuilderRef) {
+            await this.sleep(5)
+            return await this.setItemValue(key, object)
+        }
+
+        return formBuilderRef.setValues(object)
+    }
+
+    exportFormBuilderData = (validation = true): OutputValues[] => {
+        const values: OutputValues[] = [];
+        for (const key in this.formBuilderRef) {
+            const builder = this.formBuilderRef[key]
+            if (builder) {
+                values.push(builder.getValues(validation))
+            }
+        }
+        return values;
+    }
+
+    getValue(validation = true): any {
+        const items = this.exportFormBuilderData(validation);
+        return items.map(item => item.data)
+    }
+
+    clear(): Promise<ItemsInputValueType> {
+        return this.removeAll()
+    }
+
+    validation(): boolean {
+        const data = this.exportFormBuilderData();
+        return !data.some(datum => !datum?.validation.status);
+    }
+
+    getRandomKey = (): string => {
+        const random = randomString(8)
+        if (this.state.items.indexOf(random) > -1) return this.getRandomKey()
+        return random;
+    }
+
+    addItem = (): Promise<string> => {
+        const random = this.getRandomKey()
+        let added = false;
+        return new Promise((resolve) => {
+            this.setState(oldState => {
+                if (typeof this.props.maxItems === "number" && oldState.items.length >= this.props.maxItems) return null;
+                added = true;
+                return { ...oldState, items: [...oldState.items, random] };
+            }, () => resolve(added ? random : ''));
+        })
+    }
+
+    copyItem = (key: string) => async () => {
+        const newKey = await this.addItem()
+        if (!newKey) return;
+        const builder = this.formBuilderRef[key]
+        if (builder) {
+            const copyData = builder.getValues(false).data;
+            this.formBuilderRef[newKey]?.setValues(copyData)
+        }
+    }
+
+    removeItem = (key: string) => async (): Promise<void> => {
+        if (typeof (this.props.minItems) === "number" && this.state.items.length <= this.props.minItems) return Promise.resolve()
+        const formBuilderRef = this.formBuilderRef[key];
+        if (formBuilderRef) {
+            await formBuilderRef.clear()
+            this.setState((oldState) => {
+                let state = { ...oldState }
+                state.items = state.items.filter(item => item !== key);
+                return state;
+            }, () => {
+                delete this.formBuilderRef[key];
+            })
+        }
+    }
+
+    removeAll = () => {
+        return this.setValue(Array.from({ length: Math.max(0, this.props.minItems ?? 0) }, () => ({})));
+    }
+
+    public click = () => { }
+    public focus = () => { }
+    public blur = () => { }
+
+    renderItem = (key: string) => {
+        return this.props.disableDefaultItemWrapper ? (
+            <Fragment key={key}>
+                {this.props.removeIcon !== false ? (
+                    <IconButton onClick={this.removeItem(key)}>{this.props.removeIcon ? this.props.removeIcon : <RemoveIcon />}</IconButton>
+                ) : null}
+                <FormBuilder inputs={this.props.inputs} ref={el => { this.formBuilderRef = { ...this.formBuilderRef, [key]: el } }} />
+                {this.props.copyIcon !== false ? (
+                    <IconButton onClick={this.copyItem(key)}>{this.props.copyIcon ? this.props.copyIcon : <CopyAllIcon />}</IconButton>
+                ) : null}
+            </Fragment>
+        ) : (
+            <Box key={key} sx={{ display: "flex", alignItems: "center" }}>
+                {this.props.removeIcon !== false ? (
+                    <IconButton onClick={this.removeItem(key)}>{this.props.removeIcon ? this.props.removeIcon : <RemoveIcon />}</IconButton>
+                ) : null}
+                <FormBuilder inputs={this.props.inputs} ref={el => { this.formBuilderRef = { ...this.formBuilderRef, [key]: el } }} />
+                {this.props.copyIcon !== false ? (
+                    <IconButton onClick={this.copyItem(key)}>{this.props.copyIcon ? this.props.copyIcon : <CopyAllIcon />}</IconButton>
+                ) : null}
+            </Box>
+        )
+    }
+
+    render() {
+        return (
+            <Box>
+                {this.props.renderHeader ? (
+                    this.props.renderHeader(this.addItem, this.removeAll)
+                ) : (
+                    <Box>
+                        <IconButton onClick={this.addItem}><AddIcon /></IconButton>
+                        <IconButton onClick={this.removeAll}><DeleteIcon /></IconButton>
+                    </Box>
+                )}
+
+                {this.state.items.map((key) =>
+                    this.props.itemWrapper
+                        ? this.props.itemWrapper(this.renderItem(key), key, {
+                            copyItem: this.copyItem(key),
+                            removeItem: this.removeItem(key)
+                        })
+                        : this.renderItem(key)
+                )}
+            </Box>
+        )
+    }
+}

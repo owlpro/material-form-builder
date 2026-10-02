@@ -1,0 +1,180 @@
+import { ObjectLiteral } from 'src/types'
+
+export const randomString = (length: number) => {
+    var result = ''
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    var charactersLength = characters.length
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    }
+    return result
+}
+
+export const mask = (value: string, pattern: string, placeholder = '') => {
+    let i = 0,
+        v = value.toString()
+    return pattern.replace(/\./g, (_) => v[i++] || placeholder)
+}
+
+export const isArray = (data: any): boolean => {
+    return Array.isArray(data)
+}
+
+export const isNull = (data: any): boolean => {
+    return data === null
+}
+
+export const checkValue = (value: any): boolean => {
+    if (value === null) return false
+    if (value === undefined) return false
+    return true
+}
+
+export const isPlainObject = (value: any): value is ObjectLiteral => {
+    if (value === null || typeof value !== 'object') return false
+    const prototype = Object.getPrototypeOf(value)
+    return prototype === Object.prototype || prototype === null
+}
+
+export const clonePlain = <T>(value: T, seen = new WeakMap<object, any>()): T => {
+    if (!Array.isArray(value) && !isPlainObject(value)) return value
+    if (seen.has(value as object)) return seen.get(value as object)
+
+    const copy: any = Array.isArray(value) ? [] : Object.create(Object.getPrototypeOf(value))
+    seen.set(value as object, copy)
+    Object.keys(value).forEach(key => {
+        copy[key] = clonePlain((value as any)[key], seen)
+    })
+    return copy
+}
+
+export const sleep = (ms: number) => {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+export const selectFromObject = (selector: string, data: any) => {
+    const regex = new RegExp('.*[.*=.*]')
+    let splitSelector = selector.split('.')
+    let workingObject = data
+    splitSelector.forEach((selectorItem): void => {
+        if (!workingObject) workingObject = {}
+        if (regex.test(selectorItem)) {
+            const objectBeforeQuery = selectorItem.replace(/\[.*\]/g, '')
+            if (objectBeforeQuery) {
+                workingObject = workingObject[objectBeforeQuery]
+            }
+            if (!Array.isArray(workingObject)) return
+            const splitQuery = selectorItem.replace(/.*\[|\]/g, '').split('=')
+            const queryKey = splitQuery[0]!.trim()
+            const queryValue = isNaN(parseInt(splitQuery[1]!)) ? splitQuery[1] : parseInt(splitQuery[1]!)
+            workingObject = workingObject.find((ob: any) => ob[queryKey] === queryValue)
+        } else {
+            workingObject = workingObject[selectorItem]
+        }
+    })
+    return workingObject
+}
+
+export const setToObject = (selector: string, value: any, object: any) => {
+    // value = typeof value !== 'boolean' && !Array.isArray(value) && value && !isNaN(value) ? parseInt(value, 10) : value
+    const regex = new RegExp('.*[.*=.*]')
+    let splitSelector = selector.split('.')
+    if (splitSelector.length > 1) {
+        let workingObject = object
+        splitSelector.forEach((selectorItem, index) => {
+            const isLast = splitSelector.length === index + 1
+            if (regex.test(selectorItem)) {
+                const replacedSelectorItem = selectorItem.replace(/\[.*\]/, '')
+                if (!Object.prototype.hasOwnProperty.call(workingObject, replacedSelectorItem)) workingObject[replacedSelectorItem] = []
+                const splitQuery = selectorItem.replace(/.*\[|\]/g, '').split('=')
+                const queryKey = splitQuery[0]!.trim()
+                const queryValue = isNaN(parseInt(splitQuery[1]!)) ? splitQuery[1] : parseInt(splitQuery[1]!)
+                const exists = workingObject[replacedSelectorItem].find((item: any) => item[queryKey] === queryValue)
+                if (exists) {
+                    workingObject = exists
+                } else {
+                    const newObject = { [queryKey]: queryValue }
+                    workingObject[replacedSelectorItem].push(newObject)
+                    workingObject = newObject
+                }
+            } else {
+                if (isLast) {
+                    workingObject[selectorItem] = value
+                } else {
+                    if (!Object.prototype.hasOwnProperty.call(workingObject, selectorItem)) workingObject[selectorItem] = {}
+                    workingObject = workingObject[selectorItem]
+                }
+            }
+        })
+    } else {
+        object[selector] = value
+    }
+    return object
+}
+
+export const stringify = (obj: ObjectLiteral): string => {
+    let cache: any = []
+    let str = JSON.stringify(obj, function (_, value) {
+        if (typeof value === 'object' && value !== null) {
+            if (cache.indexOf(value) !== -1) {
+                // Circular reference found, discard key
+                return
+            }
+            // Store value in our collection
+            cache.push(value)
+        }
+        return value
+    })
+    cache = null // reset the cache
+    return str
+}
+
+export const mergeRefs = (...refs: any[]) => {
+    return (value: any) => {
+        refs.forEach((ref) => {
+            if (!ref) return;
+            if (typeof ref === "function") {
+                ref(value);
+            } else if (typeof ref === "object") {
+                ref.current = value;
+            }
+        });
+    };
+};
+/**
+ * Merge two slotProps entries. Each one can be an object or an `(ownerState) => object` callback.
+ * Keys in `override` win.
+ */
+export const mergeSlot = (base: any, override: any) => {
+    if (!base) return override
+    if (!override) return base
+    if (typeof base !== 'function' && typeof override !== 'function') return { ...base, ...override }
+    return (ownerState: any) => ({
+        ...(typeof base === 'function' ? base(ownerState) : base),
+        ...(typeof override === 'function' ? override(ownerState) : override),
+    })
+}
+
+const legacySlotKeys = {
+    InputProps: 'input',
+    inputProps: 'htmlInput',
+    InputLabelProps: 'inputLabel',
+    SelectProps: 'select',
+    FormHelperTextProps: 'formHelperText',
+} as const
+
+/**
+ * MUI v9 removed InputProps, inputProps, InputLabelProps, SelectProps and FormHelperTextProps from TextField.
+ * Move them into slotProps, so input configs written for older versions keep working.
+ * A value set directly in slotProps wins over the legacy prop.
+ */
+export const withLegacySlotProps = <T extends ObjectLiteral>(props: T): Omit<T, keyof typeof legacySlotKeys> & { slotProps: ObjectLiteral } => {
+    const { slotProps, ...rest }: ObjectLiteral = props
+    const merged: ObjectLiteral = { ...slotProps }
+    Object.entries(legacySlotKeys).forEach(([legacyKey, slotKey]) => {
+        const legacy = rest[legacyKey]
+        delete rest[legacyKey]
+        if (legacy) merged[slotKey] = mergeSlot(legacy, merged[slotKey])
+    })
+    return { ...rest, slotProps: merged } as any
+}

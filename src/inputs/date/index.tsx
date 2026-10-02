@@ -1,0 +1,111 @@
+import { DateValidationError, PickerChangeHandlerContext } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Dayjs } from 'dayjs';
+import React, { Component } from "react";
+import { mergeSlot, stringify, withLegacySlotProps } from 'src/helpers/general';
+import { InputImplement } from '../../types';
+import { DateInputProps, DateInputValueType } from './types';
+
+interface IState {
+    value: DateInputValueType,
+    error: boolean
+}
+
+export class DateInput extends Component<DateInputProps, IState> implements InputImplement<DateInputValueType> {
+    state: IState = {
+        value: this.props.defaultValue || null,
+        error: false
+    }
+
+    validationTimeout: any;
+
+    inputRef: HTMLInputElement | null | undefined;
+
+    shouldComponentUpdate(nextProps: DateInputProps, nextState: IState) {
+
+        switch (true) {
+            case this.state.value !== nextState.value:
+            case this.state.error !== nextState.error:
+            case stringify(nextProps?.updateListener ?? {}) !== stringify(this.props?.updateListener ?? {}):
+                return true;
+            default: return false;
+        }
+    }
+
+    setValue(value: DateInputValueType, disableOnChangeEvent?: boolean): Promise<DateInputValueType> {
+        if (value === this.state.value) return Promise.resolve(value)
+
+        return new Promise((resolve) => {
+            this.setState({ ...this.state, value }, () => {
+                if (!disableOnChangeEvent) this.props._call_parent_for_update?.()
+                this.props.onChangeValue?.(value as DateInputValueType)
+                resolve(value)
+            })
+        })
+    }
+
+    getValue(): DateInputValueType {
+        return this.state.value || null;
+    }
+
+    clear(): Promise<DateInputValueType> {
+        return this.setValue(this.props.defaultValue || null)
+    }
+
+    validation(): boolean {
+        if (!this.state.value && this.props.required) {
+            clearTimeout(this.validationTimeout)
+            this.setState({ ...this.state, error: true })
+            this.validationTimeout = setTimeout(() => {
+                this.setState({ ...this.state, error: false })
+            }, 3000)
+            return false;
+        }
+        return true;
+    }
+
+    onChange = (value: Dayjs | null, context: PickerChangeHandlerContext<DateValidationError>) => {
+        this.setValue(value)
+        this.props.onChange?.(value, context)
+    };
+
+    private onClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        clearTimeout(this.validationTimeout)
+        this.setState({ ...this.state, error: false })
+        this.props.InputProps?.onClick?.(event)
+    }
+
+    public click = () => {
+        this.inputRef?.click()
+    }
+    public focus = () => {
+        this.inputRef?.focus()
+    }
+    public blur = () => {
+        // the focused element is a section next to the hidden input, not the input itself
+        const active = document.activeElement
+        if (active instanceof HTMLElement && this.inputRef?.parentElement?.contains(active)) active.blur()
+    }
+
+    render() {
+        const { updateListener, slotProps, fullWidth, onChangeValue, defaultValue, variant, required, visible, _call_parent_for_update, selector, type, dateAdapter, InputProps, ...restProps } = this.props;
+        const { textField: textFieldSlotProps, ...restSlotProps } = slotProps ?? {};
+        const fieldProps = withLegacySlotProps(InputProps ?? {});
+
+        return (
+            <DatePicker
+                {...restProps}
+                value={this.state.value}
+                onChange={this.onChange}
+                inputRef={el => { this.inputRef = el }}
+                slotProps={{
+                    ...restSlotProps,
+                    textField: mergeSlot(
+                        mergeSlot({ fullWidth: fullWidth ?? false, variant: variant ?? "standard", required: required ?? false, ...fieldProps }, textFieldSlotProps),
+                        { error: this.state.error, onClick: this.onClick }
+                    )
+                }}
+            />
+        )
+    }
+}

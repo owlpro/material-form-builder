@@ -1,22 +1,52 @@
 {
     "compilerOptions": {
-        "target": "ES5",
-        "module": "ES2015",
-        "jsx": "react",
-        "sourceMap": true,
-        "outDir": "/dist",
-        "strict": true,
-        "allowJs": true,
+        /* Language and Environment */
+        "target": "es2020",
+        "jsx": "react-jsx",
+
+        /* Modules */
+        "module": "ESNext",
         "moduleResolution": "node",
+
+        /* Resolve */
+        "rootDir": "./src",
+        "baseUrl": "./",
+        "paths": {
+            "*": ["*"],
+            "@/*": ["./src/*"]
+        },
+        /* JavaScript Support */
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 1,
+
+        /* Emit */
+        "noEmit": true,
+        "isolatedModules": true,
+        "checkJs": true,
+        // "emitDeclarationOnly": true,
+        "sourceMap": false,
+
+        "outDir": "dist",
+        // "declaration": false,
+        // "declarationDir": "dist/types",
+
+        /* Interop Constraints */
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
-        "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "declaration": true,
-        "downlevelIteration": true
-        // "declarationDir": "types",
-        // "emitDeclarationOnly": true
+
+        /* Type Checking */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
+        "allowUnreachableCode": false,
+
+        /* Completeness */
+        "skipLibCheck": true
     },
-    "include": ["src/**/*"],
-    "exclude": ["node_modules", "dist"]
+    "include": ["src", "*.tsx", "*.ts"],
+    "exclude": ["coverage", "config", "dist", "node_modules", "docs", "all_flags"]
 }

@@ -1,41 +1,44 @@
-import image from '@rollup/plugin-image';
-import commonjs from "rollup-plugin-commonjs";
-import resolve from "rollup-plugin-node-resolve";
-import external from "rollup-plugin-peer-deps-external";
-import typescript from "rollup-plugin-typescript2";
-import pkg from "./package.json";
+import commonjs from '@rollup/plugin-commonjs'
+import resolve from '@rollup/plugin-node-resolve'
+import terser from '@rollup/plugin-terser'
+import typescript from '@rollup/plugin-typescript'
+import dts from 'rollup-plugin-dts'
+import nodeExternals from 'rollup-plugin-node-externals'
+import svg from 'rollup-plugin-svg'
+import packageJson from './package.json' with { type: 'json' }
 
-export default {
-  input: "src/index.ts",
-  output: [
+export default [
     {
-      file: pkg.main,
-      format: "cjs",
-    //   exports: "named",
-      sourcemap: true
-    },
-  ],
-  plugins: [
-    external(),
-    resolve(),
-    // svg(),
-    image(),
-    typescript({
-    //   rollupCommonJSResolveHack: true,
-    //   exclude: "**/__tests__/**",
-    //   clean: true
-    }),
-    commonjs({
-      include: ["node_modules/**", "src/types/svg.d.ts", "src/inputs/mobile/flags"],
-      namedExports: {
-        "node_modules/react/react.js": [
-          "Children",
-          "Component",
-          "PropTypes",
-          "createElement"
+        input: './src/index.ts',
+        output: [
+            {
+                file: packageJson.main,
+                format: 'cjs',
+                exports: 'named',
+                name: packageJson.name,
+                // sourcemap: true
+                // preserveModules: true,
+            },
+            {
+                file: packageJson.module,
+                format: 'es',
+                exports: 'named',
+                name: packageJson.name,
+                // sourcemap: true
+                // preserveModules: true,
+            },
         ],
-        "node_modules/react-dom/index.js": ["render"]
-      }
-    })
-  ]
-};
+        plugins: [nodeExternals(), resolve(), commonjs(), typescript(), svg(), terser()],
+        external: [...Object.keys(packageJson.peerDependencies)],
+    },
+    {
+        input: './src/index.ts',
+        output: [{ file: './dist/index.d.ts', format: 'esm' }],
+        external: [/\.(css|less|scss)$/, /node_modules/],
+        plugins: [
+            dts({
+                tsconfig: './tsconfig.json',
+            }),
+        ],
+    },
+]
