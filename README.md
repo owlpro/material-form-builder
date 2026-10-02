@@ -39,10 +39,18 @@ Make sure you have these peer dependencies installed:
 npm install @mui/material @mui/icons-material @mui/x-date-pickers @emotion/react @emotion/styled dayjs
 ```
 
-| material-form-builder | @mui/material | @mui/x-date-pickers | react |
-|---|---|---|---|
-| 2.x | 9 | 9 | 18 / 19 |
-| 1.x | 6 | 7 | 17 / 18 |
+| material-form-builder | @mui/material | @mui/x-date-pickers | react | branch | tag |
+|---|---|---|---|---|---|
+| 2.x | 9 | 9 | 18 / 19 | `main` (`mui-v9`) | `mui-v9/2.0.0` |
+| 1.x | 6 | 7 | 17 / 18 | `mui-v6` | `mui-v6/1.5.9` |
+| 0.x | 5 | 5 | 18 | `mui-v5` | `mui-v5/0.22.0` |
+
+For an older MUI version, install the matching major:
+
+```bash
+npm install material-form-builder@1   # MUI 6
+npm install material-form-builder@0   # MUI 5
+```
 
 ### Upgrading from 1.x
 

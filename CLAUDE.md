@@ -2,7 +2,8 @@
 
 ## Overview
 An npm library (v2.x) providing a dynamic, type-safe React form builder on top of MUI v9 and MUI X v9.
-The `mui-v6` branch holds 1.x (MUI v5/v6); `mui-v9` holds 2.x.
+`main` (= `mui-v9`) holds 2.x (MUI v9); `mui-v6` holds 1.x (MUI v6); `mui-v5` holds 0.x (MUI v5).
+One tag per MUI line: `mui-vX/<version>` (`mui-v5/0.22.0`, `mui-v6/1.5.9`, `mui-v9/2.0.0`).
 Author: Mahdi Amiri (@owlpro)
 
 ## Build
